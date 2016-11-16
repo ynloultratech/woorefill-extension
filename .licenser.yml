@@ -1,0 +1,7 @@
+finder:
+    in:
+        - .
+parameters:
+    author: YNLO-Ultratech Development Team <developer@ynloultratech.com>
+    package: woorefill-extension
+    version: 1.0-alpha

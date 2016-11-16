@@ -31,7 +31,7 @@ $availability_html = empty($availability['availability']) ? '' : '<p class="stoc
 echo apply_filters('woocommerce_stock_html', $availability_html, $availability['availability'], $product);
 ?>
 
-<?php if ($product->is_in_stock() && ! wc_product_in_cart($product) && wc_can_add_another_wireless_product_to_cart()) : ?>
+<?php if ($product->is_in_stock() && ! wc_product_in_cart($product)) : ?>
 
     <?php do_action('woocommerce_before_add_to_cart_form'); ?>
 

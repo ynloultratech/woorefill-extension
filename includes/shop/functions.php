@@ -44,6 +44,22 @@ function wc_cart_has_wireless_product()
 }
 
 /**
+ * Clean the current cart of wireless products
+ */
+function wc_cart_remove_all_wireless_products()
+{
+    $items = WC()->cart->cart_contents;
+    foreach ($items as $key => $item) {
+        if (isset($item['product_id']) && $productId = $item['product_id']) {
+            $product = wc_get_product($productId);
+            if ($product->is_type('wireless')) {
+                WC()->cart->remove_cart_item($key);
+            }
+        }
+    }
+}
+
+/**
  * Return the first available wireless product in the cart
  *
  * @return null|WC_Product

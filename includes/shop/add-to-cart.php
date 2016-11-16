@@ -24,16 +24,43 @@ add_action(
     30
 );
 
+/**
+ * Remove any wireless product before add other to the cart
+ */
 add_filter(
-    'woocommerce_loop_add_to_cart_link',
-    function ($link) {
-        global $product;
-        if ($product->is_type('wireless')) {
-            if (wc_product_in_cart($product) || ! wc_can_add_another_wireless_product_to_cart()) {
+    'woocommerce_add_to_cart_validation',
+    function ($pass, $product_id = null) {
+        if ($product_id) {
+            $product = wc_get_product($product_id);
+
+            if ($product->is_type('wireless')) {
+                wc_cart_remove_all_wireless_products();
+            }
+        }
+
+        return $pass;
+    },
+    10,
+    2
+);
+
+/**
+ * Don't show
+ */
+add_filter(
+    'wc_add_to_cart_message',
+    function ($pass, $product_id = null) {
+        if ($product_id) {
+            $product = wc_get_product($product_id);
+
+            if ($product->is_type('wireless')) {
                 return null;
             }
         }
 
-        return $link;
-    }
+        return $pass;
+    },
+    10,
+    2
 );
+

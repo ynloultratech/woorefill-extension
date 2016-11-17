@@ -97,3 +97,19 @@ HTML;
     }
 );
 
+/**
+ * Quick edit fields
+ */
+add_action(
+    'woocommerce_product_quick_edit_end',
+    function () {
+        echo <<<HTML
+<script>
+    //TODO: show or hide fields according to product type
+   // jQuery('[name="_sku"]').closest('label').hide().next('.clear').hide();
+   // jQuery('[name="_shipping_class"]').closest('label').hide().next('.clear').hide();
+   // jQuery('.price_fields').show();
+</script>
+HTML;
+    }
+);

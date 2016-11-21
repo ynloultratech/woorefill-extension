@@ -17,10 +17,23 @@ if ( ! defined('ABSPATH')) {
 
 class WooRefillAPI
 {
+    const POST = 'POST';
+    const GET = 'GET';
+
     /**
      * @var string
      */
     private static $baseUrl = 'http://woorefill-api.dev/api/v1.0';
+
+    /**
+     * @var string
+     */
+    private static $errorCode = null;
+
+    /**
+     * @var string
+     */
+    private static $errorMessage = null;
 
     /**
      * @param       $id
@@ -38,38 +51,61 @@ class WooRefillAPI
             ],
             $meta
         );
+
+        $json = self::send(self::POST, sprintf('/product/%s/submit', $id), $data);
+
+        if ($json && array_key_value($json, 'status') === 'COMPLETED') {
+            return $json;
+        }
+    }
+
+    /**
+     * send
+     *
+     * @param       $method
+     * @param       $url
+     * @param array $data
+     *
+     * @return array|mixed|null|object
+     * @throws Exception
+     */
+    protected static function send($method, $url, array $data = [])
+    {
+        self::$errorCode = null;
+        self::$errorMessage = null;
+
         $baseUrl = self::$baseUrl;
         $apiKey = get_woo_refill_api_key();
-        $url = $baseUrl."/product/$id/submit?apikey={$apiKey}";
+        $url = $baseUrl."$url?apikey={$apiKey}";
 
-        woorefill_log("Connecting to API url: ".str_replace($apiKey, '{hidden}', $url));
-        woorefill_log("Sending data: ".print_r($data, true));
+        woorefill_log(sprintf('Connecting to API url: %s ', str_replace($apiKey, '{hidden}', $url)));
 
-        $response = wp_remote_post($url, $data);
+        if ($method === self::POST) {
+            $response = wp_remote_post($url, $data);
+        } else {
+            $response = wp_remote_get($url);
+        }
 
-        if (isset($response['body'])) {
-            woorefill_log("API Response (Json): ".$response['body']);
+        if (isset($response['response']['code'], $response['response']['message'])) {
+            woorefill_log(sprintf('API Response (Status): %s-%s', $response['response']['code'], $response['response']['message']));
+        }
+
+        if (array_key_exists('body', $response)) {
+            woorefill_log(sprintf('API Response (Json): %s', $response['body']));
             $json = json_decode($response['body'], true);
         } else {
             $json = null;
         }
 
-        woorefill_log("API Response (Response Data): ".print_r($json, true));
-
-        if (isset($response['response']['code'], $response['response']['message'])) {
-            woorefill_log("API Response (Status): ".$response['response']['code'].'-'.$response['response']['message']);
-        }
-
-
         if ($json && $error = array_key_value($json, 'error')) {
-            throw new \Exception(array_key_value($error, 'message'), array_key_value($error, 'code'));
+            self::$errorCode = array_key_value($error, 'code');
+            self::$errorMessage = array_key_value($error, 'message');
         }
 
-        if ($json && array_key_value($json, 'status') === 'COMPLETED') {
-            return $json;
+        if ( ! $json) {
+            woorefill_log(sprintf('API Response (Full): %s', print_r($response, true)));
         }
 
-        woorefill_log("API Response (Full): ".print_r($response, true));
-        throw new \Exception("Unknown Error, the order cant be processed");
+        return $json;
     }
 }

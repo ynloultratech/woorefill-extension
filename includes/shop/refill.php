@@ -18,8 +18,23 @@ if ( ! defined('ABSPATH')) {
 add_action(
     'woocommerce_payment_complete',
     function ($id) {
-        //TODO, make a real refill
         $order = WC()->order_factory->get_order($id);
-        $order->update_status('completed', "Refill success \n");
+        $product = wc_order_get_wireless_product($id);
+        $sku = wc_order_get_wireless_product_sku($id);
+        woorefill_log(sprintf('Submitting order %s with product %s', $order->id, $product->get_formatted_name()));
+
+        if ($sku) {
+            try {
+                WooRefillAPI::submit($sku, $id);
+                $order->update_status('completed', "Refill success \n\n");
+            } catch (\Exception $e) {
+                woorefill_log('ERROR: '.$e->getMessage());
+                woorefill_log($e);
+                $order->update_status('cancelled', $e->getMessage()." \n\n");
+            }
+        } else {
+            woorefill_log('The product does not have valid wireless product id to submit.');
+            $order->update_status('cancelled', "Invalid Product \n\n");
+        }
     }
 );

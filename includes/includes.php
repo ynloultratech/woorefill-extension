@@ -16,6 +16,8 @@ if ( ! defined('ABSPATH')) {
 }
 
 include_once __DIR__.'/config.php';
+include_once __DIR__.'/functions.php';
 include_once __DIR__.'/admin/admin.php';
 include_once __DIR__.'/shop/shop.php';
 include_once __DIR__.'/wc-product-wireless.php';
+include_once __DIR__.'/api.php';

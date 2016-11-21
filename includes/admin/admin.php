@@ -16,4 +16,4 @@ if ( ! defined('ABSPATH')) {
 }
 
 include_once __DIR__.'/settings.php';
-include_once __DIR__.'/product_settings_page.php';
+include_once __DIR__.'/product_settings.php';

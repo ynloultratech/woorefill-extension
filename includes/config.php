@@ -11,8 +11,22 @@
  * @version 1.0-alpha
  */
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 function allow_buy_multiple_wireless_products()
 {
     //TODO: move to some settings in the backend
     return false;
+}
+
+function get_woo_refill_api_key()
+{
+    return get_option('_woorefill_api_key');
+}
+
+function woo_refill_log_enabled()
+{
+    return (get_option('_woorefill_log') === 'yes');
 }

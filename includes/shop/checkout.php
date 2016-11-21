@@ -21,8 +21,8 @@ add_filter(
         if (wc_cart_has_wireless_product()) {
             $fields['refill'] = [
                 'phone_to_refill' => [
-                    'type'     => 'tel',
-                    'label'    => __('Phone to Refill'),
+                    'type' => 'tel',
+                    'label' => __('Phone to Refill'),
                     'required' => true,
                 ],
             ];
@@ -39,14 +39,17 @@ add_action(
     'woocommerce_checkout_billing',
     function () {
         if (wc_cart_has_wireless_product()) {
-            $plan       = wc_cart_get_first_wireless_product()->get_title();
-            $note       = "Phone to refill with $plan";
+            $plan = wc_cart_get_first_wireless_product()->get_title();
+            $note = "Phone to refill with $plan";
+
+            //woo_api_get_fields();
+
             $phoneInput = woocommerce_form_field(
                 'phone_to_refill',
                 [
-                    'type'        => 'tel',
-                    'label'       => __('Phone to Refill'),
-                    'required'    => true,
+                    'type' => 'tel',
+                    'label' => __('Phone to Refill'),
+                    'required' => true,
                     'description' => $note,
                 ],
                 WC()->checkout()->get_value('billing_phone')

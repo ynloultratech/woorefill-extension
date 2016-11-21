@@ -16,6 +16,55 @@ if ( ! defined('ABSPATH')) {
 }
 
 /**
+ * Get first available wireless product in given order id
+ *
+ * @param $id
+ *
+ * @return null|WC_Product
+ */
+function wc_order_get_wireless_product($id)
+{
+    $order = WC()->order_factory->get_order($id);
+    $items = $order->get_items();
+    $product = null;
+    foreach ($items as $item) {
+        if (isset($item['item_meta']['_product_id'])) {
+            if (is_array($item['item_meta']['_product_id'])) {
+                $productId = current($item['item_meta']['_product_id']);
+            } else {
+                $productId = $item['item_meta']['_product_id'];
+            }
+
+            $product = wc_get_product($productId);
+            if ($product instanceof WC_Product_Wireless) {
+                break;
+            }
+        }
+    }
+
+    return $product;
+}
+
+/**
+ * Get the wireless product sku for given order id to make refills
+ *
+ * @param $id
+ *
+ * @return mixed|null
+ */
+function wc_order_get_wireless_product_sku($id)
+{
+    $product = wc_order_get_wireless_product($id);
+
+    $wirelessSku = null;
+    if ($product) {
+        $wirelessSku = get_post_meta($product->get_id(), '_wireless_product_id', true);
+    }
+
+    return $wirelessSku;
+}
+
+/**
  * Verify if given product is already in the cart
  *
  * @param $product

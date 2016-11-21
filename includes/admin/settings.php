@@ -26,7 +26,7 @@ class WC_Settings_Wireless extends WC_Settings_Page
      */
     public function __construct()
     {
-        $this->id    = 'wireless';
+        $this->id = 'wireless';
         $this->label = __('Wireless');
 
         add_filter('woocommerce_settings_tabs_array', [$this, 'add_settings_page'], 40);
@@ -53,16 +53,24 @@ class WC_Settings_Wireless extends WC_Settings_Page
                 //                ['type' => 'sectionend', 'id' => 'woorefill_wireless_settings'],
                 [
                     'title' => __('Refill Service'),
-                    'type'  => 'title',
-                    'desc'  => '',
-                    'id'    => 'woorefill_api_service',
+                    'type' => 'title',
+                    'desc' => '',
+                    'id' => 'woorefill_api_service',
                 ],
                 [
                     'title' => __('API Key'),
-                    'type'  => 'text',
-                    'desc'  => __('API Key to communicate with service to make refills'),
-                    'id'    => '_woorefill_api_key',
-                    'css'   => 'width: 250px;',
+                    'type' => 'text',
+                    'desc' => __('API Key to communicate with service to make refills'),
+                    'id' => '_woorefill_api_key',
+                    'css' => 'width: 300px;',
+                ],
+                'debug' => [
+                    'title' => __('Debug Log'),
+                    'type' => 'checkbox',
+                    'label' => __('Enable logging'),
+                    'default' => 'no',
+                    'id' => '_woorefill_log',
+                    'desc' => sprintf(__('Log WooRefill events, such as API request and responses, inside <code>%s</code>'), wc_get_log_file_path('woorefill')),
                 ],
                 ['type' => 'sectionend', 'id' => 'woorefill_api_service'],
             ]

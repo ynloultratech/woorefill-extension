@@ -56,9 +56,25 @@ function wc_order_get_wireless_product_sku($id)
 {
     $product = wc_order_get_wireless_product($id);
 
+    return wc_get_wireless_product_sku($product);
+}
+
+/**
+ * Get the wireless product sku for given product
+ *
+ * @param string|WC_Product_Wireless $product
+ *
+ * @return mixed|null
+ */
+function wc_get_wireless_product_sku($product)
+{
+    if ($product instanceof WC_Product_Wireless) {
+        $product = $product->get_id();
+    }
+
     $wirelessSku = null;
     if ($product) {
-        $wirelessSku = get_post_meta($product->get_id(), '_wireless_product_id', true);
+        $wirelessSku = get_post_meta($product, '_wireless_product_id', true);
     }
 
     return $wirelessSku;
@@ -135,4 +151,41 @@ function wc_cart_get_first_wireless_product()
 function wc_can_add_another_wireless_product_to_cart()
 {
     return allow_buy_multiple_wireless_products() || ! wc_cart_has_wireless_product();
+}
+
+/**
+ * Return array of fields and meta og given product sku
+ *
+ * @param $sku
+ *
+ * @return array
+ */
+function wc_resolve_api_product_fields($sku)
+{
+    $apiProduct = WooRefillAPI::getProduct($sku);
+    $fields = [];
+    if (isset($apiProduct['request_meta'])) {
+        foreach ($apiProduct['request_meta'] as $name => $prop) {
+
+            //skip amount for now
+            //TODO: use amount field to fill variable products
+            if ($name === 'amount'){
+                continue;
+            }
+
+            $fields[sprintf('_woo_refill_meta_%s', $name)] = [
+                'type' => array_key_value($prop, 'input_type', 'text'),
+                'label' => array_key_value($prop, 'label', ucfirst($name)),
+                'required' => array_key_value($prop, 'required', false),
+                'maxlength' => array_key_value($prop, 'maxlength', null),
+                'custom_attributes' => [
+                    'minlength' => array_key_value($prop, 'minlength', null),
+                    'min' => array_key_value($prop, 'min', null),
+                    'max' => array_key_value($prop, 'max', null),
+                ],
+            ];
+        }
+    }
+
+    return $fields;
 }

@@ -60,6 +60,16 @@ class WooRefillAPI
     }
 
     /**
+     * @param $id
+     *
+     * @return array|mixed|null|object
+     */
+    public static function getProduct($id)
+    {
+        return self::send(self::GET, sprintf('/product/%s', $id));
+    }
+
+    /**
      * send
      *
      * @param       $method
@@ -97,13 +107,14 @@ class WooRefillAPI
             $json = null;
         }
 
+        if ( ! $json) {
+            woorefill_log(sprintf('API Response (Full): %s', print_r($response, true)));
+        }
+
         if ($json && $error = array_key_value($json, 'error')) {
             self::$errorCode = array_key_value($error, 'code');
             self::$errorMessage = array_key_value($error, 'message');
-        }
-
-        if ( ! $json) {
-            woorefill_log(sprintf('API Response (Full): %s', print_r($response, true)));
+            throw new Exception(self::$errorMessage, self::$errorCode);
         }
 
         return $json;

@@ -19,16 +19,18 @@ add_filter(
     'woocommerce_checkout_fields',
     function ($fields) {
         if (wc_cart_has_wireless_product()) {
-            $fields['refill'] = [
-                'phone_to_refill' => [
-                    'type' => 'tel',
-                    'label' => __('Phone to Refill'),
-                    'required' => true,
-                ],
-            ];
+            $sku = wc_get_wireless_product_sku(wc_cart_get_first_wireless_product());
+            $fields = array_merge($fields, wc_resolve_api_product_fields($sku));
         }
 
         return $fields;
+    }
+);
+
+add_action(
+    'woocommerce_checkout_process',
+    function () {
+        //wc_add_notice( __( 'You must accept our Terms &amp; Conditions.', 'woocommerce' ), 'error' );
     }
 );
 
@@ -40,37 +42,31 @@ add_action(
     function () {
         if (wc_cart_has_wireless_product()) {
             $plan = wc_cart_get_first_wireless_product()->get_title();
-            $note = "Phone to refill with $plan";
+            $sku = wc_get_wireless_product_sku(wc_cart_get_first_wireless_product());
+            $fields = wc_resolve_api_product_fields($sku);
+            foreach ($fields as $name => $props) {
+                // WC()->checkout()->get_value('billing_phone')
+                //$note = "Phone to refill with $plan";
+                $input = woocommerce_form_field($name, $props);
 
-            //woo_api_get_fields();
-
-            $phoneInput = woocommerce_form_field(
-                'phone_to_refill',
-                [
-                    'type' => 'tel',
-                    'label' => __('Phone to Refill'),
-                    'required' => true,
-                    'description' => $note,
-                ],
-                WC()->checkout()->get_value('billing_phone')
-            );
-
-            echo <<<HTML
-$phoneInput
-<hr>
-HTML;
-
+                echo $input;
+            }
         }
     }
 );
+
 /**
  * Update order metadata
  */
 add_action(
     'woocommerce_checkout_update_order_meta',
     function ($order_id) {
-        if (isset($_POST['phone_to_refill']) && wc_cart_has_wireless_product()) {
-            update_post_meta($order_id, '_phone_to_refill', $_POST['phone_to_refill']);
+        if (wc_cart_has_wireless_product()) {
+            foreach ($_POST as $field => $value) {
+                if (strpos($field, '_woo_refill_meta_') !== false) {
+                    update_post_meta($order_id, $field, $value);
+                }
+            }
         }
     }
 );

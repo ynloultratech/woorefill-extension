@@ -31,6 +31,11 @@ function woorefill_log($message)
     }
 }
 
+function wr_humanize_str($label)
+{
+    return ucwords(str_replace('_', ' ', $label));
+}
+
 if ( ! function_exists('array_key_value')) {
     /**
      * Extract some value from array using a key path,

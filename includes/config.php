@@ -15,6 +15,9 @@ if ( ! defined('ABSPATH')) {
     exit;
 }
 
+const WR_INPUT_META_PREFIX = '_woo_refill_meta_';
+const WR_RESPONSE_PREFIX = '_woo_api_response_';
+
 function allow_buy_multiple_wireless_products()
 {
     //TODO: move to some settings in the backend

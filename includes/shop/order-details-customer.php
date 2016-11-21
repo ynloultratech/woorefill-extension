@@ -11,14 +11,19 @@
  * @version 1.0-alpha
  */
 
-if ( ! defined('ABSPATH')) {
-    exit;
-}
+add_action(
+    'woocommerce_order_details_after_customer_details',
+    function ($order) {
+        /** @var WC_Order $order */
+        $pin = get_post_meta($order->id, WR_RESPONSE_PREFIX.'PIN', true);
+        if ($pin) {
+            echo <<<HTML
+<tr>
+    <th>Pin</th>
+    <td>$pin</td>
+</tr>
+HTML;
+        }
 
-include_once __DIR__.'/functions.php';
-include_once __DIR__.'/checkout.php';
-include_once __DIR__.'/refill.php';
-include_once __DIR__.'/add-to-cart.php';
-include_once __DIR__.'/thankyou.php';
-include_once __DIR__.'/order-details-customer.php';
-
+    }
+);

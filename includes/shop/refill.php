@@ -25,8 +25,15 @@ add_action(
 
         if ($sku) {
             try {
-                WooRefillAPI::submit($sku, $id);
+                $transaction = WooRefillAPI::submit($sku, $id);
+                update_post_meta($id, WR_RESPONSE_PREFIX.'transaction', $transaction['id']);
+                update_post_meta($id, WR_RESPONSE_PREFIX.'provider_transaction', $transaction['provider_transaction_id']);
+                update_post_meta($id, WR_RESPONSE_PREFIX.'response', $transaction['response_message']);
+                foreach ($transaction['response_meta'] as $name => $value) {
+                    update_post_meta($id, WR_RESPONSE_PREFIX.$name, $value);
+                }
                 $order->update_status('completed', "Refill success \n\n");
+
             } catch (\Exception $e) {
                 woorefill_log('ERROR: '.$e->getMessage());
                 woorefill_log($e);

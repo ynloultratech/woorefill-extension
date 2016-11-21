@@ -40,7 +40,7 @@ class WooRefillAPI
      * @param null  $orderId
      * @param array $meta
      *
-     * @return array
+     * @return array|false
      * @throws Exception
      */
     public static function submit($id, $orderId = null, $meta = [])
@@ -52,11 +52,13 @@ class WooRefillAPI
             $meta
         );
 
-        $json = self::send(self::POST, sprintf('/product/%s/submit', $id), $data);
+        $transaction = self::send(self::POST, sprintf('/product/%s/submit', $id), $data);
 
-        if ($json && array_key_value($json, 'status') === 'COMPLETED') {
-            return $json;
+        if ($transaction && array_key_value($transaction, 'status') === 'COMPLETED') {
+            return $transaction;
         }
+
+        return false;
     }
 
     /**
@@ -91,7 +93,8 @@ class WooRefillAPI
         woorefill_log(sprintf('Connecting to API url: %s ', str_replace($apiKey, '{hidden}', $url)));
 
         if ($method === self::POST) {
-            $response = wp_remote_post($url, $data);
+            woorefill_log(sprintf('Post data: %s', print_r($data, true)));
+            $response = wp_remote_post($url, ['body' => $data]);
         } else {
             $response = wp_remote_get($url);
         }
@@ -114,6 +117,7 @@ class WooRefillAPI
         if ($json && $error = array_key_value($json, 'error')) {
             self::$errorCode = array_key_value($error, 'code');
             self::$errorMessage = array_key_value($error, 'message');
+            woorefill_log(sprintf('API Error (%s): %s', self::$errorCode, self::$errorMessage));
             throw new Exception(self::$errorMessage, self::$errorCode);
         }
 

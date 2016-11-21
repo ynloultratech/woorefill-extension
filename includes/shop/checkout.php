@@ -30,7 +30,7 @@ add_filter(
 add_action(
     'woocommerce_checkout_process',
     function () {
-        //wc_add_notice( __( 'You must accept our Terms &amp; Conditions.', 'woocommerce' ), 'error' );
+
     }
 );
 
@@ -41,13 +41,22 @@ add_action(
     'woocommerce_checkout_billing',
     function () {
         if (wc_cart_has_wireless_product()) {
-            $plan = wc_cart_get_first_wireless_product()->get_title();
             $sku = wc_get_wireless_product_sku(wc_cart_get_first_wireless_product());
             $fields = wc_resolve_api_product_fields($sku);
             foreach ($fields as $name => $props) {
-                // WC()->checkout()->get_value('billing_phone')
-                //$note = "Phone to refill with $plan";
-                $input = woocommerce_form_field($name, $props);
+                $value = null;
+
+                //phone
+                if (preg_match('/_phone$/', $name)) {
+                    $value = WC()->checkout()->get_value('billing_phone');
+                }
+
+                //amount
+                if (preg_match('/_amount$/', $name)) {
+                    $value = wc_cart_get_first_wireless_product()->price;
+                }
+
+                $input = woocommerce_form_field($name, $props, $value);
 
                 echo $input;
             }

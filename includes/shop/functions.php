@@ -162,16 +162,14 @@ function wc_can_add_another_wireless_product_to_cart()
  */
 function wc_resolve_api_product_fields($sku)
 {
-    $apiProduct = WooRefillAPI::getProduct($sku);
+    try {
+        $apiProduct = WooRefillAPI::getProduct($sku);
+    } catch (\Exception $e) {
+        //do nothing
+    }
     $fields = [];
     if (isset($apiProduct['request_meta'])) {
         foreach ($apiProduct['request_meta'] as $name => $prop) {
-
-            //skip amount for now
-            //TODO: use amount field to fill variable products
-            if ($name === 'amount'){
-                continue;
-            }
 
             $fields[sprintf('_woo_refill_meta_%s', $name)] = [
                 'type' => array_key_value($prop, 'input_type', 'text'),
@@ -184,6 +182,14 @@ function wc_resolve_api_product_fields($sku)
                     'max' => array_key_value($prop, 'max', null),
                 ],
             ];
+
+            //skip amount for now
+            //TODO: use amount field to fill variable products
+            if ($name === 'amount') {
+                $fields[sprintf('_woo_refill_meta_%s', $name)]['custom_attributes']['style'] = 'display:none';
+                $fields[sprintf('_woo_refill_meta_%s', $name)]['label'] = null;
+                $fields[sprintf('_woo_refill_meta_%s', $name)]['required'] = false;
+            }
         }
     }
 

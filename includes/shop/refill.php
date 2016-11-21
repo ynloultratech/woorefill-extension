@@ -25,14 +25,28 @@ add_action(
 
         if ($sku) {
             try {
-                $transaction = WooRefillAPI::submit($sku, $id);
-                update_post_meta($id, WR_RESPONSE_PREFIX.'transaction', $transaction['id']);
-                update_post_meta($id, WR_RESPONSE_PREFIX.'provider_transaction', $transaction['provider_transaction_id']);
-                update_post_meta($id, WR_RESPONSE_PREFIX.'response', $transaction['response_message']);
-                foreach ($transaction['response_meta'] as $name => $value) {
-                    update_post_meta($id, WR_RESPONSE_PREFIX.$name, $value);
+                $meta = [];
+                $metaArray = get_post_meta($id, null, true);
+                foreach ($metaArray as $metaName => $metaValue) {
+                    if (strpos($metaName, WR_INPUT_META_PREFIX) !== false) {
+                        $metaName = str_replace(WR_INPUT_META_PREFIX, '', $metaName);
+                        if ($metaValue) {
+                            $meta[$metaName] = current($metaValue);
+                        }
+                    }
                 }
-                $order->update_status('completed', "Refill success \n\n");
+
+                $transaction = WooRefillAPI::submit($sku, $id, $meta);
+
+                if ($transaction) {
+                    update_post_meta($id, WR_RESPONSE_PREFIX.'transaction', $transaction['id']);
+                    update_post_meta($id, WR_RESPONSE_PREFIX.'provider_transaction', $transaction['provider_transaction_id']);
+                    update_post_meta($id, WR_RESPONSE_PREFIX.'response', $transaction['response_message']);
+                    foreach ($transaction['response_meta'] as $name => $value) {
+                        update_post_meta($id, WR_RESPONSE_PREFIX.$name, $value);
+                    }
+                    $order->update_status('completed', "Refill success \n\n");
+                }
 
             } catch (\Exception $e) {
                 woorefill_log('ERROR: '.$e->getMessage());

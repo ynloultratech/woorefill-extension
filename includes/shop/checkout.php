@@ -62,6 +62,18 @@ add_action(
                     $input = woocommerce_form_field($name, $props, $value);
 
                     echo $input;
+
+                    //highlight the phone
+                    //change the phone to refill label for h3
+                    if (preg_match('/_phone$/', $name)) {
+                        echo <<<HTML
+<script>
+    var label = jQuery('#_woo_refill_meta_phone_field label');
+    var content = '<h3>'+ label.html() + '</h3>';
+    label.replaceWith(content);
+</script>
+HTML;
+                    }
                 }
             } catch (\Exception $e) {
                 wc_add_notice('This product can\'t be processed now, please try again later.', 'error');

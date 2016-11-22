@@ -8,7 +8,7 @@
  *
  * @author YNLO-Ultratech Development Team <developer@ynloultratech.com>
  * @package woorefill-extension
- * @version 1.0-alpha
+ * @version 1.0.x
  */
 
 add_action(

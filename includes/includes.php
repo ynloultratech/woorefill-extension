@@ -8,7 +8,7 @@
  *
  * @author YNLO-Ultratech Development Team <developer@ynloultratech.com>
  * @package woorefill-extension
- * @version 1.0-alpha
+ * @version 1.0.x
  */
 
 if ( ! defined('ABSPATH')) {
@@ -21,3 +21,4 @@ include_once __DIR__.'/admin/admin.php';
 include_once __DIR__.'/shop/shop.php';
 include_once __DIR__.'/wc-product-wireless.php';
 include_once __DIR__.'/api.php';
+include_once __DIR__.'/updater-class.php';

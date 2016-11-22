@@ -1,13 +1,14 @@
 <?php
 
-/**
- * TotalReup (r) Payment Center (https://www.totalreup.com)
- *
+/*
  * LICENSE: This file is subject to the terms and conditions defined in
  * file 'LICENSE', which is part of this source code package.
  *
- * @author    Total Developer Team <developer@totalreup.com>
- * @copyright 2015 Copyright(c) Total Mobile (https://totalmobile.com) - All rights reserved.
+ * @copyright 2016 Copyright(c) - All rights reserved.
+ *
+ * @author YNLO-Ultratech Development Team <developer@ynloultratech.com>
+ * @package woorefill-extension
+ * @version 1.0.x
  */
 
 add_action(

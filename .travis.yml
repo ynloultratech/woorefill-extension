@@ -6,6 +6,7 @@ matrix:
         - php: 7.0
 
 script:
+    - ls -l
     - zip woorefill-extension.zip
 
 deploy:

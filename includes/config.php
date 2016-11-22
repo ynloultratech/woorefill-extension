@@ -14,9 +14,16 @@
 if ( ! defined('ABSPATH')) {
     exit;
 }
+if (file_exists(__DIR__.DIRECTORY_SEPARATOR.'dev_config.php')) {
+    include __DIR__.DIRECTORY_SEPARATOR.'dev_config.php';
+}
 
 const WR_INPUT_META_PREFIX = '_woo_refill_meta_';
 const WR_RESPONSE_PREFIX = '_woo_api_response_';
+
+if (!defined('WR_API_BASE_URL')) {
+    define('WR_API_BASE_URL', 'https://www.beasterp.com/api/v1.0');
+}
 
 function allow_buy_multiple_wireless_products()
 {

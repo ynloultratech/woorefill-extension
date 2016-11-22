@@ -23,11 +23,6 @@ class WooRefillAPI
     /**
      * @var string
      */
-    private static $baseUrl = 'https://www.beasterp.com/api/v1.0';
-
-    /**
-     * @var string
-     */
     private static $errorCode = null;
 
     /**
@@ -100,11 +95,8 @@ class WooRefillAPI
         self::$errorCode = null;
         self::$errorMessage = null;
 
-        $baseUrl = self::$baseUrl;
-        $url = $baseUrl.$url;
-
+        $url = WR_API_BASE_URL.$url;
         woorefill_log(sprintf('Connecting to API url: %s ', $url));
-
 
         if ($method === self::POST) {
             woorefill_log(sprintf('Post data: %s', print_r($data, true)));
@@ -117,7 +109,7 @@ class WooRefillAPI
             self::$errorCode = $response->get_error_code();
             self::$errorMessage = $response->get_error_message();
             woorefill_log(sprintf('Error (%s): %s', self::$errorCode, self::$errorMessage));
-            throw new Exception(self::$errorMessage, self::$errorCode);
+            throw new Exception(self::$errorMessage);
         }
 
         if (isset($response['response']['code'], $response['response']['message'])) {
@@ -139,7 +131,7 @@ class WooRefillAPI
             self::$errorCode = array_key_value($error, 'code');
             self::$errorMessage = array_key_value($error, 'message');
             woorefill_log(sprintf('API Error (%s): %s', self::$errorCode, self::$errorMessage));
-            throw new Exception(self::$errorMessage, self::$errorCode);
+            throw new Exception((string)self::$errorMessage, (int)self::$errorCode);
         }
 
         set_transient($cacheKey, $json, 120);

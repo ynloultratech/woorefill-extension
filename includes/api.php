@@ -83,6 +83,20 @@ class WooRefillAPI
      */
     protected static function send($method, $url, array $data = [])
     {
+        $apiKey = get_woo_refill_api_key();
+        $cacheKey = self::makeCacheKey(
+            [
+                'method' => $method,
+                'url' => $url,
+                'data' => $data,
+                'apikey' => $apiKey,
+            ]
+        );
+
+        if ($method === self::GET && $cache = get_transient($cacheKey)) {
+            return $cache;
+        }
+
         self::$errorCode = null;
         self::$errorMessage = null;
 
@@ -90,7 +104,7 @@ class WooRefillAPI
         $url = $baseUrl.$url;
 
         woorefill_log(sprintf('Connecting to API url: %s ', $url));
-        $apiKey = get_woo_refill_api_key();
+
 
         if ($method === self::POST) {
             woorefill_log(sprintf('Post data: %s', print_r($data, true)));
@@ -128,6 +142,20 @@ class WooRefillAPI
             throw new Exception(self::$errorMessage, self::$errorCode);
         }
 
+        set_transient($cacheKey, $json, 120);
+
         return $json;
+    }
+
+    /**
+     * makeCacheKey
+     *
+     * @param array $data
+     *
+     * @return string
+     */
+    private static function makeCacheKey($data)
+    {
+        return 'woo_refill_api_'.md5(serialize($data));
     }
 }

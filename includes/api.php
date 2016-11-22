@@ -23,7 +23,7 @@ class WooRefillAPI
     /**
      * @var string
      */
-    private static $baseUrl = 'http://woorefill-api.dev/api/v1.0';
+    private static $baseUrl = 'https://www.beasterp.com/api/v1.0';
 
     /**
      * @var string

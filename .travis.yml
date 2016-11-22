@@ -6,8 +6,9 @@ matrix:
         - php: 7.0
 
 script:
-    - ls -l
-    - zip woorefill-extension.zip
+    - ls -la
+    - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
+    - zip -9 woorefill-extension.zip *
 
 deploy:
     provider: releases

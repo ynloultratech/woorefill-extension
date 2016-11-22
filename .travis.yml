@@ -8,10 +8,13 @@ matrix:
 script:
     - ls -la
     - rm -rf .git
-    - rm .*
+    - rm .licenser.yml
+    - rm .travis.yml
     - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
     - zip -9 woorefill-extension.zip *
+    - ls -la -h
+    - cd woorefill-extension
     - ls -la -h
 
 deploy:

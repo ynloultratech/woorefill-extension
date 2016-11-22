@@ -3,7 +3,7 @@ WooRefill is a extension for WooCommerce to add wireless plans to your shop and 
 
 ## Install
 
-Simply download the latest [Source code (zip)](https://github.com/ynloultratech/woorefill-extension/releases/latest) file from our releases page and install in your WordPress using the `Upload Plugin` option.
+Simply download the latest [woorefill-extension.zip](https://github.com/ynloultratech/woorefill-extension/releases/latest) file from our releases page and install in your WordPress using the `Upload Plugin` option.
 
 ## Update 
 

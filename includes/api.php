@@ -87,19 +87,19 @@ class WooRefillAPI
         self::$errorMessage = null;
 
         $baseUrl = self::$baseUrl;
-        $apiKey = get_woo_refill_api_key();
-        $url = $baseUrl."$url?apikey={$apiKey}";
+        $url = $baseUrl.$url;
 
-        woorefill_log(sprintf('Connecting to API url: %s ', str_replace($apiKey, '{hidden}', $url)));
+        woorefill_log(sprintf('Connecting to API url: %s ', $url));
+        $apiKey = get_woo_refill_api_key();
 
         if ($method === self::POST) {
             woorefill_log(sprintf('Post data: %s', print_r($data, true)));
-            $response = wp_remote_post($url, ['body' => $data]);
+            $response = wp_remote_post($url, ['body' => $data, 'headers' => ['APIKey' => $apiKey]]);
         } else {
-            $response = wp_remote_get($url);
+            $response = wp_remote_get($url, ['headers' => ['APIKey' => $apiKey]]);
         }
 
-        if ($response instanceof WP_Error){
+        if ($response instanceof WP_Error) {
             self::$errorCode = $response->get_error_code();
             self::$errorMessage = $response->get_error_message();
             woorefill_log(sprintf('Error (%s): %s', self::$errorCode, self::$errorMessage));

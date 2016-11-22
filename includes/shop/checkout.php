@@ -15,6 +15,9 @@ if ( ! defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * Resolve fields from api product metadata and add to the list of fields to checkout
+ */
 add_filter(
     'woocommerce_checkout_fields',
     function ($fields) {
@@ -35,7 +38,7 @@ add_action(
 );
 
 /**
- * Add phone to refill
+ * Resolve fields from api product metadata and add to the list of fields to checkout
  */
 add_action(
     'woocommerce_checkout_billing',

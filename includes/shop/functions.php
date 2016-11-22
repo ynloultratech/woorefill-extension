@@ -162,11 +162,8 @@ function wc_can_add_another_wireless_product_to_cart()
  */
 function wc_resolve_api_product_fields($sku)
 {
-    try {
-        $apiProduct = WooRefillAPI::getProduct($sku);
-    } catch (\Exception $e) {
-        //do nothing
-    }
+    $apiProduct = WooRefillAPI::getProduct($sku);
+
     $fields = [];
     if (isset($apiProduct['request_meta'])) {
         foreach ($apiProduct['request_meta'] as $name => $prop) {

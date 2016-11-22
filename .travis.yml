@@ -7,6 +7,8 @@ matrix:
 
 script:
     - ls -la
+    - rm .*
+    - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
     - zip -9 woorefill-extension.zip *
 

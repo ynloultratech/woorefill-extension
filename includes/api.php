@@ -23,7 +23,7 @@ class WooRefillAPI
     /**
      * @var string
      */
-    private static $baseUrl = 'https://www.beasterp.com/api/v1.0';
+    private static $baseUrl = 'http://woorefill-api.dev/api/v1.0';
 
     /**
      * @var string
@@ -97,6 +97,13 @@ class WooRefillAPI
             $response = wp_remote_post($url, ['body' => $data]);
         } else {
             $response = wp_remote_get($url);
+        }
+
+        if ($response instanceof WP_Error){
+            self::$errorCode = $response->get_error_code();
+            self::$errorMessage = $response->get_error_message();
+            woorefill_log(sprintf('Error (%s): %s', self::$errorCode, self::$errorMessage));
+            throw new Exception(self::$errorMessage, self::$errorCode);
         }
 
         if (isset($response['response']['code'], $response['response']['message'])) {

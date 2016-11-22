@@ -54,11 +54,6 @@ add_action(
                 foreach ($fields as $name => $props) {
                     $value = null;
 
-                    //phone
-                    if (preg_match('/_phone$/', $name)) {
-                        $value = WC()->checkout()->get_value('billing_phone');
-                    }
-
                     //amount
                     if (preg_match('/_amount$/', $name)) {
                         $value = wc_cart_get_first_wireless_product()->price;

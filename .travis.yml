@@ -3,11 +3,12 @@ language: php
 matrix:
     fast_finish: true
     include:
-        - php: 7.0
+        - php: 5.6
 
 script:
     - ls -la
-    - rm -rf .*
+    - rm -rf .git
+    - rm .*
     - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
     - zip -9 woorefill-extension.zip *

@@ -8,14 +8,14 @@
  *
  * @author YNLO-Ultratech Development Team <developer@ynloultratech.com>
  * @package woorefill-extension
- * @version 1.0-alpha
+ * @version 1.0.x
  */
 
 /*
 Plugin Name: WooRefill
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Plugin URI: https://github.com/ynloultratech/woorefill-extension
 Description: WooRefill is a extension for WooCommerce to add wireless plans to your shop and do refills.
-Version: 1.0-alpha
+Version: 1.0-alpha.2
 Author: YnloUltratech
 */
 
@@ -24,6 +24,10 @@ if ( ! defined('ABSPATH')) {
 }
 
 include_once __DIR__.'/includes/includes.php';
+
+if (is_admin()) {
+    new YnloUltratechGitHubPluginUpdater(__FILE__, 'ynloultratech', "woorefill-extension");
+}
 
 /**
  * @param $var

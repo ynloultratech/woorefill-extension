@@ -67,6 +67,24 @@ class WooRefillAPI
     }
 
     /**
+     * @return array
+     */
+    public static function getCarriers()
+    {
+        return self::send(self::GET, '/carrier');
+    }
+
+    /**
+     * @param string|integer $carrierId
+     *
+     * @return array
+     */
+    public static function getProducts($carrierId = null)
+    {
+        return self::send(self::GET, '/product'.($carrierId ? '?carrier_id='.$carrierId : ''));
+    }
+
+    /**
      * send
      *
      * @param       $method

@@ -16,6 +16,20 @@ if ( ! defined('ABSPATH')) {
 }
 
 /**
+ * Render given template to use in ajax responses
+ *
+ * @param $template
+ */
+function wr_render_ajax_template($template)
+{
+    ob_start();
+    include $template;
+    $table = ob_get_clean();
+
+    _ajax_wp_die_handler($table);
+}
+
+/**
  * Logging method.
  *
  * @param string $message

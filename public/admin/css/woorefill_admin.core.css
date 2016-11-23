@@ -1,0 +1,7 @@
+label.form-invalid {
+    background: red;
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 3px;
+    display: table-cell;
+}

@@ -27,6 +27,17 @@ include_once __DIR__.'/includes/includes.php';
 
 if (is_admin()) {
     new YnloUltratechGitHubPluginUpdater(__FILE__, 'ynloultratech', "woorefill-extension");
+
+    add_action(
+        'admin_enqueue_scripts',
+        function () {
+            wp_enqueue_script('datatables', plugins_url('/public/admin/js/jquery.dataTables.min.js', __FILE__));
+            wp_enqueue_script('woorefill_admin_core', plugins_url('/public/admin/js/woorefill_admin.core.js', __FILE__));
+            wp_enqueue_script('jquery_validate', plugins_url('/public/admin/js/jquery.validate.min.js', __FILE__));
+            wp_enqueue_style('datatables_css', plugins_url('/public/admin/css/jquery.dataTables.min.css', __FILE__));
+            wp_enqueue_style('woorefill_admin_core', plugins_url('/public/admin/css/woorefill_admin.core.css', __FILE__));
+        }
+    );
 }
 
 /**

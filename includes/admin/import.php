@@ -32,8 +32,8 @@ add_action(
                             throw new LogicException('Select at least one product to import');
                         }
                         $importer->setProducts($products);
-                        $importer->setCarrierId( array_key_value($_POST, 'carrier_id'));
-                        $importer->setStatus( array_key_value($_POST, 'status'));
+                        $importer->setCarrierId(array_key_value($_POST, 'carrier_id'));
+                        $importer->setStatus(array_key_value($_POST, 'status'));
 
                         if (array_key_value($_POST, 'create_carrier')) {
                             $importer->setCarrierName(array_key_value($_POST, 'carrier_name'));
@@ -43,12 +43,13 @@ add_action(
 
                         if (array_key_value($_POST, 'create_category')) {
                             $importer->setCategoryName(array_key_value($_POST, 'category_name'));
-                        }else{
+                        } else {
                             $importer->setCategory(get_term(array_key_value($_POST, 'parent_category')));
                         }
 
                         $importer->import();
-
+                        $success = 'All selected products has been imported successfully.';
+                        $_POST = [];
                     } catch (\Exception $e) {
                         $error = $e->getMessage();
                     }

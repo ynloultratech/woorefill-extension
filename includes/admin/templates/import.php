@@ -21,6 +21,10 @@
         <div class="notice notice-error"><p><?= $error ?></p></div>
     <?php endif; ?>
 
+    <?php if (isset($success)): ?>
+        <div class="notice notice-success"><p><?= $success ?></p></div>
+    <?php endif; ?>
+
     <br class="clear"/>
     <?php $submittedImport = (boolean)array_key_value($_POST, 'carrier_id'); ?>
     <div id="col-container">

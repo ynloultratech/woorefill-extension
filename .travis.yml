@@ -15,13 +15,12 @@ script:
     - rm -rf .git
     - rm .licenser.yml
     - rm .travis.yml
-    - rm .sandbox.yml
     - rm .gitignore
     - rm composer.json
     - rm composer.lock
     - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
-    - zip -r -9 woorefill-extension.zip *
+    - zip -r -9 woorefill-extension.zip * > log
     - ls -la -h
 
 deploy:

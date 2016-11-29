@@ -127,7 +127,7 @@ class ImportProductsController extends Controller
 
     protected function buildImportForm()
     {
-        return $this->createFormBuilder(ImportForm::class)->getForm();
+        return $this->createFormBuilder('import_products_form')->getForm();
     }
 
     /**

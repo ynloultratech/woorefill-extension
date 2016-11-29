@@ -39,7 +39,7 @@ class CarrierFormType extends AbstractType
         );
         $carriers = [];
         foreach ($terms as $term) {
-            $carriers[sprintf('%s (%s)', $term->name, $term->count)] = $term->term_id;
+            $carriers[$term->term_id] = sprintf('%s (%s)', $term->name, $term->count);
         }
         $resolver->setDefaults(
             [
@@ -54,6 +54,14 @@ class CarrierFormType extends AbstractType
      */
     public function getParent()
     {
-        return ChoiceType::class;
+        return 'choice';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName()
+    {
+        return 'carrier_choice';
     }
 }

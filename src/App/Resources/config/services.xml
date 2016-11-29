@@ -7,11 +7,12 @@
         <parameter key="api_key"></parameter>
         <parameter key="api_url">https://www.beasterp.com/api/v1.0</parameter>
         <parameter key="enable_logs">false</parameter>
+        <parameter key="plugin_file"></parameter>
     </parameters>
 
     <services>
         <service id="updater" class="WooRefill\App\Updater">
-            <tag name="wp_filter" tag="pre_set_site_transient_update_plugins" method="setTransitent"/>
+            <argument>%plugin_file%</argument>
             <tag name="wp_filter" tag="plugins_api" method="setPluginInfo"/>
             <tag name="wp_filter" tag="upgrader_post_install" method="postInstall"/>
         </service>
@@ -35,7 +36,7 @@
             <factory class="WooRefill\Symfony\Component\HttpFoundation\Request" method="createFromGlobals"/>
         </service>
 
-        <service id="event_dispatcher" class="WooRefill\App\Event\EventDispatcherBridge">
+        <service id="event_dispatcher" class="WooRefill\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
             <factory class="WooRefill\App\Kernel" method="getEventDispatcher"/>
         </service>
 
@@ -45,6 +46,7 @@
         </service>
 
         <service id="asset_register" class="WooRefill\App\Asset\AssetRegister">
+            <argument>%plugin_file%</argument>
         </service>
 
         <service id="tagged_services" class="WooRefill\App\TaggedServices\TaggedServices">
@@ -57,13 +59,8 @@
             <argument type="service" id="logger"/>
         </service>
 
-        <service id="category_form_type" class="WooRefill\Admin\Form\Type\CategoryFormType">
-            <argument type="service" id="product_category_manager"/>
-            <tag name="form.type"/>
-        </service>
-
         <service id="wp_form_type_extension" class="WooRefill\App\Form\Extension\WPFormTypeExtension">
-            <tag name="form.type_extension"/>
+            <tag name="form.type_extension" alias="wp_form_type_extension"/>
         </service>
 
         <service id="wp_event_manager" class="WooRefill\App\WPEventBridge\WPEventManager">

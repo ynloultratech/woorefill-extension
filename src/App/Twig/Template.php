@@ -10,6 +10,7 @@
  * @package woorefill-extension
  * @version 1.0.x
  */
+
 namespace WooRefill\App\Twig;
 
 use WooRefill\App\Twig\Extension\WPHelperExtension;
@@ -34,7 +35,7 @@ class Template
      */
     public function __construct(ContainerInterface $container)
     {
-        $appVariableReflection = new \ReflectionClass(AppVariable::class);
+        $appVariableReflection = new \ReflectionClass('WooRefill\Symfony\Bridge\Twig\AppVariable');
         $vendorTwigBridgeDir = dirname($appVariableReflection->getFileName());
 
         $vendorDir = realpath(__DIR__.'/../../../vendor');

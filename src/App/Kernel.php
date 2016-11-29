@@ -15,7 +15,6 @@ namespace WooRefill\App;
 
 use WooRefill\Admin\DependencyInjection\AdminExtension;
 use WooRefill\App\DependencyInjection\AppExtension;
-use WooRefill\App\Event\EventDispatcherBridge;
 use WooRefill\Shop\DependencyInjection\ShopExtension;
 use WooRefill\Symfony\Component\DependencyInjection\Container;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -53,7 +52,7 @@ class Kernel
             $extension->load([], self::$container);
         }
 
-        self::$eventDispatcher = new EventDispatcherBridge(self::$container);
+        self::$eventDispatcher = new ContainerAwareEventDispatcher(self::$container);
         self::$container->addCompilerPass(new RegisterListenersPass());
         self::$container->addCompilerPass(new TaggedServicesCompilerPass());
         self::$container->compile();

@@ -13,8 +13,8 @@
 
 namespace WooRefill\App\Api;
 
+use Guzzle\Http\Client;
 use WooRefill\App\Logger\Logger;
-use WooRefill\GuzzleHttp\Client;
 
 /**
  * Class RefillAPI
@@ -202,14 +202,12 @@ class RefillAPI
         //woorefill_log(sprintf('Connecting to API url: %s ', $url));
         try {
             $client = new Client();
-            $options = [
-                'form_params' => $data,
-                'headers' => [
-                    'APIKey' => $apiKey,
-                ],
+            $headers = [
+                'APIKey' => $apiKey,
             ];
-            $response = $client->request($method, $url, $options);
-            $json = $response->getBody()->getContents();
+            $request = $client->createRequest($method, $url, $headers, $data);
+            $response = $client->send($request);
+            $json = (string)$response->getBody();
             $result = @json_decode($json);
 
             if ($result) {

@@ -52,7 +52,7 @@ class ProductTableFormType extends AbstractType
             function ($options) {
                 $choices = [];
                 foreach ($options['products'] as $product) {
-                    $choices[$product->name] = $product->id;
+                    $choices[$product->id] = $product->name;
                 }
 
                 return $choices;
@@ -77,7 +77,7 @@ class ProductTableFormType extends AbstractType
     /**
      * @inheritDoc
      */
-    public function getBlockPrefix()
+    public function getName()
     {
         return 'product_table';
     }
@@ -87,6 +87,6 @@ class ProductTableFormType extends AbstractType
      */
     public function getParent()
     {
-        return ChoiceType::class;
+        return 'choice';
     }
 }

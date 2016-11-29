@@ -34,14 +34,14 @@ class CategoryFormType extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $categoriesArray = $this->manager->getProductsCategories();
         $categories = [];
         foreach ($categoriesArray as $category) {
-            $categories[sprintf('%s (%s)', $category->name, $category->count)] = $category->term_id;
+            $categories[$category->term_id] = sprintf('%s (%s)', $category->name, $category->count);
         }
         $resolver->setDefaults(
             [
@@ -52,10 +52,18 @@ class CategoryFormType extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     *{@inheritDoc}
      */
     public function getParent()
     {
-        return ChoiceType::class;
+        return 'choice';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return 'category_choice';
     }
 }

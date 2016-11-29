@@ -34,7 +34,7 @@ abstract class Controller implements ContainerAwareInterface
     /**
      * @return FormBuilderInterface
      */
-    protected function createFormBuilder($type = FormType::class, $data = null, array $options = [])
+    protected function createFormBuilder($type = 'WooRefill\Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
     {
         /** @var FormFactory $formFactory */
         $formFactory = $this->get('form_factory');

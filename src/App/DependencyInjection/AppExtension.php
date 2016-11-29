@@ -37,6 +37,9 @@ class AppExtension extends Extension
         $container->setParameter('api_key', get_option('_woorefill_api_key'));
         $container->setParameter('enable_logs', get_option('_woorefill_log') === 'yes');
 
+        $pluginFile = __DIR__.'/../../../woorefill.php';
+        $container->setParameter('plugin_file', realpath($pluginFile));
+
         if (defined('API_URL')) {
             $container->setParameter('api_url', API_URL);
         }

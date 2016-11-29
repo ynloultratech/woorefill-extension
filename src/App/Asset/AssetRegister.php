@@ -16,6 +16,21 @@ namespace WooRefill\App\Asset;
 class AssetRegister
 {
     /**
+     * @var string
+     */
+    protected $pluginFile;
+
+    /**
+     * AssetRegister constructor.
+     *
+     * @param string $pluginFile
+     */
+    public function __construct($pluginFile)
+    {
+        $this->pluginFile = $pluginFile;
+    }
+
+    /**
      * @param       $name
      * @param       $file
      * @param array $deps
@@ -44,8 +59,6 @@ class AssetRegister
      */
     protected function getFilePath($file)
     {
-        $plugin = __DIR__.'/../../../woorefill.php';
-        $plugin = realpath($plugin);
-        return plugins_url($file, $plugin);
+        return plugins_url($file, $this->pluginFile);
     }
 }

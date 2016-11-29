@@ -28,10 +28,9 @@ class Updater
     private $githubAPIResult; // holds data from GitHub
     private $accessToken; // GitHub private repo token
 
-    public function __construct()
+    public function __construct($pluginFile)
     {
-        $file = __DIR__.'/../../woorefill.php';
-        $this->pluginFile = realpath($file);
+        $this->pluginFile = $pluginFile;
     }
 
     /**

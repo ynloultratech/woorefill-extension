@@ -73,22 +73,22 @@ class ImportForm extends AbstractType
 
         $builder->add(
             'products',
-            ProductTableFormType::class,
+            'product_table',
             [
                 'products' => $products,
             ]
         );
         $builder->add(
             'createCarrier',
-            ChoiceType::class,
+            'choice',
             [
                 'wrapper_class' => 'form-field horizontal',
                 'choice_attr' => function ($val, $key, $index) {
                     return ['data-toggle-prefix' => '.create-carrier-'];
                 },
                 'choices' => [
-                    'Create new carrier' => 1,
-                    'Use existent carrier' => 0,
+                    1 => 'Create new carrier',
+                    0 => 'Use existent carrier',
                 ],
                 'expanded' => true,
                 'help' => __('Import selected products into existent carrier or create new one?'),
@@ -106,7 +106,7 @@ class ImportForm extends AbstractType
         );
         $builder->add(
             'existentCarrier',
-            CarrierFormType::class,
+            'carrier_choice',
             [
                 'wrapper_class' => 'form-field create-carrier-0',
             ]
@@ -114,12 +114,12 @@ class ImportForm extends AbstractType
 
         $builder->add(
             'createCategory',
-            ChoiceType::class,
+            'choice',
             [
                 'wrapper_class' => 'form-field horizontal create-carrier-1',
                 'choices' => [
-                    'Create new category' => 1,
-                    'Use existent category' => 0,
+                    1 => 'Create new category',
+                    0 => 'Use existent category',
                 ],
                 'choice_attr' => function ($val, $key, $index) {
                     return ['data-toggle-prefix' => '.create-category-'];
@@ -140,7 +140,7 @@ class ImportForm extends AbstractType
         );
         $builder->add(
             'existentCategory',
-            CategoryFormType::class,
+            'category_choice',
             [
                 'help' => __('Select the category to use for this carrier.'),
                 'wrapper_class' => 'form-field horizontal  create-category-0',
@@ -148,7 +148,7 @@ class ImportForm extends AbstractType
         );
         $builder->add(
             'newCategoryParent',
-            CategoryFormType::class,
+            'category_choice',
             [
                 'wrapper_class' => 'form-field horizontal create-category-1',
                 'required' => false,
@@ -156,7 +156,7 @@ class ImportForm extends AbstractType
         );
         $builder->add(
             'status',
-            ProductStatusFormType::class,
+            'product_status_choice',
             [
                 'data' => 'publish',
                 'help' => __('Status to set for each product after import'),
@@ -202,9 +202,9 @@ class ImportForm extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function getBlockPrefix()
+    public function getName()
     {
         return 'import_products_form';
     }

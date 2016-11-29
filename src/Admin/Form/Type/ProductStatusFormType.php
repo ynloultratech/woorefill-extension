@@ -30,9 +30,9 @@ class ProductStatusFormType extends AbstractType
         $resolver->setDefaults(
             [
                 'choices' => [
-                    'Pending' => 'pending',
-                    'Draft' => 'draft',
-                    'Publish' => 'publish',
+                    'pending' => 'Pending',
+                    'draft' => 'Draft',
+                    'publish' => 'Publish',
                 ],
             ]
         );
@@ -43,6 +43,14 @@ class ProductStatusFormType extends AbstractType
      */
     public function getParent()
     {
-        return ChoiceType::class;
+        return 'choice';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName()
+    {
+        return 'product_status_choice';
     }
 }

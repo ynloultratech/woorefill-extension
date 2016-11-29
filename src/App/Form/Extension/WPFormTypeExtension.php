@@ -52,12 +52,11 @@ class WPFormTypeExtension extends AbstractTypeExtension
         );
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function getExtendedType()
     {
-        return FormType::class;
+        return 'form';
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="import_form" class="WooRefill\Admin\Form\ImportForm">
+            <argument type="service" id="refill_api"/>
+            <argument type="service" id="request"/>
+            <tag name="form.type"/>
+        </service>
+
+        <service id="product_table" class="WooRefill\Admin\Form\Type\ProductTableFormType">
+            <tag name="form.type"/>
+        </service>
+
+        <service id="carrier_choice" class="WooRefill\Admin\Form\Type\CarrierFormType">
+            <argument type="service" id="product_category_manager"/>
+            <tag name="form.type"/>
+        </service>
+
+        <service id="category_choice" class="WooRefill\Admin\Form\Type\CategoryFormType">
+            <argument type="service" id="product_category_manager"/>
+            <tag name="form.type"/>
+        </service>
+
+        <service id="product_status_choice" class="WooRefill\Admin\Form\Type\ProductStatusFormType">
+            <tag name="form.type"/>
+        </service>
+    </services>
+</container>

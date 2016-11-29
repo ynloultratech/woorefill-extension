@@ -64,10 +64,41 @@ class Refill implements ContainerAwareInterface
             } catch (\Exception $e) {
                 $this->getLogger()->addLog($e->getTraceAsString());
                 $order->update_status('cancelled', $e->getMessage()." \n\n");
+                $this->refundWirelessProduct($order, $e->getMessage());
             }
         } else {
             $this->getLogger()->addErrorLog('The product "%s" does not have valid wireless product id to submit.', $product->get_formatted_name());
             $order->update_status('cancelled', "Invalid Product \n\n");
+            $this->refundWirelessProduct($order, "Invalid Product");
+        }
+    }
+
+    /**
+     * refundWirelessProduct
+     *
+     * @param \WC_Order $order
+     * @param  string   $reason
+     *
+     * @return bool
+     */
+    public function refundWirelessProduct(\WC_Order $order, $reason)
+    {
+        $gateway = wc_get_payment_gateway_by_order($order);
+        $amount = $order->calculate_totals();
+        if ($gateway instanceof \WC_Payment_Gateway) {
+            if ($gateway->supports('refunds')) {
+                $refunded = $gateway->process_refund($order->id, $amount, $reason);
+                if ($refunded) {
+                    return true;
+                } else {
+                    $order->add_order_note('The refund has been failed, check your payment gateway logs.');
+                }
+            } else {
+                $gatewayName = $gateway->title;
+                $order->add_order_note(sprintf('The gateway %s does not support refund. Make the refund manually', $gatewayName));
+            }
+        } else {
+            $order->add_order_note('The order don`t have a valid payment method to make a refund.');
         }
     }
 

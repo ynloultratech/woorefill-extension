@@ -21,13 +21,16 @@ class OrderManager
     /**
      * Get first available wireless product in given order id
      *
-     * @param $id
+     * @param int|\WC_Order $order
      *
      * @return null|\WC_Product
      */
-    public function getFirstWirelessProduct($id)
+    public function getFirstWirelessProduct($order)
     {
-        $order = WC()->order_factory->get_order($id);
+        if (!$order instanceof \WC_Order) {
+            $order = WC()->order_factory->get_order($order);
+        }
+
         $items = $order->get_items();
         $product = null;
         foreach ($items as $item) {

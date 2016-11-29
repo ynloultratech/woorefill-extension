@@ -6,23 +6,27 @@ matrix:
         - php: 5.6
 
 install:
-  - travis_retry composer global require hirak/prestissimo
-  - travis_retry composer install --no-dev --prefer-dist --no-interaction
-  - composer run-script post-install-cmd
-  - composer dumpautoload
+    - travis_retry composer global require hirak/prestissimo
+    - travis_retry composer install --prefer-dist --no-interaction
+    - composer dumpautoload
 
 script:
+    - ls -la
+    - php vendor/bin/phpunit -c phpunit.xml.dist
+
+before_deploy:
+    - rm -rf vendor
+    - rm composer.lock
     - rm -rf .git
     - rm .licenser.yml
     - rm .travis.yml
     - rm .gitignore
-    - rm composer.json
-    - rm composer.lock
+    - travis_retry composer install --no-dev --prefer-dist --no-interaction
+    - composer dumpautoload
     - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
     - zip -r -9 woorefill-extension.zip * > log
     - ls -la -h
-
 deploy:
     provider: releases
     api_key:

@@ -13,7 +13,7 @@ install:
 script:
     - php vendor/bin/phpunit -c phpunit.xml.dist
 
-before_deploy:
+after_script:
     - rm -rf vendor
     - rm composer.lock
     - rm -rf .git

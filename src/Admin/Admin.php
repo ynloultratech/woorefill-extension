@@ -14,6 +14,7 @@
 namespace WooRefill\Admin;
 
 use WooRefill\App\Asset\AssetRegister;
+use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\TaggedServices\TaggedServices;
 use WooRefill\App\TaggedServices\TagSpecification;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -24,7 +25,7 @@ use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
  */
 class Admin implements ContainerAwareInterface
 {
-    use ContainerAwareTrait;
+    use CommonServiceTrait;
 
     /**
      * Build the admin menu
@@ -67,6 +68,24 @@ class Admin implements ContainerAwareInterface
                 $title,
                 $slug,
                 [$specification->getService(), $specification->getAttributes()['method']]
+            );
+        }
+    }
+
+    /**
+     * checkAPIKey
+     */
+    public function checkAPIKey()
+    {
+        $apiKey = $this->container->getParameter('api_key');
+        if (empty($apiKey) && !(isset($_GET['page'], $_GET['tab']) && 'wc-settings' === $_GET['page'] && 'wireless' === $_GET['tab'])) {
+            $message = sprintf('WooRefill is almost ready. To get started, <a href="%s">set your WooRefill API Key</a>.','/wp-admin/admin.php?page=wc-settings&tab=wireless');
+            $this->render(
+                '@Admin/notice.html.twig',
+                [
+                    'type'=>'warning',
+                    'message'=>$message
+                ]
             );
         }
     }

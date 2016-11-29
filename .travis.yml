@@ -24,7 +24,7 @@ after_script:
     - composer dumpautoload
     - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
-    - zip -r -9 woorefill-extension.zip * > log
+    - zip -r -9 -q woorefill-extension.zip *
     - ls -la -h
 
 deploy:

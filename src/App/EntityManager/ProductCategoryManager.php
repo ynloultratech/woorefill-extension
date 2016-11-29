@@ -35,13 +35,13 @@ class ProductCategoryManager
                 'relation' => 'OR',
                 [
                     'key' => 'wireless_carrier',
-                    'compare' => 'NOT EXISTS',
-                    'value' => '',
+                    'compare' => '=',
+                    'value' => null,
                 ],
                 [
                     'key' => 'wireless_carrier',
-                    'compare' => '=',
-                    'value' => '0',
+                    'compare' => 'NOT EXISTS',
+                    'value' => '',
                 ],
             ],
         ];

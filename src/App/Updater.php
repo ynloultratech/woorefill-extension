@@ -13,7 +13,7 @@
 
 namespace WooRefill\App;
 
-use WooRefill\GuzzleHttp\Client;
+use Guzzle\Http\Client;
 
 /**
  * Class Updater
@@ -60,11 +60,14 @@ class Updater
             $url = add_query_arg(["access_token" => $this->accessToken], $url);
         }
 
-        $client = new Client();
-        $response = $client->get($url, ['verify' => false]);
+        $response = wp_remote_get($url, ['timeout' => 60]);
+
+        if ($response instanceof \WP_Error) {
+            return $response;
+        }
 
         // Get the results
-        $this->githubAPIResult = @json_decode($response->getBody()->getContents());
+        $this->githubAPIResult = @json_decode(isset($response['body']) ? $response['body'] : null);
     }
 
     /**
@@ -135,17 +138,11 @@ class Updater
         $response->author = $this->pluginData["AuthorName"];
         $response->homepage = $this->pluginData["PluginURI"];
 
-        // This is our release download zip file
-        $downloadLink = $this->githubAPIResult->zipball_url;
-
-        // Include the access token for private GitHub repos
-        if (!empty($this->accessToken)) {
-            $downloadLink = add_query_arg(
-                ["access_token" => $this->accessToken],
-                $downloadLink
-            );
+        // Release download zip file
+        if ($this->githubAPIResult->assets) {
+            $asset = current($this->githubAPIResult->assets);
+            $response->download_link = $asset->browser_download_url;
         }
-        $response->download_link = $downloadLink;
 
         $parsedown = new \Parsedown();
         // Create tabs in the lightbox

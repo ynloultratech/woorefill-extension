@@ -1,5 +1,5 @@
 {% block product_table_widget %}
-    {% if products|length > 20 and not carrier %}
+    {% if products|length > 20 and carrier is not defined %}
         <div class="notice notice-warning">
             <p>
                 <strong>Warning</strong> You are viewing too many products, ensure select only needed otherwise too many new products will be created in your shop.

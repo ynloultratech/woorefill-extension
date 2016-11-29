@@ -151,6 +151,7 @@ class ImportForm extends AbstractType
             CategoryFormType::class,
             [
                 'wrapper_class' => 'form-field horizontal create-category-1',
+                'required' => false,
             ]
         );
         $builder->add(

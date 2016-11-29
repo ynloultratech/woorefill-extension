@@ -41,7 +41,11 @@ class ProductImporter implements ContainerAwareInterface
         }
 
         if ($importData->isCreateCategory()) {
-            $response = wp_insert_term($importData->getNewCategoryName(), 'product_cat', ['parent' => $importData->getNewCategoryParent()->term_id]);
+            $args = [];
+            if ($importData->getNewCategoryParent()) {
+                $args = ['parent' => $importData->getNewCategoryParent()->term_id];
+            }
+            $response = wp_insert_term($importData->getNewCategoryName(), 'product_cat', $args);
             if ($response instanceof \WP_Error) {
                 throw new \LogicException($response->get_error_message());
             }

@@ -1,4 +1,4 @@
 prefix: WooRefill
 finder:
     in:
-      - vendor_lib
+      - vendor

@@ -2,7 +2,11 @@
   "name": "ynloultratech/woorefill-extension",
   "description": "WooRefill is a extension for WooCommerce to add wireless plans to your shop and make refills.",
   "type": "wordpress-plugin",
-  "keywords": ["wordpress", "plugin", "refill"],
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "refill"
+  ],
   "homepage": "https://github.com/ynloultratech/woorefill-extension",
   "license": "Apache.20",
   "authors": [
@@ -12,7 +16,7 @@
       "homepage": "https://github.com/ynloultratech"
     }
   ],
-   "autoload": {
+  "autoload": {
     "psr-4": {
       "WooRefill\\": "src/"
     }
@@ -34,7 +38,6 @@
     "symfony/event-dispatcher": "2.7.*",
     "symfony/intl": "2.7.*",
     "symfony/property-access": "2.7.*",
-    "symfony/finder": "2.7.*",
     "erusev/parsedown": "^1.6"
   },
   "require-dev": {
@@ -69,7 +72,7 @@
           "intl/Resources/data",
           "guzzlehttp/guzzle/docs"
         ],
-        "exclude":[
+        "exclude": [
           "twig/twig/lib/Twig/Node/Expression/Test"
         ]
       }

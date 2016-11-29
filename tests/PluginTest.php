@@ -14,10 +14,9 @@
 namespace WooRefill\Test;
 
 use WooRefill\App\Kernel;
-use WooRefill\Symfony\Component\DependencyInjection\Container;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
 
-include 'wp-emulator.php';
+include __DIR__.'wp-emulator.php';
 
 class PluginTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,7 @@
                 <th scope="col" style="width: 30px">{{ 'ID'|trans }}</th>
                 <th scope="col">{{ 'Name'|trans }}</th>
                 <th scope="col" style="text-align: right">
-                    <a href="javascript: showProducts('');" class="button {% if request.isMethod('post') and not request.get('carrier_id') %}button-primary active{% endif %}">
+                    <a id="carrier-select-" href="javascript: showProducts('');" class="button {% if request.isMethod('post') and not request.get('carrier_id') %}button-primary active{% endif %}">
                         {{ 'View All'|trans }}
                     </a>
                 </th>
@@ -45,6 +45,7 @@
         jQuery('#wireless-products-loader').show();
         var productsWrapper = jQuery('#wireless-products-wrapper');
         productsWrapper.hide();
+        productsWrapper.html('');
         productsWrapper.load('/wp-admin/admin-ajax.php?action=get_wireless_products&carrier_id=' + $carrierId, function () {
             jQuery('#wireless-products-loader').hide();
             productsWrapper.show(500);

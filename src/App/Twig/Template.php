@@ -49,8 +49,8 @@ class Template
         $loader->addPath(__DIR__.'/../../Shop/Resources/views/', 'Shop');
         $this->twig = new \Twig_Environment(
             $loader, [
-                'debug' => true,
-                'strict_variables' => true,
+                'debug' => WOOREFILL_DEBUG,
+                'strict_variables' => WOOREFILL_DEBUG,
                 'autoescape' => false,
             ]
         );

@@ -28,8 +28,12 @@ use WooRefill\App\Kernel;
 include_once __DIR__.'/src/includes/wc-product-wireless.php';
 include __DIR__.'/vendor_lib/autoload.php';
 
-if (file_exists(__DIR__.'/dev/dev.php')){
+if (file_exists(__DIR__.'/dev/dev.php')) {
     include __DIR__.'/dev/dev.php';
+}
+
+if (!defined('WOOREFILL_DEBUG')) {
+    define('WOOREFILL_DEBUG', false);
 }
 
 Kernel::init();

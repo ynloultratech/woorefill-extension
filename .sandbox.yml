@@ -1,0 +1,4 @@
+prefix: WooRefill
+finder:
+    in:
+      - vendor

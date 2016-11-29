@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shop_cart" class="WooRefill\Shop\Cart">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_action" tag="woocommerce_wireless_add_to_cart" method="addToCart" priority="30"/>
+            <tag name="wp_action" tag="woocommerce_add_to_cart_validation" method="addToCartValidate"/>
+            <tag name="wp_action" tag="wc_add_to_cart_message" method="addToCartMessage" />
+    </service>
+
+        <service id="shop_checkout" class="WooRefill\Shop\Checkout">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_filter" tag="woocommerce_checkout_fields" method="checkoutFields"/>
+            <tag name="wp_action" tag="woocommerce_checkout_billing" method="checkoutBilling"/>
+            <tag name="wp_action" tag="woocommerce_checkout_update_order_meta" method="updateOrderMeta"/>
+        </service>
+
+        <service id="shop_thankyou" class="WooRefill\Shop\ThankYou">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_action" tag="woocommerce_thankyou" method="thankYou"/>
+        </service>
+
+        <service id="shop_refill" class="WooRefill\Shop\Refill">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_action" tag="woocommerce_payment_complete" method="refill"/>
+        </service>
+
+        <service id="shop_customer_order_details" class="WooRefill\Shop\CustomerOrderDetails">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_action" tag="woocommerce_order_details_after_customer_details" method="addWirelessDetails"/>
+        </service>
+    </services>
+</container>

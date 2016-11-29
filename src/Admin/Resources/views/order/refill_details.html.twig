@@ -1,0 +1,11 @@
+{% if details %}
+    <div class="order_data_column_container" style="padding-top: 20px">
+        <hr>
+        <h3>
+            Refill Details
+        </h3>
+        {% for label, value in details %}
+            <p><strong>{{ label|humanize }}:</strong> {{ value }}</p>
+        {% endfor %}
+    </div>
+{% endif %}

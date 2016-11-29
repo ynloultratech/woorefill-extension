@@ -1,0 +1,14 @@
+{% for field, args in fields %}
+    {% set value = '' %}
+
+    {% if field matches "/_amount$/" %}
+        {% set value = product.price %}
+    {% endif %}
+
+    {{ call('woocommerce_form_field', field, args, value) }}
+{% endfor %}
+<script>
+    var label = jQuery('#_woo_refill_meta_phone_field label');
+    var content = '<h3>' + label.html() + '</h3>';
+    label.replaceWith(content);
+</script>

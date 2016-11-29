@@ -1,0 +1,52 @@
+{% block import_products_form_widget %}
+    <h3 style="margin-bottom: 0">
+        {% if carrier %}
+            Products to import from "{{ carrier.name }}"
+        {% else %}
+            Products to import.
+        {% endif %}
+    </h3>
+    <p>{{ 'Check the list of products to import.'|trans }}</p>
+    <hr>
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.products) }}
+
+    <div id="import-form" style="display: none">
+        {{ form_row(form.createCarrier) }}
+        {{ form_row(form.newCarrierName) }}
+        {{ form_row(form.existentCarrier) }}
+
+        <div class="create-carrier-1">
+            {{ form_row(form.createCategory) }}
+            {{ form_row(form.newCategoryName) }}
+            {{ form_row(form.existentCategory) }}
+            {{ form_row(form.newCategoryParent) }}
+        </div>
+
+        {{ form_row(form.status) }}
+        {{ form_rest(form) }}
+
+
+        <p class="submit">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="{{ 'Import'|trans }}">
+            <a href="edit.php?post_type=product&page=download_wireless_products_csv&carrier_id={{ carrier ?carrier.id : null }}" class="button">{{ 'Export to CSV'|trans }}</a>
+        </p>
+
+    </div>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('[name="import_products_form"]').validate({
+                errorClass: 'form-invalid',
+                highlight: function (element, errorClass) {
+                    jQuery(element).closest('.form-field').addClass(errorClass);
+                }
+            });
+            jQuery('[data-toggle-prefix]').formToggle();
+            if (jQuery('#wireless-products-table-wrapper').length) {
+                jQuery('#import-form').show();
+            }
+        });
+    </script>
+{% endblock %}

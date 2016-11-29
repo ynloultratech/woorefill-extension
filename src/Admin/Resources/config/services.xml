@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="admin" class="WooRefill\Admin\Admin">
+            <tag name="wp_action" tag="admin_menu" method="menu"/>
+            <tag name="wp_action" tag="admin_enqueue_scripts" method="registerAssets"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="product_importer" class="WooRefill\Admin\Import\ProductImporter">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="import_form" class="WooRefill\Admin\Form\ImportForm">
+            <argument type="service" id="refill_api"/>
+            <argument type="service" id="request"/>
+            <tag name="form.type"/>
+        </service>
+
+        <service id="product_settings_page" class="WooRefill\Admin\Page\ProductSettings">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_filter" tag="product_type_selector" method="productTypeSelector"/>
+            <tag name="wp_filter" tag="product_type_options" method="productTypeOptions"/>
+            <tag name="wp_filter" tag="woocommerce_product_data_tabs" method="productDataTabs"/>
+            <tag name="wp_action" tag="woocommerce_product_options_pricing" method="productOptionsPricing"/>
+            <tag name="wp_action" tag="save_post" method="saveProduct"/>
+        </service>
+
+        <service id="order_page" class="WooRefill\Admin\Page\Order">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_action" tag="woocommerce_admin_order_data_after_order_details" method="orderDataAfterDetails"/>
+        </service>
+
+        <service id="category_page" class="WooRefill\Admin\Page\Category">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_action" tag="product_cat_add_form_fields" method="categoryAddFormFields"/>
+            <tag name="wp_action" tag="product_cat_edit_form_fields" method="categoryEditFormFields"/>
+            <tag name="wp_action" tag="edit_term" method="saveCategory"/>
+            <tag name="wp_action" tag="create_term" method="saveCategory"/>
+        </service>
+
+        <service id="settings_page" class="WooRefill\Admin\Page\Settings">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_filter" tag="woocommerce_settings_tabs_array" method="add_settings_page" priority="40"/>
+            <tag name="wp_action" tag="woocommerce_settings_wireless" method="output"/>
+            <tag name="wp_action" tag="woocommerce_settings_save_wireless" method="save"/>
+        </service>
+    </services>
+</container>

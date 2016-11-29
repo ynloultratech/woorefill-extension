@@ -5,3 +5,8 @@ label.form-invalid {
     border-radius: 3px;
     display: table-cell;
 }
+
+.horizontal input[type="radio"]+label{
+    margin-right: 10px;
+    display: inline-block;
+}

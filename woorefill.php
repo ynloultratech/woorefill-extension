@@ -19,36 +19,17 @@ Version: 1.0-alpha.5
 Author: YnloUltratech
 */
 
-if ( ! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-include_once __DIR__.'/includes/includes.php';
+use WooRefill\App\Kernel;
 
-if (is_admin()) {
-    new YnloUltratechGitHubPluginUpdater(__FILE__, 'ynloultratech', "woorefill-extension");
+include_once __DIR__.'/src/includes/wc-product-wireless.php';
+include __DIR__.'/vendor/autoload.php';
 
-    add_action(
-        'admin_enqueue_scripts',
-        function () {
-            wp_enqueue_script('datatables', plugins_url('/public/admin/js/jquery.dataTables.min.js', __FILE__));
-            wp_enqueue_script('woorefill_admin_core', plugins_url('/public/admin/js/woorefill_admin.core.js', __FILE__));
-            wp_enqueue_script('jquery_validate', plugins_url('/public/admin/js/jquery.validate.min.js', __FILE__));
-            wp_enqueue_style('datatables_css', plugins_url('/public/admin/css/jquery.dataTables.min.css', __FILE__));
-            wp_enqueue_style('woorefill_admin_core', plugins_url('/public/admin/css/woorefill_admin.core.css', __FILE__));
-        }
-    );
+if (file_exists(__DIR__.'/dev/dev.php')){
+    include __DIR__.'/dev/dev.php';
 }
 
-/**
- * @param $var
- */
-function dump($var)
-{
-    $output = var_export($var, true);
-    echo <<<HTML
-<pre>
-    $output
-</pre>
-HTML;
-}
+Kernel::init();

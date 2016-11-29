@@ -1,0 +1,39 @@
+{% extends 'form_div_layout.html.twig' %}
+{% use '@Admin/form_widgets.html.twig' %}
+
+{% block form_row %}
+    <div class="{{ wrapper_class }}">
+        {{ parent() }}
+    </div>
+{% endblock %}
+
+{% block form %}
+    <div class="{{ wrapper_class }}">
+        {{ parent() }}
+    </div>
+{% endblock %}
+
+{% block form_widget_simple %}
+    {{ parent() }}
+    {{ block('help_block') }}
+{% endblock %}
+
+{% block choice_widget %}
+    {{ parent() }}
+    {{ block('help_block') }}
+{% endblock %}
+
+{% block help_block %}
+    {% if help %}<p>{{ help }}</p>{% endif %}
+{% endblock %}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <div style="display: none">
+                {# this notice is moved out of the above wrapper by WP #}
+                <div class="notice notice-error notice-alt"><p>{{ error.message }}</p></div>
+            </div>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endblock form_errors -%}

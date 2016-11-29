@@ -17,6 +17,10 @@ use WooRefill\App\Api\RefillAPI;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+if (!class_exists('WC_Settings_Page')) {
+    include WC()->plugin_path().DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ['includes', 'admin', 'settings', 'class-wc-settings-page.php']);
+}
+
 /**
  * Class Settings
  */

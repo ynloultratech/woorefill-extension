@@ -23,6 +23,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+if (!class_exists('WooCommerce')) {
+    return;
+}
+
 use WooRefill\App\Kernel;
 
 include_once __DIR__.'/src/includes/wc-product-wireless.php';

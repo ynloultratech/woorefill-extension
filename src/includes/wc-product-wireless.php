@@ -15,6 +15,10 @@ if ( ! defined('ABSPATH')) {
     exit;
 }
 
+if (!class_exists('WC_Product')) {
+    include WC()->plugin_path().DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ['includes', 'abstracts', 'abstract-wc-product.php']);
+}
+
 /**
  * WC_Product_Wireless
  *

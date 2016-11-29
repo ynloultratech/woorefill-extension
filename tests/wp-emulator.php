@@ -9,7 +9,7 @@
 
 define('ABSPATH', __DIR__);
 
-define('APIKEY','1234567890ABCDEFGHIJK');
+define('APIKEY', '1234567890ABCDEFGHIJK');
 
 function get_option($key)
 {
@@ -37,6 +37,11 @@ class WooCommerce
 }
 
 class WC_Product
+{
+
+}
+
+class WC_Payment_Gateway_CC
 {
 
 }

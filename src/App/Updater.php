@@ -13,8 +13,6 @@
 
 namespace WooRefill\App;
 
-use Guzzle\Http\Client;
-
 /**
  * Class Updater
  */
@@ -146,10 +144,10 @@ class Updater
 
         $parsedown = new \Parsedown();
         // Create tabs in the lightbox
-        $response->sections = [
+        $response->sections = array(
             'description' => $this->pluginData["Description"],
             'changelog' => $parsedown->parse($this->githubAPIResult->body),
-        ];
+        );
 
         // Gets the required version of WP if available
         $matches = null;

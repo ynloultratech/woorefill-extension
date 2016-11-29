@@ -13,7 +13,6 @@
 
 namespace WooRefill\App\Api;
 
-use Guzzle\Http\Client;
 use WooRefill\App\Logger\Logger;
 
 /**
@@ -201,14 +200,25 @@ class RefillAPI
 
         //woorefill_log(sprintf('Connecting to API url: %s ', $url));
         try {
-            $client = new Client();
-            $headers = [
-                'APIKey' => $apiKey,
+            $options = [
+                'timeout' => 60,
+                'body'=>$data,
+                'headers'=>[
+                    'APIKey' => $apiKey,
+                ]
             ];
-            $request = $client->createRequest($method, $url, $headers, $data);
-            $response = $client->send($request);
-            $json = (string)$response->getBody();
-            $result = @json_decode($json);
+
+            if (self::GET === $method) {
+                $response = wp_remote_get($url, $options);
+            } else {
+                $response = wp_remote_post($url, $options);
+            }
+
+            if ($response instanceof \WP_Error) {
+                throw new \Exception($response->get_error_message());
+            }
+
+            $result = @json_decode($response['body']);
 
             if ($result) {
                 if ($result && $error = $result->error) {

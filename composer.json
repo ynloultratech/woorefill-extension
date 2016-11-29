@@ -35,7 +35,6 @@
     "symfony/intl": "2.7.*",
     "symfony/property-access": "2.7.*",
     "symfony/finder": "2.7.*",
-    "guzzlehttp/guzzle": "^3.8",
     "erusev/parsedown": "^1.6"
   },
   "require-dev": {

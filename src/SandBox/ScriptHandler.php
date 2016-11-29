@@ -15,6 +15,7 @@ namespace WooRefill\SandBox;
 
 use Composer\Autoload\AutoloadGenerator;
 use Composer\IO\IOInterface;
+use Composer\Package\RootPackageInterface;
 use Composer\Script\Event;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -46,7 +47,23 @@ class ScriptHandler
         $io = $event->getIO();
 
         $io->write('Resolving composer namespaces...');
-        $namespaces = self::resolveNamespaces($vendorDir, $prefix);
+
+        /** @var RootPackageInterface $package */
+        $package = $event->getComposer()->getPackage();
+        $ignoreNamespaces = [];
+        if (isset($package->getAutoload()['psr-4'])) {
+            foreach ($package->getAutoload()['psr-4'] as $namespace => $path) {
+                $ignoreNamespaces[] = $namespace;
+            }
+        }
+        if (isset($package->getDevAutoload()['psr-4'])) {
+            foreach ($package->getDevAutoload()['psr-4'] as $namespace => $path) {
+                $ignoreNamespaces[] = $namespace;
+            }
+        }
+
+        $namespaces = self::resolveNamespaces($vendorDir, $prefix, $ignoreNamespaces);
+
         $io->write(sprintf('[OK] %s namespaces found', count($namespaces)));
 
         $finder = new Finder();
@@ -92,14 +109,19 @@ class ScriptHandler
     /**
      * @param string $vendorDir
      * @param string $prefix
+     * @param array  $ignore
      *
      * @return array
      */
-    protected static function resolveNamespaces($vendorDir, $prefix)
+    protected static function resolveNamespaces($vendorDir, $prefix, $ignore = [])
     {
         $namespaces = [];
         $psr4NameSpaces = include realpath($vendorDir.'/composer/autoload_psr4.php');
         foreach ($psr4NameSpaces as $namespace => $paths) {
+            if (in_array($namespace, $ignore)) {
+                continue;
+            }
+
             $namespace = preg_replace("/$prefix\\\\?/", '', $namespace);
             if (preg_match('/\\\\$/', $namespace)) {
                 $namespaces[] = $namespace;

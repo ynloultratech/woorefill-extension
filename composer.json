@@ -14,8 +14,12 @@
   ],
    "autoload": {
     "psr-4": {
-      "WooRefill\\": "src/",
-      "WooRefill\\Test\\": "tests/"
+      "WooRefill\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WooRefill\\Tests\\": "tests/"
     }
   },
   "require": {

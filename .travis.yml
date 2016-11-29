@@ -11,7 +11,6 @@ install:
     - composer dumpautoload
 
 script:
-    - ls -la
     - php vendor/bin/phpunit -c phpunit.xml.dist
 
 before_deploy:
@@ -27,6 +26,7 @@ before_deploy:
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
     - zip -r -9 woorefill-extension.zip * > log
     - ls -la -h
+
 deploy:
     provider: releases
     api_key:

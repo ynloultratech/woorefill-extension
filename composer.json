@@ -17,6 +17,41 @@
       "WooRefill\\": "src/"
     }
   },
+  "scripts": {
+    "post-install-cmd": [
+      "WooRefill\\SandBox\\ScriptHandler::sandbox"
+    ],
+    "post-update-cmd": [
+      "WooRefill\\SandBox\\ScriptHandler::sandbox"
+    ]
+  },
+  "extra": {
+    "sandbox": {
+      "prefix": "WooRefill",
+      "name": [
+        "*.php",
+        "*.yml",
+        "*.json",
+        "*.xml"
+      ],
+      "clean": {
+        "files": [
+        ],
+        "dirs": [
+          ".git",
+          "tests",
+          "test",
+          "Test",
+          "Tests",
+          "intl/Resources/data",
+          "guzzlehttp/guzzle/docs"
+        ],
+        "exclude":[
+          "twig/twig/lib/Twig/Node/Expression/Test"
+        ]
+      }
+    }
+  },
   "require": {
     "php": ">=5.3",
     "twig/twig": "^1.28",
@@ -29,6 +64,7 @@
     "symfony/event-dispatcher": "2.7.*",
     "symfony/intl": "2.7.*",
     "symfony/property-access": "2.7.*",
+    "symfony/finder": "2.7.*",
     "guzzlehttp/guzzle": "^3.8",
     "erusev/parsedown": "^1.6"
   }

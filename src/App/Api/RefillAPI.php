@@ -220,7 +220,7 @@ class RefillAPI
 
             $result = @json_decode($response['body']);
 
-            if ($result) {
+            if ($result !== null) {
                 if ($result && $error = $result->error) {
                     $error = $result->error->code;
                     $message = $result->error->message;

@@ -78,7 +78,7 @@ class Updater
     public function setTransitent($transient)
     {
         if (empty($transient->checked)) {
-            //return $transient;
+         //return $transient;
         }
 
         // Get plugin & GitHub release information
@@ -90,11 +90,11 @@ class Updater
 
         // Update the transient to include our updated plugin data
         if ($doUpdate === 1) {
-            $package = $this->githubAPIResult->zipball_url;
-
-            // Include the access token for private GitHub repos
-            if (!empty($this->accessToken)) {
-                $package = add_query_arg(["access_token" => $this->accessToken], $package);
+            // Release download zip file
+            $package = null;
+            if ($this->githubAPIResult->assets) {
+                $asset = current($this->githubAPIResult->assets);
+                $package = $asset->browser_download_url;
             }
 
             $obj = new \stdClass();

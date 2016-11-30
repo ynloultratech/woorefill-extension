@@ -11,19 +11,31 @@
  * @version 1.0.x
  */
 
-namespace WooRefill\Test;
+namespace WooRefill\Tests;
 
+use Mockery\MockInterface;
 use WooRefill\App\Kernel;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
 
-include __DIR__.'\wp-emulator.php';
-
 class PluginTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MockInterface
+     */
+    public static $functions;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        self::$functions = \Mockery::mock();
+        include_once __DIR__.'/wp-functions.php';
+        include_once __DIR__.'/../woorefill.php';
+    }
+
     public function testPluginInitialization()
     {
-        include __DIR__.'/../woorefill.php';
-
         /** @var ContainerInterface $container */
         $container = Kernel::get('service_container');
         $logger = $container->get('logger');

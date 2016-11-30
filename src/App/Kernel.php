@@ -40,6 +40,10 @@ class Kernel
 
     public static function init()
     {
+        if (self::$container) {
+            return;
+        }
+
         self::$container = new ContainerBuilder();
 
         /** @var Extension[] $extensions */
@@ -65,6 +69,10 @@ class Kernel
      */
     public static function getEventDispatcher()
     {
+        if (!self::$eventDispatcher) {
+            Kernel::init();
+        }
+
         return self::$eventDispatcher;
     }
 
@@ -73,6 +81,10 @@ class Kernel
      */
     public static function getContainer()
     {
+        if (!self::$container) {
+            Kernel::init();
+        }
+
         return self::$container;
     }
 
@@ -85,6 +97,6 @@ class Kernel
      */
     public static function get($service)
     {
-        return self::$container->get($service);
+        return self::getContainer()->get($service);
     }
 }

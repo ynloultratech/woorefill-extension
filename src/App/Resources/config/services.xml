@@ -13,7 +13,7 @@
     <services>
         <service id="updater" class="WooRefill\App\Updater">
             <argument>%plugin_file%</argument>
-            <tag name="wp_filter" tag="pre_set_site_transient_update_plugins" method="setTransitent"/>
+            <tag name="wp_filter" tag="pre_set_site_transient_update_plugins" method="setTransient"/>
             <tag name="wp_filter" tag="plugins_api" method="setPluginInfo"/>
             <tag name="wp_filter" tag="upgrader_post_install" method="postInstall"/>
         </service>

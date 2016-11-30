@@ -15,6 +15,8 @@ define('ABSPATH', __DIR__);
 
 define('APIKEY', '1234567890ABCDEFGHIJK');
 
+define('WP_PLUGIN_DIR', __DIR__);
+
 use WooRefill\Tests\AbstractBasePluginTest;
 
 function get_option($key)
@@ -50,6 +52,31 @@ function do_filter($tag)
     return AbstractBasePluginTest::getMockery()->do_filter($tag);
 }
 
+function plugin_basename()
+{
+    return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
+}
+
+function get_plugin_data()
+{
+    return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
+}
+
+function is_plugin_active()
+{
+    return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
+}
+
+function activate_plugin()
+{
+    return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
+}
+
+function wp_remote_get()
+{
+    return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
+}
+
 function wc_get_checkout_url()
 {
     return AbstractBasePluginTest::getMockery()->wc_get_checkout_url();
@@ -58,6 +85,15 @@ function wc_get_checkout_url()
 class WooCommerce
 {
 
+}
+
+class WP_Filesystem_Base
+{
+
+    public function move()
+    {
+
+    }
 }
 
 class WC_Product

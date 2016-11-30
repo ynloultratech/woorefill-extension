@@ -44,7 +44,7 @@ abstract class AbstractBasePluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $service
+     * @param string $service #Service
      *
      * @return object
      */
@@ -54,7 +54,7 @@ abstract class AbstractBasePluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $name
+     * @param string $name #Parameter
      *
      * @return object
      */

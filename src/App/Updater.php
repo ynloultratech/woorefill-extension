@@ -75,7 +75,7 @@ class Updater
      *
      * @return mixed
      */
-    public function setTransitent($transient)
+    public function setTransient($transient)
     {
         if (empty($transient->checked)) {
          //return $transient;

@@ -11,28 +11,19 @@
  * @version 1.0.x
  */
 
-namespace WooRefill\Shop;
+namespace WooRefill\Tests\Shop;
 
-use WooRefill\App\Kernel;
-use WooRefill\Tests\PluginTest;
+use WooRefill\Shop\ThankYou;
+use WooRefill\Tests\AbstractBasePluginTest;
 
-class ThankYouTest extends PluginTest
+class ThankYouTestAbstractBase extends AbstractBasePluginTest
 {
-    protected $instance;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->instance = new ThankYou();
-        $this->instance->setContainer(Kernel::get('service_container'));
-    }
-
     public function testThankYou()
     {
-        self::$functions->shouldReceive('get_post_meta')->with(1)->andReturnValues(['123456789'])->once();
+        self::getMockery()->shouldReceive('get_post_meta')->with(1)->andReturnValues(['123456789'])->once();
 
         /** @var ThankYou $thankYou */
-        $thankYou = Kernel::get('shop_thankyou');
+        $thankYou = $this->get('shop_thankyou');
 
         ob_start();
         $thankYou->thankYou(1);

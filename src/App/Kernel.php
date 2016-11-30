@@ -89,8 +89,6 @@ class Kernel
     }
 
     /**
-     * get
-     *
      * @param $service
      *
      * @return object #Service
@@ -98,5 +96,15 @@ class Kernel
     public static function get($service)
     {
         return self::getContainer()->get($service);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string|mixed
+     */
+    public static function getParameter($name)
+    {
+        return self::getContainer()->getParameter($name);
     }
 }

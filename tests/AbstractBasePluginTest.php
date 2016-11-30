@@ -15,32 +15,51 @@ namespace WooRefill\Tests;
 
 use Mockery\MockInterface;
 use WooRefill\App\Kernel;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractBasePluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var MockInterface
      */
-    public static $functions;
+    protected static $mockery;
 
     /**
      * @inheritDoc
      */
     protected function setUp()
     {
-        self::$functions = \Mockery::mock();
+        self::$mockery = \Mockery::mock();
         include_once __DIR__.'/wp-functions.php';
         include_once __DIR__.'/../woorefill.php';
     }
 
-    public function testPluginInitialization()
+    /**
+     * getMockery
+     *
+     * @return MockInterface
+     */
+    public static function getMockery()
     {
-        /** @var ContainerInterface $container */
-        $container = Kernel::get('service_container');
-        $logger = $container->get('logger');
+        return self::$mockery;
+    }
 
-        self::assertInstanceOf('WooRefill\App\Logger\Logger', $logger);
-        self::assertEquals(APIKEY, $container->getParameter('api_key'));
+    /**
+     * @param string $service
+     *
+     * @return object
+     */
+    public function get($service)
+    {
+        return Kernel::get($service);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return object
+     */
+    public function getParameter($name)
+    {
+        return Kernel::getParameter($name);
     }
 }

@@ -15,7 +15,7 @@ define('ABSPATH', __DIR__);
 
 define('APIKEY', '1234567890ABCDEFGHIJK');
 
-use WooRefill\Tests\PluginTest;
+use WooRefill\Tests\AbstractBasePluginTest;
 
 function get_option($key)
 {
@@ -29,17 +29,30 @@ function get_option($key)
 
 function get_post_meta($id)
 {
-    return PluginTest::$functions->get_post_meta($id);
+    return AbstractBasePluginTest::getMockery()->get_post_meta($id);
 }
 
-function add_action()
+function add_action($tag)
 {
-
 }
 
-function add_filter()
+function do_action($tag)
 {
+    return AbstractBasePluginTest::getMockery()->do_action($tag);
+}
 
+function add_filter($tag)
+{
+}
+
+function do_filter($tag)
+{
+    return AbstractBasePluginTest::getMockery()->do_filter($tag);
+}
+
+function wc_get_checkout_url()
+{
+    return AbstractBasePluginTest::getMockery()->wc_get_checkout_url();
 }
 
 class WooCommerce
@@ -49,6 +62,27 @@ class WooCommerce
 
 class WC_Product
 {
+    /**
+     * WC_Product constructor.
+     */
+    public function __construct($product)
+    {
+    }
+
+    public function is_purchasable()
+    {
+
+    }
+
+    public function is_in_stock()
+    {
+
+    }
+
+    public function getId()
+    {
+
+    }
 
 }
 

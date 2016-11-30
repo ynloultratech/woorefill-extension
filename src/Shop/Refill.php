@@ -63,7 +63,7 @@ class Refill implements ContainerAwareInterface
 
             } catch (\Exception $e) {
                 $this->getLogger()->addLog($e->getTraceAsString());
-                $order->update_status('cancelled', $e->getMessage()." \n\n");
+                $order->update_status('failed', $e->getMessage()." \n\n");
                 $this->refundWirelessProduct($order, $e->getMessage());
             }
         } else {
@@ -85,10 +85,20 @@ class Refill implements ContainerAwareInterface
     {
         $gateway = wc_get_payment_gateway_by_order($order);
         $amount = $order->calculate_totals();
+
         if ($gateway instanceof \WC_Payment_Gateway) {
             if ($gateway->supports('refunds')) {
                 $refunded = $gateway->process_refund($order->id, $amount, $reason);
                 if ($refunded) {
+                    wc_create_refund(
+                        [
+                            'order_id' => $order->id,
+                            'amount' => $amount,
+                            'reason' => $reason,
+                        ]
+                    );
+                    $order->update_status('refunded');
+
                     return true;
                 } else {
                     $order->add_order_note('The refund has been failed, check your payment gateway logs.');

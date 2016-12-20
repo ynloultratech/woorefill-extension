@@ -8,6 +8,7 @@
             <tag name="wp_action" tag="admin_menu" method="menu"/>
             <tag name="wp_action" tag="admin_enqueue_scripts" method="registerAssets"/>
             <tag name="wp_action" tag="admin_init" method="checkAPIKey"/>
+            <tag name="wp_action" tag="admin_init" method="checkLogsOn"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

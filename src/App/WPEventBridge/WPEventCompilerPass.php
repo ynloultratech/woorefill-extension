@@ -31,7 +31,6 @@ class WPEventCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-
         if (!$container->hasDefinition('wp_event_manager')) {
             return;
         }
@@ -66,8 +65,14 @@ class WPEventCompilerPass implements CompilerPassInterface
     {
         $function = function () use ($event) {
             $service = Kernel::getContainer()->get($event->getReference());
+            try {
+                $result = call_user_func_array([$service, $event->getMethod()], func_get_args());
+            } catch (\Exception $e) {
+                Kernel::get('logger')->addErrorLog($e);
+                $result = new \WP_Error($e->getCode(), $e->getMessage());
+            }
 
-            return call_user_func_array([$service, $event->getMethod()], func_get_args());
+            return $result;
         };
 
         if ($event->getType() === WPEvent::ACTION) {

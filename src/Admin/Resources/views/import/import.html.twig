@@ -15,7 +15,7 @@
                         {% include '@Admin/import/carriers.html.twig' %}
                     {% else %}
                         <div style="text-align: center; padding: 50px">
-                            <img src="/wp-admin/images/spinner-2x.gif">
+                            <img src="{{ admin_url('/images/spinner-2x.gif') }}">
                         </div>
                     {% endif %}
                 </div>
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div id="wireless-products-loader" style="text-align: center; padding: 50px; {% if submitted %}display: none{% endif %}">
-                <img src="/wp-admin/images/spinner-2x.gif">
+                <img src="{{ admin_url('/images/spinner-2x.gif') }}">
             </div>
         </div>
     </div>

@@ -68,7 +68,7 @@ class ImportForm extends AbstractType
     {
         $builder->addViewTransformer(new ImportDataTransformer());
 
-        $builder->setAction('/wp-admin/edit.php?post_type=product&page=import_wireless_products&carrier_id='.$options['carrier_id']);
+        $builder->setAction(admin_url('edit.php?post_type=product&page=import_wireless_products&carrier_id='.$options['carrier_id']));
         $products = $this->api->getProducts($options['carrier_id']);
 
         $builder->add(

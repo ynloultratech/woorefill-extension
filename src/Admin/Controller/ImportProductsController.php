@@ -67,7 +67,7 @@ class ImportProductsController extends Controller
         try {
             $carriers = $this->getApi()->getCarriers();
             $this->renderAjax('@Admin/import/carriers.html.twig', ['carriers' => $carriers]);
-        } catch (ClientException $e) {
+        } catch (\Exception $e) {
             $this->showError($e);
         }
     }
@@ -152,7 +152,7 @@ class ImportProductsController extends Controller
                 }
             }
         }
-
+        $this->get('logger')->addErrorLog($e);
         $this->renderAjax('@Admin/error_message.html.twig', ['error_message' => $errorMessage]);
     }
 }

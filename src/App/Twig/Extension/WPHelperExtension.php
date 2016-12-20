@@ -40,7 +40,31 @@ class WPHelperExtension extends \Twig_Extension
             new \Twig_SimpleFunction('do_action', [$this, 'doAction']),
             new \Twig_SimpleFunction('call', [$this, 'call']),
             new \Twig_SimpleFunction('call_get', [$this, 'callGet']),
+            new \Twig_SimpleFunction('admin_url', [$this, 'adminUrl']),
+            new \Twig_SimpleFunction('ajax_admin_url', [$this, 'ajaxAdminUrl']),
         ];
+    }
+
+    /**
+     * @param string $path
+     * @param string $scheme
+     *
+     * @return string
+     */
+    public function adminUrl($path = '', $scheme = 'admin')
+    {
+        return admin_url($path, $scheme);
+    }
+
+    /**
+     * @param string $query
+     * @param string $scheme
+     *
+     * @return string
+     */
+    public function ajaxAdminUrl($query = '', $scheme = 'admin')
+    {
+        return admin_url('admin-ajax.php'.$query, $scheme);
     }
 
 

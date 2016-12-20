@@ -46,7 +46,7 @@
         var productsWrapper = jQuery('#wireless-products-wrapper');
         productsWrapper.hide();
         productsWrapper.html('');
-        productsWrapper.load('/wp-admin/admin-ajax.php?action=get_wireless_products&carrier_id=' + $carrierId, function () {
+        productsWrapper.load('{{ ajax_admin_url() }}?action=get_wireless_products&carrier_id=' + $carrierId, function () {
             jQuery('#wireless-products-loader').hide();
             productsWrapper.show(500);
         });

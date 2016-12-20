@@ -21,7 +21,7 @@
                 </div>
                 {% if not submitted %}
                     <script>
-                        jQuery('#wireless-carriers-wrapper').load('/wp-admin/admin-ajax.php?action=get_wireless_carriers')
+                        jQuery('#wireless-carriers-wrapper').load('{{ ajax_admin_url('?action=get_wireless_carriers') }}')
                     </script>
                 {% endif %}
             </div>

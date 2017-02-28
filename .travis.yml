@@ -37,7 +37,7 @@ before_deploy:
 deploy:
     provider: releases
     api_key:
-      secure: I7IGt0MkLjYc7ba844714TiB6kCi/dERSptMiv5sfWXqK7UgwD3eB/95IGt9uQqpqBPii3rTCTgunQV7QKOj06DVdi4y71J9cNpwCOpDsH56ca5SW8TI6Ee/vvbfamJ+79aSl24O8fgBqDuFVt7O2P36Sw/jhkYNgT8ujmD1l1DAWJQKW6e89KuYwJTV39Zl9I204VZu8tmHkQmyCdVVgS4cnEMOUhXkmirbc7Mp/jrwmlYaPcivL/wXaAn4V8BGlwMfCXwpJB0sf3WdUaJjGPC7f9rx6cH12wKWpsK+h9btk4GvdBXdLBy0SGu9MipmkSj66p9OqGXiNs98+gwfLaC08Do1zsJJ6GC4FJEN4PrHePVWNcK4vd1+cAG8SySWptnHL4LmKyiBH2z3mUZMRVDorLuOhxn1dhx8xK/ghxdcMF1wYl3GBxrMxgL36KDHkWh3AsANCCG6+zX9x+x+EFwOzg4fbRl9cn+33Fdmr69HVqz9pz8RyRBNgKzDmxuAoGH+acnWKilVTEpHDs1qa0gHNCOyuPv2Lv1iYh//F2Cc0uIsbY+ZqPMU91Y0xal0phUUQ2EJS8QUq15xIedqhmhT7VuErsdY6Y6AEc+ydcwHTLJqcg3mB8XHJ1XRaExk6S/I/RB8m9UsQPp+yFLS2E4HSoGK5EP5OBFdyvr26dw=
+      secure: $DEPLOY_API_KEY
     file: 'woorefill-extension.zip'
     skip_cleanup: true
     on:

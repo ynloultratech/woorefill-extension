@@ -11,7 +11,7 @@
  * @version 1.0.x
  */
 
-if ( ! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -46,6 +46,10 @@ class WC_Product_Wireless extends WC_Product
      */
     public function add_to_cart_url()
     {
+        if ($this->is_variable_price()) {
+            return parent::add_to_cart_url();
+        }
+
         $url = remove_query_arg('added-to-cart', add_query_arg('add-to-cart', $this->id, wc_get_checkout_url()));
 
         return apply_filters('woocommerce_product_add_to_cart_url', $url, $this);
@@ -61,5 +65,63 @@ class WC_Product_Wireless extends WC_Product
         $text = __('Refill');
 
         return apply_filters('woocommerce_product_add_to_cart_text', $text, $this);
+    }
+
+    /**
+     * Functions for getting parts of a price, in html, used by get_price_html.
+     *
+     * @param  string $from String or float to wrap with 'from' text
+     * @param  mixed  $to   String or float to wrap with 'to' text
+     *
+     * @return string
+     */
+    public function get_price_html_from_to($from, $to)
+    {
+        $price = '<del>'.((is_numeric($from)) ? wc_price($from) : $from).'</del> <ins>'.((is_numeric($to)) ? wc_price($to) : $to).'</ins>';
+
+        return apply_filters('woocommerce_get_price_html_from_to', $price, $from, $to, $this);
+    }
+
+    public function is_variable_price()
+    {
+        return (strtolower($this->__get('wireless_variable_price')) === 'yes');
+    }
+
+    public function min_price()
+    {
+        return $this->__get('wireless_min_price');
+    }
+
+    public function max_price()
+    {
+        return $this->__get('wireless_max_price');
+    }
+
+    public function suggested_price()
+    {
+        return $this->__get('wireless_suggested_price');
+    }
+
+    public function set_price($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * Returns the price in html format.
+     *
+     * @param string $price (default: '')
+     *
+     * @return string
+     */
+    public function get_price_html($price = '')
+    {
+        if ($this->is_variable_price()) {
+            $price = wc_price($this->min_price()).' - '.wc_price($this->max_price());
+
+            return apply_filters('woocommerce_sale_price_html', $price, $this);
+        }
+
+        return parent::get_price_html($price);
     }
 }

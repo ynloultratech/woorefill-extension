@@ -8,6 +8,8 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
+            <tag name="wp_action" tag="woocommerce_cart_loaded_from_session" method="cartLoadedFromSession"/>
+            <tag name="wp_action" tag="woocommerce_add_cart_item" method="addCartItem"/>
             <tag name="wp_action" tag="woocommerce_wireless_add_to_cart" method="addToCart" priority="30"/>
             <tag name="wp_action" tag="woocommerce_add_to_cart_validation" method="addToCartValidate"/>
             <tag name="wp_action" tag="wc_add_to_cart_message" method="addToCartMessage" />

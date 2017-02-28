@@ -93,10 +93,9 @@ class Checkout implements ContainerAwareInterface
                     ],
                 ];
 
-                //skip amount for now
-                //TODO: use amount field to fill variable products
+                //hide amount, is already settled in the addToCart
                 if ($name === 'amount') {
-                    $fields[sprintf('_woo_refill_meta_%s', $name)]['custom_attributes']['style'] = 'display:none';
+                    $fields[sprintf('_woo_refill_meta_%s', $name)]['type'] = 'hidden';
                     $fields[sprintf('_woo_refill_meta_%s', $name)]['label'] = null;
                     $fields[sprintf('_woo_refill_meta_%s', $name)]['required'] = false;
                 }

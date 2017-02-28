@@ -83,6 +83,10 @@ class ProductImporter implements ContainerAwareInterface
                     wp_set_object_terms($post_id, 'wireless', 'product_type');
 
                     update_post_meta($post_id, '_wireless_product_id', $product->id);
+                    update_post_meta($post_id, '_wireless_variable_price', $product->variable_amount ? 'yes' : 'no');
+                    update_post_meta($post_id, '_wireless_min_price', $product->min_amount);
+                    update_post_meta($post_id, '_wireless_max_price', $product->max_amount);
+                    update_post_meta($post_id, '_wireless_suggested_price', $product->max_amount);
                     update_post_meta($post_id, '_regular_price', $product->amount);
                     update_post_meta($post_id, '_price', $product->amount);
                     update_post_meta($post_id, '_sale_price', $product->amount);

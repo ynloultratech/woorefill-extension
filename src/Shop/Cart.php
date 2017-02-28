@@ -23,6 +23,28 @@ class Cart implements ContainerAwareInterface
 {
     use CommonServiceTrait;
 
+    public function cartLoadedFromSession(\WC_Cart $cart)
+    {
+        //updated the product price based on price data
+        foreach ($cart->get_cart() as $item) {
+            $product = $item['data'];
+            if ($product instanceof \WC_Product_Wireless && isset($item['price'])) {
+                $product->set_price($item['price']);
+            }
+        }
+    }
+
+    public function addCartItem($cart_item_data)
+    {
+        //set product price data to use later in the cart, @see cartLoadedFromSession
+        $product = $cart_item_data['data'];
+        if ($product instanceof \WC_Product_Wireless) {
+            $cart_item_data['price'] = $_POST['_wireless_price'];
+        }
+
+        return $cart_item_data;
+    }
+
     /**
      * addToCart
      */
@@ -33,7 +55,26 @@ class Cart implements ContainerAwareInterface
             return;
         }
 
-        $this->render('@Shop/cart/add_to_cart.html.twig', ['product' => $product]);
+        $priceInput = null;
+        if ($product instanceof \WC_Product_Wireless && $product->is_variable_price()) {
+            $priceInput = [
+                'type' => 'number',
+                'label' => 'Amount to Refill:',
+                'required' => true,
+                'custom_attributes' => [
+                    'min' => $product->min_price(),
+                    'max' => $product->max_price(),
+                ],
+            ];
+        }
+
+        $this->render(
+            '@Shop/cart/add_to_cart.html.twig', [
+                'product' => $product,
+                'price_input' => $priceInput,
+                'suggested_price' => apply_filters('woorefill_suggested_cart_price', $product->suggested_price()),
+            ]
+        );
     }
 
     /**
@@ -49,8 +90,11 @@ class Cart implements ContainerAwareInterface
         if ($product_id) {
             $product = wc_get_product($product_id);
 
-            if ($product->is_type('wireless')) {
+            if ($product instanceof \WC_Product_Wireless) {
                 $this->removeAllWirelessProducts();
+                if ($product->is_variable_price()) {
+                    //return false;
+                }
             }
         }
 
@@ -102,11 +146,8 @@ class Cart implements ContainerAwareInterface
     public function getFirstWirelessProduct()
     {
         foreach (WC()->cart->get_cart() as $item) {
-            if (isset($item['product_id']) && $productId = $item['product_id']) {
-                $product = wc_get_product($productId);
-                if ($product->product_type === \WC_Product_Wireless::PRODUCT_TYPE_WIRELESS) {
-                    return $product;
-                }
+            if (isset($item['data']) && ($item['data'] instanceof \WC_Product_Wireless)) {
+                return $item['data'];
             }
         }
 
@@ -120,6 +161,6 @@ class Cart implements ContainerAwareInterface
      */
     public function hasWirelessProduct()
     {
-        return (boolean)$this->getFirstWirelessProduct();
+        return (boolean) $this->getFirstWirelessProduct();
     }
 }

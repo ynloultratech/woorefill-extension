@@ -71,7 +71,7 @@ class ProductSettings implements ContainerAwareInterface
      */
     public function productOptionsPricing()
     {
-       $this->render('@Admin/product_settings/product_pricing.html.twig');
+        $this->render('@Admin/product_settings/product_pricing.html.twig');
     }
 
     /**
@@ -83,6 +83,23 @@ class ProductSettings implements ContainerAwareInterface
     {
         if (isset($_POST['_wireless_product_id']) && $_POST['_wireless_product_id']) {
             update_post_meta($post_id, '_wireless_product_id', $_POST['_wireless_product_id']);
+        }
+
+        if (isset($_POST['_wireless_variable_price'])) {
+            update_post_meta($post_id, '_regular_price', 0);
+            update_post_meta($post_id, '_wireless_variable_price', $_POST['_wireless_variable_price']);
+        }
+
+        if (isset($_POST['_wireless_suggested_price'])) {
+            update_post_meta($post_id, '_wireless_suggested_price', $_POST['_wireless_suggested_price']);
+        }
+
+        if (isset($_POST['_wireless_min_price'])) {
+            update_post_meta($post_id, '_wireless_min_price', $_POST['_wireless_min_price']);
+        }
+
+        if (isset($_POST['_wireless_max_price'])) {
+            update_post_meta($post_id, '_wireless_max_price', $_POST['_wireless_max_price']);
         }
     }
 }

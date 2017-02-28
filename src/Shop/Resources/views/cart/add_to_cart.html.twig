@@ -1,3 +1,4 @@
+{# @var product \WC_Product_Wireless #}
 {% if product.is_in_stock %}
 
     {{ do_action('woocommerce_before_add_to_cart_form') }}
@@ -6,6 +7,10 @@
         {{ do_action('woocommerce_before_add_to_cart_button') }}
 
         <input type="hidden" name="add-to-cart" value="{{ product.id }}"/>
+
+        {% if price_input %}
+            {{ call('woocommerce_form_field', '_wireless_price', price_input, suggested_price ) }}
+        {% endif %}
 
         <button type="submit" class="single_add_to_cart_button button alt">{{ product.add_to_cart_text }}</button>
 

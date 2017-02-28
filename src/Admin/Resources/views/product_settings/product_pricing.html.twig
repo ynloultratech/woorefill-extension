@@ -1,3 +1,36 @@
+
+<input type="hidden" name="_wireless_variable_price" value="no"/>
+
+{{ wc_checkbox({
+    'id': '_wireless_variable_price',
+    'label': 'Open Price?',
+    'desc_tip': true,
+    'wrapper_class': 'show_if_wireless',
+    'description': 'Cam use a range of price to refill this product'
+}) }}
+
+<div class="show_if_open_price">
+    {{ wc_text_input({
+        'id': '_wireless_min_price',
+        'label': 'Min Price',
+        'wrapper_class': 'show_if_wireless ',
+    }) }}
+
+    {{ wc_text_input({
+        'id': '_wireless_max_price',
+        'label': 'Max Price',
+        'wrapper_class': 'show_if_wireless',
+    }) }}
+
+    {{ wc_text_input({
+        'id': '_wireless_suggested_price',
+        'label': 'Suggested Price',
+        'wrapper_class': 'show_if_wireless',
+        'desc_tip': true,
+        'description': 'This price will be used as default'
+    }) }}
+</div>
+
 {{ wc_text_input({
     'id': '_wireless_product_id',
     'label': 'Wireless Product ID',
@@ -5,7 +38,17 @@
     'wrapper_class': 'show_if_wireless',
     'description': 'This product ID is used to communicate with the refill API and make the refill.'
 }) }}
+
 <script>
+    jQuery('#_wireless_variable_price').on('change', function () {
+        if (jQuery(this).prop('checked')) {
+            jQuery('.show_if_open_price').show();
+            jQuery('._regular_price_field').hide();
+        } else {
+            jQuery('.show_if_open_price').hide();
+            jQuery('._regular_price_field').show();
+        }
+    }).change();
     jQuery('.options_group.pricing').addClass('show_if_wireless');
     var forceVirtual = function () {
         if (jQuery('#product-type').val() === 'wireless') {

@@ -37,6 +37,7 @@ class WPHelperExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('wc_text_input', [$this, 'wcTextInput']),
+            new \Twig_SimpleFunction('wc_checkbox', [$this, 'wcCheckbox']),
             new \Twig_SimpleFunction('do_action', [$this, 'doAction']),
             new \Twig_SimpleFunction('call', [$this, 'call']),
             new \Twig_SimpleFunction('call_get', [$this, 'callGet']),
@@ -145,6 +146,21 @@ class WPHelperExtension extends \Twig_Extension
     {
         ob_start();
         woocommerce_wp_text_input($args);
+
+        return ob_get_clean();
+    }
+
+    /**
+     * wcCheckbox
+     *
+     * @param $args
+     *
+     * @return string
+     */
+    public function wcCheckbox($args = [])
+    {
+        ob_start();
+        woocommerce_wp_checkbox($args);
 
         return ob_get_clean();
     }

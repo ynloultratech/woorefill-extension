@@ -172,6 +172,17 @@ class RefillAPI
     }
 
     /**
+     * @param string $mobile
+     *
+     * @return array|false
+     * @throws \Exception
+     */
+    public function accountInfo($mobile)
+    {
+        return $this->send(self::GET, sprintf('/account/%s', $mobile));
+    }
+
+    /**
      * send
      *
      * @param       $method
@@ -202,10 +213,10 @@ class RefillAPI
         try {
             $options = [
                 'timeout' => 60,
-                'body'=>$data,
-                'headers'=>[
+                'body' => $data,
+                'headers' => [
                     'APIKey' => $apiKey,
-                ]
+                ],
             ];
 
             if (self::GET === $method) {
@@ -224,7 +235,7 @@ class RefillAPI
                 if ($result && $error = $result->error) {
                     $error = $result->error->code;
                     $message = $result->error->message;
-                    throw new \Exception((string)$message, (int)$error);
+                    throw new \Exception((string) $message, (int) $error);
                 }
 
                 set_transient($cacheKey, $result, 120);

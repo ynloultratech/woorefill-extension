@@ -36,8 +36,7 @@ before_deploy:
 
 deploy:
     provider: releases
-    api_key:
-      secure: $DEPLOY_API_KEY
+    api_key: $DEPLOY_API_KEY
     file: 'woorefill-extension.zip'
     skip_cleanup: true
     on:

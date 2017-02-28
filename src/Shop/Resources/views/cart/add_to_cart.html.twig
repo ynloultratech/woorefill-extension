@@ -9,7 +9,7 @@
         <input type="hidden" name="add-to-cart" value="{{ product.id }}"/>
 
         {% if price_input %}
-            {{ call('woocommerce_form_field', '_wireless_price', price_input, suggested_price ) }}
+            {{ call('woocommerce_form_field', '_wireless_price', price_input, product.suggested_price ) }}
         {% endif %}
 
         <button type="submit" class="single_add_to_cart_button button alt">{{ product.add_to_cart_text }}</button>

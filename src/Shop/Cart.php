@@ -72,7 +72,6 @@ class Cart implements ContainerAwareInterface
             '@Shop/cart/add_to_cart.html.twig', [
                 'product' => $product,
                 'price_input' => $priceInput,
-                'suggested_price' => apply_filters('woorefill_suggested_cart_price', $product->suggested_price()),
             ]
         );
     }

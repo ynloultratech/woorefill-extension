@@ -64,6 +64,7 @@ class Cart implements ContainerAwareInterface
                 'custom_attributes' => [
                     'min' => $product->min_price(),
                     'max' => $product->max_price(),
+                    'required' => 'required',
                 ],
             ];
         }

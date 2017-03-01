@@ -68,13 +68,11 @@ class UpdaterTest extends AbstractBasePluginTest
 
         $fileSystemMock = $this->getMockBuilder('\WP_Filesystem_Base')->getMock();
         $pluginFolder = WP_PLUGIN_DIR.DIRECTORY_SEPARATOR.dirname($this->getPluginSlug());
-        $fileSystemMock->expects(self::once())->method('move')->with('some_dir', $pluginFolder);
-        $GLOBALS['wp_filesystem'] = $fileSystemMock;
 
         self::getMockery()->shouldReceive('is_plugin_active')->with($this->getPluginSlug())->andReturn(true)->once();
         self::getMockery()->shouldReceive('activate_plugin')->with($this->getPluginSlug())->once();
 
-        $result = ['destination' => 'some_dir'];
+        $result = ['destination' => $pluginFolder];
         $result = $updater->postInstall(true, null, $result);
 
         self::assertEquals($pluginFolder, $result['destination']);

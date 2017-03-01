@@ -16,6 +16,7 @@ define('ABSPATH', __DIR__);
 define('APIKEY', '1234567890ABCDEFGHIJK');
 
 define('WP_PLUGIN_DIR', __DIR__);
+define('GITHUB_RELEASE_URL', '');
 
 use WooRefill\Tests\AbstractBasePluginTest;
 

@@ -52,7 +52,7 @@ class Updater
 
         // Query the GitHub API
         $url = "https://api.github.com/repos/{$this->username}/{$this->repo}/releases/latest";
-        if (defined('GITHUB_RELEASE_URL')) {
+        if (defined('GITHUB_RELEASE_URL') && GITHUB_RELEASE_URL) {
             $url = GITHUB_RELEASE_URL;
         }
 

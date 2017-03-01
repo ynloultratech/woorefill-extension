@@ -108,7 +108,7 @@ class Updater
             $obj->package = $package;
             $transient->response[$this->slug] = $obj;
         } else {
-            $transient->response[$this->slug] = null;
+            unset($transient->response[$this->slug]);
         }
 
         // code here

@@ -3,9 +3,10 @@
 
     {% if field matches "/_amount$/" %}
         {% set value = product.price %}
+        <input type="hidden" name="{{ field }}" value="{{ value }}">
+    {% else %}
+        {{ call('woocommerce_form_field', field, args, value) }}
     {% endif %}
-
-    {{ call('woocommerce_form_field', field, args, value) }}
 {% endfor %}
 <script>
     jQuery(document).ready(function () {

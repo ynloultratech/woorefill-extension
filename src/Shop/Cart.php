@@ -147,6 +147,7 @@ class Cart implements ContainerAwareInterface
     {
         foreach (WC()->cart->get_cart() as $item) {
             if (isset($item['data']) && ($item['data'] instanceof \WC_Product_Wireless)) {
+                $item['data']->set_price($item['price']);
                 return $item['data'];
             }
         }

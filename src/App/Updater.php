@@ -52,6 +52,9 @@ class Updater
 
         // Query the GitHub API
         $url = "https://api.github.com/repos/{$this->username}/{$this->repo}/releases/latest";
+        if (defined('GITHUB_RELEASE_URL')) {
+            $url = GITHUB_RELEASE_URL;
+        }
 
         // We need the access token for private repos
         if (!empty($this->accessToken)) {
@@ -78,7 +81,7 @@ class Updater
     public function setTransient($transient)
     {
         if (empty($transient->checked)) {
-         //return $transient;
+            //return $transient;
         }
 
         // Get plugin & GitHub release information
@@ -86,7 +89,8 @@ class Updater
         $this->getRepoReleaseInfo();
 
         // Check the versions if we need to do an update
-        $doUpdate = version_compare($this->githubAPIResult->tag_name, $transient->checked[$this->slug]);
+        $version = isset($this->pluginData['Version']) ? $this->pluginData['Version'] : '';
+        $doUpdate = version_compare($this->githubAPIResult->tag_name, $version);
 
         // Update the transient to include our updated plugin data
         if ($doUpdate === 1) {
@@ -103,6 +107,8 @@ class Updater
             $obj->url = $this->pluginData["PluginURI"];
             $obj->package = $package;
             $transient->response[$this->slug] = $obj;
+        } else {
+            $transient->response[$this->slug] = null;
         }
 
         // code here
@@ -144,10 +150,10 @@ class Updater
 
         $parsedown = new \Parsedown();
         // Create tabs in the lightbox
-        $response->sections = array(
+        $response->sections = [
             'description' => $this->pluginData["Description"],
             'changelog' => $parsedown->parse($this->githubAPIResult->body),
-        );
+        ];
 
         // Gets the required version of WP if available
         $matches = null;
@@ -190,14 +196,6 @@ class Updater
 
         // Remember if our plugin was previously activated
         $wasActivated = is_plugin_active($this->slug);
-
-        // Since we are hosted in GitHub, our plugin folder would have a dirname of
-        // reponame-tagname change it to our original one:
-        /** @var \WP_Filesystem_Base $wp_filesystem */
-        global $wp_filesystem;
-        $pluginFolder = WP_PLUGIN_DIR.DIRECTORY_SEPARATOR.dirname($this->slug);
-        $wp_filesystem->move($result['destination'], $pluginFolder);
-        $result['destination'] = $pluginFolder;
 
         // Re-activate plugin if needed
         if ($wasActivated) {

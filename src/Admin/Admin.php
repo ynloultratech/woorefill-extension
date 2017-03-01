@@ -79,7 +79,7 @@ class Admin implements ContainerAwareInterface
     {
         $apiKey = $this->container->getParameter('api_key');
         if (empty($apiKey) && !(isset($_GET['page'], $_GET['tab']) && 'wc-settings' === $_GET['page'] && 'wireless' === $_GET['tab'])) {
-            $message = sprintf('WooRefill is almost ready. To get started, <a href="%s">set your WooRefill API Key</a>.',  admin_url().'/admin.php?page=wc-settings&tab=wireless');
+            $message = sprintf('WooRefill is almost ready. To get started, <a href="%s">set your WooRefill API Key</a>.', admin_url().'/admin.php?page=wc-settings&tab=wireless');
             $this->render(
                 '@Admin/notice.html.twig',
                 [

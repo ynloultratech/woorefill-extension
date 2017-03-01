@@ -14,6 +14,7 @@
 namespace WooRefill\Shop;
 
 use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Asset\AssetRegister;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\ProductManager;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -44,14 +45,21 @@ class Checkout implements ContainerAwareInterface
     {
         if ($this->getCart()->hasWirelessProduct()) {
             try {
+
+                /** @var AssetRegister $register */
+                $register = $this->container->get('asset_register');
+                $register->enqueueScript('jquery_inputmask', '/public/js/jquery.inputmask.bundle.js');
+
                 $product = $this->getCart()->getFirstWirelessProduct();
                 $wirelessId = $this->getProductManager()->getWirelessId($product);
+                $apiProduct = $this->getRefillAPI()->getProduct($wirelessId);
                 $fields = $this->resolveAPIProductFields($wirelessId);
                 $this->render(
                     '@Shop/checkout/wireless_fields.html.twig',
                     [
                         'fields' => $fields,
                         'product' => $product,
+                        'api_product' => $apiProduct,
                     ]
                 );
             } catch (\Exception $e) {
@@ -67,6 +75,11 @@ class Checkout implements ContainerAwareInterface
         if ($this->getCart()->hasWirelessProduct()) {
             foreach ($_POST as $field => $value) {
                 if (strpos($field, '_woo_refill_meta_') !== false) {
+                    if (preg_match('/meta_phone$/', $field)) {
+                        //remove the mask, keep phone number and int prefix,
+                        //+(1) 3051234123 -> +13051234123
+                        $value = preg_replace('/[^\+\d]/', '', $value);
+                    }
                     update_post_meta($order_id, $field, $value);
                 }
             }
@@ -81,15 +94,23 @@ class Checkout implements ContainerAwareInterface
         if ($apiProduct->request_meta) {
             foreach ($apiProduct->request_meta as $name => $prop) {
 
+                $mask = null;
+                $placeholder = null;
+                if ($name === 'phone') {
+                    $genericMask = sprintf("+ (%s) %s", current($apiProduct->international_codes), str_repeat('*', $apiProduct->phone_length));
+                    $mask = sprintf("'mask': '%s'", str_replace('*', '9', $genericMask));
+                    $placeholder = str_replace('*', '_', $genericMask);
+                }
+
                 $fields[sprintf('_woo_refill_meta_%s', $name)] = [
                     'type' => $prop->input_type ?: 'text',
                     'label' => $prop->label ?: ucfirst($name),
                     'required' => $prop->required ?: false,
-                    'maxlength' => $prop->maxlength ?: null,
+                    'placeholder' => $placeholder,
                     'custom_attributes' => [
-                        'minlength' => $prop->minlength ?: null,
                         'min' => $prop->min ?: null,
                         'max' => $prop->max ?: null,
+                        'data-inputmask' => $mask,
                     ],
                 ];
 

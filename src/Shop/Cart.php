@@ -146,8 +146,11 @@ class Cart implements ContainerAwareInterface
     public function getFirstWirelessProduct()
     {
         foreach (WC()->cart->get_cart() as $item) {
-            if (isset($item['data'],$item['price']) && $item['price'] && ($item['data'] instanceof \WC_Product_Wireless)) {
-                $item['data']->set_price($item['price']);
+            if (isset($item['data']) && ($item['data'] instanceof \WC_Product_Wireless)) {
+                if (isset($item['price']) && $item['price']) {
+                    $item['data']->set_price($item['price']);
+                }
+
                 return $item['data'];
             }
         }

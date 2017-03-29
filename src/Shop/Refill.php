@@ -113,14 +113,6 @@ class Refill implements ContainerAwareInterface
     }
 
     /**
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->get('logger');
-    }
-
-    /**
      * @return RefillAPI
      */
     public function getRefillAPI()

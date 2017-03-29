@@ -1,5 +1,5 @@
 {% for field, args in fields %}
-    {% set value = '' %}
+    {% set value = args.value|default('') %}
 
     {% if field matches "/_amount$/" %}
         {% set value = product.price %}

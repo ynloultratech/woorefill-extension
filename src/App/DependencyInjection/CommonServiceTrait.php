@@ -13,6 +13,7 @@
 
 namespace WooRefill\App\DependencyInjection;
 
+use WooRefill\App\Logger\Logger;
 use WooRefill\App\Twig\Template;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use WooRefill\Symfony\Component\HttpFoundation\Request;
@@ -42,6 +43,14 @@ trait CommonServiceTrait
     protected function getRequest()
     {
         return $this->get('request');
+    }
+
+    /**
+     * @return Logger
+     */
+    protected function getLogger()
+    {
+        return $this->get('logger');
     }
 
     /**

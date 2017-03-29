@@ -24,6 +24,15 @@
             <tag name="wp_action" tag="woocommerce_checkout_update_order_meta" method="updateOrderMeta"/>
         </service>
 
+        <service id="shop_category" class="WooRefill\Shop\PhoneContext">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="wp_filter" tag="woocommerce_product_subcategories_args" method="filterSubcategoriesByPhone"/>
+            <tag name="wp_filter" tag="term_link" method="addPhoneToLink"/>
+            <tag name="wp_filter" tag="woorefill_default_phone_to_refill" method="resolvePhoneToRefill"/>
+        </service>
+
         <service id="shop_thankyou" class="WooRefill\Shop\ThankYou">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>

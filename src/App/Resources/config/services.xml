@@ -35,6 +35,12 @@
 
         <service id="request" class="WooRefill\Symfony\Component\HttpFoundation\Request">
             <factory class="WooRefill\Symfony\Component\HttpFoundation\Request" method="createFromGlobals"/>
+            <call method="setSession">
+                <argument type="service" id="session"/>
+            </call>
+        </service>
+
+        <service id="session" class="WooRefill\App\Session">
         </service>
 
         <service id="event_dispatcher" class="WooRefill\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">

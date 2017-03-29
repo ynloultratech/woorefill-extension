@@ -96,10 +96,16 @@ class Checkout implements ContainerAwareInterface
 
                 $mask = null;
                 $placeholder = null;
+                $value = null;
                 if ($name === 'phone') {
                     $genericMask = sprintf("+ (%s) %s", current($apiProduct->international_codes), str_repeat('*', $apiProduct->phone_length));
                     $mask = sprintf("'mask': '%s'", str_replace('*', '9', $genericMask));
                     $placeholder = str_replace('*', '_', $genericMask);
+                    $phone = apply_filters('woorefill_default_phone_to_refill', null, $apiProduct);
+                    if ($phone){
+                        $phone = substr($phone, -1 * $apiProduct->phone_length);
+                    }
+                    $value = $phone;
                 }
 
                 $fields[sprintf('_woo_refill_meta_%s', $name)] = [
@@ -107,6 +113,7 @@ class Checkout implements ContainerAwareInterface
                     'label' => $prop->label ?: ucfirst($name),
                     'required' => $prop->required ?: false,
                     'placeholder' => $placeholder,
+                    'value' => $value,
                     'custom_attributes' => [
                         'min' => $prop->min ?: null,
                         'max' => $prop->max ?: null,

@@ -29,6 +29,9 @@ class PhoneContext implements ContainerAwareInterface
     {
         $phone = $this->getRequest()->get('phone');
         if ($phone) {
+            if (preg_match('/^\s/', $phone)) {
+                $phone = preg_replace('/^\s/', '+', $phone);
+            }
             $this->getRequest()->getSession()->set('refill_phone', $phone);
             try {
                 $info = $this->getRefillAPI()->accountInfo($phone);
@@ -59,8 +62,13 @@ class PhoneContext implements ContainerAwareInterface
                             }
                         }
                     }
-                    $children = array_column(get_terms($args), 'term_id');
-                    $include = array_intersect($children, $categories);
+                    /** @var \WP_Term[] $children */
+                    $children = get_terms($args);
+                    $childrenIds = [];
+                    foreach ($children as $child) {
+                        $childrenIds[] = $child->term_id;
+                    }
+                    $include = array_intersect($childrenIds, $categories);
                     $args['include'] = implode(',', $include);
                 }
 

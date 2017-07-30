@@ -87,6 +87,12 @@ class ProductImporter implements ContainerAwareInterface
                     update_post_meta($post_id, '_wireless_min_price', $product->min_amount);
                     update_post_meta($post_id, '_wireless_max_price', $product->max_amount);
                     update_post_meta($post_id, '_wireless_suggested_price', null);
+                    update_post_meta($post_id, '_wireless_type', $product->type);
+                    update_post_meta($post_id, '_wireless_discount_rate', $product->discount_rate);
+                    update_post_meta($post_id, '_wireless_currency_code', $product->currency_code);
+                    update_post_meta($post_id, '_wireless_country_code', $product->country_code);
+                    update_post_meta($post_id, '_wireless_international_code', $product->international_code);
+                    update_post_meta($post_id, '_wireless_phone_length', $product->phone_length);
                     update_post_meta($post_id, '_regular_price', $product->amount);
                     update_post_meta($post_id, '_price', $product->amount);
                     update_post_meta($post_id, '_sale_price', $product->amount);

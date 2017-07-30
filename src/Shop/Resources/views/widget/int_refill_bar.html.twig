@@ -1,0 +1,84 @@
+{{ before_widget }}
+
+{% if title %}
+    {{ before_title }}
+    {{ title }}
+    {{ after_title }}
+{% endif %}
+
+<form class="woorefill-int-refill-widget" action="/?s=&post_type=product" method="get">
+    <table>
+        <tr>
+            <td>
+                <input type="hidden" name="s">
+                <input type="hidden" name="post_type" value="product">
+                <input type="hidden" name="view" value="all">
+                <input type="hidden" name="woorefill" value="1">
+                <input type="hidden" name="country" value="{{ country }}">
+                <input type="hidden" name="dial_code" value="{{ dial_code }}">
+                <input class="input-text" name="phone" id="WooRefillInput-{{ id }}" value="{{ phone }}" type="text"/>
+            </td>
+            <td width="50px">
+                <input type="submit" value="{{ ok_btn }}" id="WooRefillBtn-{{ id }}" href="" class="submit button"/>
+            </td>
+        </tr>
+    </table>
+</form>
+{{ after_widget }}
+
+<style>
+    .woorefill-int-refill-widget table {
+        max-width: 400px;
+        margin: 10px 0;
+        border: none;
+        background: transparent;
+    }
+
+    .woorefill-int-refill-widget table td {
+        padding: 0 !important;
+        border: none;
+        background: transparent;
+    }
+
+    .woorefill-int-refill-widget table input {
+        width: 100%;
+    }
+
+    .woorefill-int-refill-widget table intl-tel-input {
+        width: 100%;
+    }
+</style>
+
+<script>
+    jQuery(document).ready(function ($) {
+        var widget = $('.woorefill-int-refill-widget');
+        var telInput = $("#WooRefillInput-{{ id }}");
+
+        telInput.intlTelInput({
+            dropdownContainer: "body",
+            preferredCountries: ['{{ defaultCountry }}'],
+            initialCountry: '{{ country }}',
+            nationalMode: false,
+            separateDialCode: true,
+            onlyCountries: {{ countries|json_encode }},
+            allowDropdown: {{ allowDropdown ? 'true' : 'false' }}
+        });
+
+        var syncData = function () {
+            var selectedCountryData = telInput.intlTelInput("getSelectedCountryData");
+            var code = String(selectedCountryData.iso2).toUpperCase();
+            widget.find('input[name="country"]').val(code);
+            widget.find('input[name="dial_code"]').val(selectedCountryData.dialCode);
+        };
+
+        syncData();
+        telInput.on('countrychange', syncData);
+
+        var styling = function () {
+            widget.find('.intl-tel-input').css('width', '100%')
+        };
+
+        styling();
+        jQuery(window).resize(styling);
+    });
+</script>

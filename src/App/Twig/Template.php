@@ -68,6 +68,14 @@ class Template
     }
 
     /**
+     * @return \Twig_Environment
+     */
+    public function getTwig()
+    {
+        return $this->twig;
+    }
+
+    /**
      * render
      *
      * @param string $view

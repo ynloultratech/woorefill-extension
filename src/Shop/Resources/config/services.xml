@@ -53,5 +53,19 @@
             </call>
             <tag name="wp_action" tag="woocommerce_order_details_after_customer_details" method="addWirelessDetails"/>
         </service>
+
+        <service id="international_refill_widget" class="WooRefill\Shop\Widget\InternationalRefillWidgetBar">
+            <tag name="wp_action" tag="widgets_init" method="registerWidget"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="woo_refill.shop" class="WooRefill\Shop\Shop">
+            <tag name="wp_action" tag="pre_get_posts" method="preGetPosts"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
     </services>
 </container>

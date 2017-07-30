@@ -58,13 +58,26 @@ class InternationalRefillWidgetBar extends \WP_Widget implements ContainerAwareI
         }
 
         //rea the list of possible countries
-        $sql = "SELECT DISTINCT meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_wireless_country_code'";
+        $sql = "SELECT DISTINCT meta_value 
+FROM {$wpdb->postmeta} 
+LEFT JOIN {$wpdb->posts} ON post_id =  {$wpdb->posts}.id
+WHERE {$wpdb->postmeta}.meta_key = '_wireless_country_code' 
+AND {$wpdb->posts}.post_status = 'publish'";
+
         $sql_result = $wpdb->get_results($sql, ARRAY_A);
         $countries = [];
         foreach ($sql_result as $result) {
             $countries[] = $result['meta_value'];
         }
-        $countries[] = $defaultCountry;
+
+        if (empty($countries)) {
+            $countries[] = $defaultCountry;
+        }
+
+        if (!in_array($defaultCountry, $countries)) {
+            $defaultCountry = $countries[0];
+        }
+
         $countries = array_unique($countries);
 
         $country = $this->getRequest()->get('country', $defaultCountry);

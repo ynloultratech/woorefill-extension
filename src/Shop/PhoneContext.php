@@ -29,9 +29,6 @@ class PhoneContext implements ContainerAwareInterface
     {
         $phone = $this->getRequest()->get('phone');
         if ($phone) {
-            if (preg_match('/^\s/', $phone)) {
-                $phone = preg_replace('/^\s/', '+', $phone);
-            }
             $this->getRequest()->getSession()->set('refill_phone', $phone);
             try {
                 $info = $this->getRefillAPI()->accountInfo($phone);

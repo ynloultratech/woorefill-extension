@@ -28,9 +28,13 @@ class Shop implements ContainerAwareInterface
             if ($phone = $this->getRequest()->get('phone')) {
 
                 $dialCode = $this->getRequest()->get('dial_code');
+                $countryCode = $this->getRequest()->get('country_code');
                 $phone = preg_replace('/[^\d]/', '', $phone);
                 $phone = preg_replace("/\+?$dialCode/", '', $phone);
                 $phone = "+$dialCode$phone";
+                $this->getRequest()->getSession()->set('refill_phone', $phone);
+                $this->getRequest()->getSession()->set('refill_dial_code', $dialCode);
+                $this->getRequest()->getSession()->set('refill_country_code', $countryCode);
 
                 /** @var RefillAPI $api */
                 $api = $this->get('refill_api');

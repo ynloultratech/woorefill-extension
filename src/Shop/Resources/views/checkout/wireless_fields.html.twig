@@ -13,6 +13,35 @@
         var label = jQuery('#_woo_refill_meta_phone_field label');
         var content = '<h3>' + label.html() + '</h3>';
         label.replaceWith(content);
-        jQuery('#_woo_refill_meta_phone').inputmask();
+       // jQuery('#_woo_refill_meta_phone').inputmask();
+
+        jQuery(document).ready(function ($) {
+            var telInput = $("#_woo_refill_meta_phone");
+
+            telInput.intlTelInput({
+                dropdownContainer: "body",
+                onlyCountries:[telInput.data('country')],
+                nationalMode: false,
+                separateDialCode: true,
+                allowDropdown: false
+            });
+
+            var syncData = function () {
+                var selectedCountryData = telInput.intlTelInput("getSelectedCountryData");
+                var code = String(selectedCountryData.iso2).toUpperCase();
+                widget.find('input[name="country"]').val(code);
+                widget.find('input[name="dial_code"]').val(selectedCountryData.dialCode);
+            };
+
+            syncData();
+            telInput.on('countrychange', syncData);
+
+            var styling = function () {
+                widget.find('.intl-tel-input').css('width', '100%')
+            };
+
+            styling();
+            jQuery(window).resize(styling);
+        });
     });
 </script>

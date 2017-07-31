@@ -17,7 +17,6 @@ use WooRefill\App\Api\RefillAPI;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\OrderManager;
 use WooRefill\App\EntityManager\ProductManager;
-use WooRefill\App\Logger\Logger;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -62,8 +61,9 @@ class Refill implements ContainerAwareInterface
                 $order->update_status('completed', "Refill success \n\n");
 
             } catch (\Exception $e) {
+                $this->getLogger()->addLog('ERROR:'.$e->getMessage());
                 $this->getLogger()->addLog($e->getTraceAsString());
-                $order->update_status('failed', $e->getMessage()." \n\n");
+                $order->update_status('failed', 'WooRefill: '.$e->getMessage()." \n\n");
                 $this->refundWirelessProduct($order, $e->getMessage());
             }
         } else {

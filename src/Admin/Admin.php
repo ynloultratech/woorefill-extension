@@ -94,7 +94,7 @@ class Admin implements ContainerAwareInterface
     {
         $logsEnabled = $this->container->getParameter('enable_logs');
         if ($logsEnabled && !(isset($_GET['page'], $_GET['tab']) && 'wc-settings' === $_GET['page'] && 'wireless' === $_GET['tab'])) {
-            $message = sprintf('You have WooRefill Debug Logs ENABLED, this may reduce the system performance, <a href="%s">DISABLE LOGS</a>. (<small> Leave ENABLED if you has problems with this plugin, in that case please contact <a href="emailto:support@ynolultratech.com">YnloUltratech</a></small>)', admin_url().'/admin.php?page=wc-settings&tab=wireless');
+            $message = sprintf('You have WooRefill Debug Logs ENABLED, this may reduce the system performance, <a href="%s">DISABLE LOGS</a>. (<small> Leave ENABLED if you has problems with this plugin, in that case please contact <a href="mailto:support@ynolultratech.com">YnloUltratech</a></small>)', admin_url().'/admin.php?page=wc-settings&tab=wireless');
             $this->render(
                 '@Admin/notice.html.twig',
                 [

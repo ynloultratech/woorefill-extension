@@ -4,6 +4,10 @@
     {% if field matches "/_amount$/" %}
         {% set value = product.price %}
         <input type="hidden" name="{{ field }}" value="{{ value }}">
+    {% elseif(field matches "/_phone$/") %}
+        {{ call('woocommerce_form_field', field, args, value) }}
+        <input id="_woo_refill_meta_phone_field_international" type="text" name="_woo_refill_meta_phone">
+
     {% else %}
         {{ call('woocommerce_form_field', field, args, value) }}
     {% endif %}
@@ -13,35 +17,23 @@
         var label = jQuery('#_woo_refill_meta_phone_field label');
         var content = '<h3>' + label.html() + '</h3>';
         label.replaceWith(content);
-       // jQuery('#_woo_refill_meta_phone').inputmask();
+        // jQuery('#_woo_refill_meta_phone').inputmask();
 
         jQuery(document).ready(function ($) {
             var telInput = $("#_woo_refill_meta_phone");
 
             telInput.intlTelInput({
                 dropdownContainer: "body",
-                onlyCountries:[telInput.data('country')],
+                onlyCountries: [telInput.data('country')],
                 nationalMode: false,
                 separateDialCode: true,
                 allowDropdown: false
             });
 
-            var syncData = function () {
-                var selectedCountryData = telInput.intlTelInput("getSelectedCountryData");
-                var code = String(selectedCountryData.iso2).toUpperCase();
-                widget.find('input[name="country"]').val(code);
-                widget.find('input[name="dial_code"]').val(selectedCountryData.dialCode);
-            };
-
-            syncData();
-            telInput.on('countrychange', syncData);
-
-            var styling = function () {
-                widget.find('.intl-tel-input').css('width', '100%')
-            };
-
-            styling();
-            jQuery(window).resize(styling);
+            telInput.on('change', function () {
+                var intPhone = telInput.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
+                $('#_woo_refill_meta_phone_field_international').val(intPhone)
+            }).trigger('change');
         });
     });
 </script>

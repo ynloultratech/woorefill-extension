@@ -67,6 +67,13 @@ class Settings extends \WC_Settings_Page implements ContainerAwareInterface
                     'id' => '_woorefill_api_key',
                     'css' => 'width: 300px;',
                 ],
+                [
+                    'title' => __('Pre-released updates'),
+                    'type' => 'checkbox',
+                    'desc' => __('Use pre-release updates if you\'re willing to report bugs or any problems that ocurr. <b style="color: orangered">WARNING: Non stable version may contains bugs.<b>'),
+                    'id' => '_woorefill_prerelease',
+                    'css' => 'width: 300px;',
+                ],
                 'debug' => [
                     'title' => __('Debug Log'),
                     'type' => 'checkbox',

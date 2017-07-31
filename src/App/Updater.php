@@ -50,10 +50,13 @@ class Updater
             return;
         }
 
+        $preRelease = get_option('_woorefill_prerelease', 'no');
+        $preRelease = $preRelease === 'yes' ? true : false;
+
         // Query the GitHub API
-        $url = "https://api.github.com/repos/{$this->username}/{$this->repo}/releases/latest";
+        $url = "https://api.github.com/repos/{$this->username}/{$this->repo}/releases".($preRelease ? '?per_page=1' : '/latest');
         if (defined('GITHUB_RELEASE_URL') && GITHUB_RELEASE_URL) {
-            $url = GITHUB_RELEASE_URL;
+            $url = $preRelease ? GITHUB_PRE_RELEASE_URL : GITHUB_RELEASE_URL;
         }
 
         // We need the access token for private repos
@@ -67,8 +70,13 @@ class Updater
             return $response;
         }
 
+        $release = @json_decode(isset($response['body']) ? $response['body'] : null);
+        if ($preRelease && count($release)){
+            $release = $release[0];
+        }
+
         // Get the results
-        $this->githubAPIResult = @json_decode(isset($response['body']) ? $response['body'] : null);
+        $this->githubAPIResult = $release;
     }
 
     /**

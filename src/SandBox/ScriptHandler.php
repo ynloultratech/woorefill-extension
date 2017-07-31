@@ -87,7 +87,6 @@ class ScriptHandler
             $processed++;
             foreach ($namespaces as $namespace) {
                 if ($replacements = NamespacePrefixHelper::prefixUsage($prefix, $namespace, $content)) {
-                    $io->write('Prefixing '.$namespace);
                     file_put_contents($file->getPathname(), $content);
                     $updated++;
                     $changes += $replacements;

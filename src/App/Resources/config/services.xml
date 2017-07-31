@@ -5,7 +5,7 @@
 
     <parameters>
         <parameter key="api_key"></parameter>
-        <parameter key="api_url">https://www.beasterp.com/api/v1.0</parameter>
+        <parameter key="api_url">https://api.woorefill.com/v1</parameter>
         <parameter key="enable_logs">false</parameter>
         <parameter key="plugin_file"></parameter>
     </parameters>

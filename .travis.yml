@@ -22,13 +22,13 @@ script:
 before_deploy:
     - rm -rf vendor
     - rm -rf tests
-    - rm composer.lock
     - rm -rf .git
     - rm .licenser.yml
     - rm .travis.yml
     - rm .gitignore
     - travis_retry composer install --no-dev --prefer-dist --no-interaction
     - composer dumpautoload
+    - rm composer.lock
     - ls -la
     - mkdir woorefill-extension; mv !(woorefill-extension) woorefill-extension
     - zip -r -9 -q woorefill-extension.zip *

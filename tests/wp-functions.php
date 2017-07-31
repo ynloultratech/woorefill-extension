@@ -25,6 +25,7 @@ function get_option($key)
     $options = [
         '_woorefill_api_key' => APIKEY,
         '_woorefill_log' => 'yes',
+        '_woorefill_prerelease' => 'no',
     ];
 
     return $options[$key];
@@ -123,7 +124,7 @@ class WC_Product
 
 }
 
-class WC_Payment_Gateway_CC
+class WC_Payment_Gateway
 {
 
 }

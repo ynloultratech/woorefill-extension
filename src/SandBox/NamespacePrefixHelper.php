@@ -33,7 +33,7 @@ class NamespacePrefixHelper
 
         $regexs = [
             "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1\\\\$prefix$2", // starting with \ -> \SomeNamespace
-            "/([^\\w\\d\\\\'\"])($namespace)/" => "$1$prefix\\\\$2", // //normal -> SomeNamespace
+            "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix\\\\$2$3", // //normal -> SomeNamespace
             "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$3$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
             "/(['\"])($namespace)(\\\\)/" => "$1$prefix\\\\$2$3", //as is in string -> 'SomeNamespace\Class'
         ];

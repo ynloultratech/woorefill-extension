@@ -69,7 +69,7 @@ class ScriptHandler
         $finder = new Finder();
         $finder->in($vendorDir);
         if (isset($extras['sandbox']['name'])) {
-            $names = (array)$extras['sandbox']['name'];
+            $names = (array) $extras['sandbox']['name'];
         } else {
             $names = ['*.php', '*.json'];
         }
@@ -82,12 +82,21 @@ class ScriptHandler
         $processed = 0;
         $updated = 0;
         $changes = 0;
+
+        /** @var \SplFileInfo $file */
         foreach ($finder->files() as $file) {
             $content = $file->getContents();
             $processed++;
             foreach ($namespaces as $namespace) {
                 if ($replacements = NamespacePrefixHelper::prefixUsage($prefix, $namespace, $content)) {
+
+                    //escape any simple \ in json files
+                    if ($file->getExtension() === 'json') {
+                        $content = preg_replace('/([^\\\])\\\([^\\\"])/', '$1\\\\\\\\$2', $content);
+                    }
+
                     file_put_contents($file->getPathname(), $content);
+
                     $updated++;
                     $changes += $replacements;
                 }

@@ -14,7 +14,7 @@
 namespace WooRefill\App\EntityManager;
 
 use WooRefill\App\Model\LocalOperator;
-use WooRefill\JMS\Serializer\SerializerBuilder;
+use WooRefillJMS\Serializer\SerializerBuilder;
 
 /**
  * Class CarrierManager

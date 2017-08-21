@@ -16,14 +16,14 @@ namespace WooRefill\App\Controller;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\Event\EventDispatcherBridge;
 use WooRefill\App\Kernel;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use WooRefill\Symfony\Component\Form\Extension\Core\Type\FormType;
-use WooRefill\Symfony\Component\Form\FormFactory;
-use WooRefill\Symfony\Component\HttpFoundation\JsonResponse;
-use WooRefill\Symfony\Component\HttpFoundation\Request;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareTrait;
+use WooRefillSymfony\Component\Form\Extension\Core\Type\FormType;
+use WooRefillSymfony\Component\Form\FormFactory;
+use WooRefillSymfony\Component\HttpFoundation\JsonResponse;
+use WooRefillSymfony\Component\HttpFoundation\Request;
 use WooRefill\App\Twig\Template;
-use WooRefill\Symfony\Component\Form\FormBuilderInterface;
+use WooRefillSymfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class Controller
@@ -35,7 +35,7 @@ abstract class Controller implements ContainerAwareInterface
     /**
      * @return FormBuilderInterface
      */
-    protected function createFormBuilder($type = 'WooRefill\Symfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
+    protected function createFormBuilder($type = 'WooRefillSymfony\Component\Form\Extension\Core\Type\FormType', $data = null, array $options = [])
     {
         /** @var FormFactory $formFactory */
         $formFactory = $this->get('form_factory');

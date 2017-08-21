@@ -14,7 +14,7 @@ namespace WooRefill\Shop;
 
 use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class Shop implements ContainerAwareInterface
 {

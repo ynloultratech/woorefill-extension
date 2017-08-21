@@ -15,8 +15,8 @@ namespace WooRefill\App\DependencyInjection;
 
 use WooRefill\App\Logger\Logger;
 use WooRefill\App\Twig\Template;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use WooRefill\Symfony\Component\HttpFoundation\Request;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareTrait;
+use WooRefillSymfony\Component\HttpFoundation\Request;
 
 /**
  * Class CommonServiceTrait

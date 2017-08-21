@@ -148,18 +148,27 @@ class ScriptHandler
 
             list($root) = explode('\\', preg_replace('/_$/','\\', $namespace));
             $fileSystem = new Filesystem();
-//            foreach ($paths as $path) {
-//                $rootDir = $path.DIRECTORY_SEPARATOR.$root;
-//                if (file_exists($rootDir)) {
-//
-//                    $target = $path.DIRECTORY_SEPARATOR.$prefix.DIRECTORY_SEPARATOR.$root;
-//                    if (file_exists($target)) {
-//                        $fileSystem->remove($target);
-//                    }
-//                    $fileSystem->mirror($rootDir, $target);
-//                    $fileSystem->remove($rootDir);
-//                }
-//            }
+            foreach ($paths as $path) {
+                $rootDir = $path.DIRECTORY_SEPARATOR.$root;
+                if (file_exists($rootDir)) {
+                    $target = $path.DIRECTORY_SEPARATOR.$prefix.$root;
+                    if (file_exists($target)) {
+                        $fileSystem->remove($target);
+                    }
+                    $fileSystem->mirror($rootDir, $target);
+                    $fileSystem->remove($rootDir);
+                }
+
+                $rootFile = $path.DIRECTORY_SEPARATOR.$root.'.php';
+                if (file_exists($rootFile)) {
+                    $targetFile = $path.DIRECTORY_SEPARATOR.$prefix.$root.'.php';
+                    if (file_exists($targetFile)) {
+                        $fileSystem->remove($targetFile);
+                    }
+                    $fileSystem->copy($rootFile, $targetFile);
+                    $fileSystem->remove($rootFile);
+                }
+            }
         }
 
         return $namespaces;

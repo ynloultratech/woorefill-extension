@@ -14,10 +14,10 @@
 namespace WooRefill\App\Twig;
 
 use WooRefill\App\Twig\Extension\WPHelperExtension;
-use WooRefill\Symfony\Bridge\Twig\Extension\FormExtension;
-use WooRefill\Symfony\Bridge\Twig\Form\TwigRenderer;
-use WooRefill\Symfony\Bridge\Twig\Form\TwigRendererEngine;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
+use WooRefillSymfony\Bridge\Twig\Extension\FormExtension;
+use WooRefillSymfony\Bridge\Twig\Form\TwigRenderer;
+use WooRefillSymfony\Bridge\Twig\Form\TwigRendererEngine;
+use WooRefillSymfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Template
@@ -25,7 +25,7 @@ use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
 class Template
 {
     /**
-     * @var \WooRefill_Twig_Environment
+     * @var \WooRefillTwig_Environment
      */
     protected $twig;
 
@@ -34,11 +34,11 @@ class Template
      */
     public function __construct(ContainerInterface $container)
     {
-        $appVariableReflection = new \ReflectionClass('WooRefill\Symfony\Bridge\Twig\AppVariable');
+        $appVariableReflection = new \ReflectionClass('WooRefillSymfony\Bridge\Twig\AppVariable');
         $vendorTwigBridgeDir = dirname($appVariableReflection->getFileName());
 
         $vendorDir = realpath(__DIR__.'/../../../vendor');
-        $loader = new \WooRefill_Twig_Loader_Filesystem(
+        $loader = new \WooRefillTwig_Loader_Filesystem(
             [
                 $vendorDir,
                 $vendorTwigBridgeDir.'/Resources/views/Form',
@@ -47,7 +47,7 @@ class Template
         $loader->addPath(__DIR__.'/../Resources/views/', 'App');
         $loader->addPath(__DIR__.'/../../Admin/Resources/views/', 'Admin');
         $loader->addPath(__DIR__.'/../../Shop/Resources/views/', 'Shop');
-        $this->twig = new \WooRefill_Twig_Environment(
+        $this->twig = new \WooRefillTwig_Environment(
             $loader, [
                 'debug' => WOOREFILL_DEBUG,
                 'strict_variables' => WOOREFILL_DEBUG,

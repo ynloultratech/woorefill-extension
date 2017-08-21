@@ -13,7 +13,7 @@
 
 namespace WooRefill\App\TaggedServices;
 
-use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerInterface;
 
 class TaggedServices
 {

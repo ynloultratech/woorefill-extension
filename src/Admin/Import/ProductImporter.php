@@ -16,8 +16,8 @@ namespace WooRefill\Admin\Import;
 use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\EntityManager\CarrierManager;
 use WooRefill\App\EntityManager\ProductCategoryManager;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class ProductImporter

@@ -33,44 +33,51 @@ class NamespacePrefixHelper
         }
 
         $underscoredNamespace = false;
-        if (count(explode('_', $namespace)) > 1) {
+        if (preg_match('/_$/', $namespace)) {
             $underscoredNamespace = true;
+            $namespace = preg_replace('/_$/',null, $namespace);
         }
 
-        $regexs =[
-            "/([^$prefix])($namespace)/" => "$1$prefix$2"
-        ];
+        if ($underscoredNamespace) {
+            $regexs = [
+                "/(['\"\s\(!])(\\\?)({$namespace}_)/" => "$1$2$prefix$3",
+            ];
+        } else {
+            $regexs = [
+                "/(['\"\s\(!])(\\\?)({$namespace}[^\w])/" => "$1$2$prefix$3",
+            ];
+        }
 
-//        switch ($namespaceMeta->getPsr()) {
-//            case 0:
-//                $replacement = $underscoredNamespace ? '_' : '\\\\';
-//
-//                $regexs = [
-//                    "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1$replacement$prefix$2", // starting with \ -> \SomeNamespace
-//                    "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix$replacement$2$3", // //normal -> SomeNamespace
-//                    "/(['\"])($namespace)(['\"])/" => "$1$prefix$replacement$2$3", // //use as is in string, commonly in autoloader .. 'PhpCollection'
-//                    "/(\(\s*)($namespace)(\s+)/" => "$1$prefix$replacement$2$3", // //using class as function parameter (Twig $twig)
-//                    "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$replacement$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
-//                    "/(['\"])($namespace)(\\\\)/" => "$1$prefix$replacement$2$3", //as is in string -> 'SomeNamespace\Class'
-//                ];
-//
-//                if ($underscoredNamespace && preg_match('/_$/', $namespace)) {
-//                    $namespaceWithout_ = preg_replace('/_$/', null, $namespace);
-//                    $regexs["/([\s\"'\\\\])($namespaceWithout_)(_[\w+\"'])/"] = "$1$prefix$replacement$2$3"; // //wordAsPrefix -> Twig_
-//                    $regexs["/(\(\s*)($namespaceWithout_)(_\w+)/"] = "$1$prefix$replacement$2$3"; // //using class as function parameter (Twig_Interface $twig)
-//                }
-//                break;
-//            case 4:
-//                $regexs = [
-//                    "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1\\\\$prefix$2", // starting with \ -> \SomeNamespace
-//                    "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix\\\\$2$3", // //normal -> SomeNamespace
-//                    "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$3$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
-//                    "/(['\"])($namespace)(\\\\)/" => "$1$prefix\\\\$2$3", //as is in string -> 'SomeNamespace\Class'
-//                ];
-//                break;
-//            default:
-//                $regexs = [];
-//        }
+        //        switch ($namespaceMeta->getPsr()) {
+        //            case 0:
+        //                $replacement = $underscoredNamespace ? '_' : '\\\\';
+        //
+        //                $regexs = [
+        //                    "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1$replacement$prefix$2", // starting with \ -> \SomeNamespace
+        //                    "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix$replacement$2$3", // //normal -> SomeNamespace
+        //                    "/(['\"])($namespace)(['\"])/" => "$1$prefix$replacement$2$3", // //use as is in string, commonly in autoloader .. 'PhpCollection'
+        //                    "/(\(\s*)($namespace)(\s+)/" => "$1$prefix$replacement$2$3", // //using class as function parameter (Twig $twig)
+        //                    "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$replacement$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
+        //                    "/(['\"])($namespace)(\\\\)/" => "$1$prefix$replacement$2$3", //as is in string -> 'SomeNamespace\Class'
+        //                ];
+        //
+        //                if ($underscoredNamespace && preg_match('/_$/', $namespace)) {
+        //                    $namespaceWithout_ = preg_replace('/_$/', null, $namespace);
+        //                    $regexs["/([\s\"'\\\\])($namespaceWithout_)(_[\w+\"'])/"] = "$1$prefix$replacement$2$3"; // //wordAsPrefix -> Twig_
+        //                    $regexs["/(\(\s*)($namespaceWithout_)(_\w+)/"] = "$1$prefix$replacement$2$3"; // //using class as function parameter (Twig_Interface $twig)
+        //                }
+        //                break;
+        //            case 4:
+        //                $regexs = [
+        //                    "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1\\\\$prefix$2", // starting with \ -> \SomeNamespace
+        //                    "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix\\\\$2$3", // //normal -> SomeNamespace
+        //                    "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$3$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
+        //                    "/(['\"])($namespace)(\\\\)/" => "$1$prefix\\\\$2$3", //as is in string -> 'SomeNamespace\Class'
+        //                ];
+        //                break;
+        //            default:
+        //                $regexs = [];
+        //        }
 
 
         $counters = 0;

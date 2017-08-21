@@ -25,7 +25,7 @@
             </call>
         </service>
 
-        <service id="service_container" class="WooRefill\Symfony\Component\DependencyInjection\Container">
+        <service id="service_container" class="WooRefillSymfony\Component\DependencyInjection\Container">
             <factory class="WooRefill\App\Kernel" method="getContainer"/>
         </service>
 
@@ -33,8 +33,8 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="request" class="WooRefill\Symfony\Component\HttpFoundation\Request">
-            <factory class="WooRefill\Symfony\Component\HttpFoundation\Request" method="createFromGlobals"/>
+        <service id="request" class="WooRefillSymfony\Component\HttpFoundation\Request">
+            <factory class="WooRefillSymfony\Component\HttpFoundation\Request" method="createFromGlobals"/>
             <call method="setSession">
                 <argument type="service" id="session"/>
             </call>
@@ -43,11 +43,11 @@
         <service id="session" class="WooRefill\App\Session">
         </service>
 
-        <service id="event_dispatcher" class="WooRefill\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
+        <service id="event_dispatcher" class="WooRefillSymfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
             <factory class="WooRefill\App\Kernel" method="getEventDispatcher"/>
         </service>
 
-        <service id="form_factory" class="WooRefill\Symfony\Component\Form\FormFactory">
+        <service id="form_factory" class="WooRefillSymfony\Component\Form\FormFactory">
             <factory class="WooRefill\App\Form\FormFactory" method="createFormFactory"/>
             <argument type="service" id="service_container"/>
         </service>

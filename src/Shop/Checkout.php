@@ -17,7 +17,7 @@ use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\Asset\AssetRegister;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\ProductManager;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class Checkout

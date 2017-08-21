@@ -156,7 +156,7 @@ class Updater
             $response->download_link = $asset->browser_download_url;
         }
 
-        $parsedown = new \Parsedown();
+        $parsedown = new \WooRefillParsedown();
         // Create tabs in the lightbox
         $response->sections = [
             'description' => $this->pluginData["Description"],

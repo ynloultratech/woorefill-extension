@@ -16,7 +16,7 @@ namespace WooRefill\App\Twig\Extension;
 /**
  * Class WPHelperExtension
  */
-class WPHelperExtension extends \WooRefill_Twig_Extension
+class WPHelperExtension extends \WooRefillTwig_Extension
 {
     /**
      * {@inheritdoc}
@@ -24,9 +24,9 @@ class WPHelperExtension extends \WooRefill_Twig_Extension
     public function getFilters()
     {
         return [
-            new \WooRefill_Twig_SimpleFilter('trans', [$this, 'trans']),
-            new \WooRefill_Twig_SimpleFilter('price', [$this, 'price']),
-            new \WooRefill_Twig_SimpleFilter('dump', [$this, 'dump']),
+            new \WooRefillTwig_SimpleFilter('trans', [$this, 'trans']),
+            new \WooRefillTwig_SimpleFilter('price', [$this, 'price']),
+            new \WooRefillTwig_SimpleFilter('dump', [$this, 'dump']),
         ];
     }
 
@@ -36,15 +36,15 @@ class WPHelperExtension extends \WooRefill_Twig_Extension
     public function getFunctions()
     {
         return [
-            new \WooRefill_Twig_SimpleFunction('dump', [$this, 'dump']),
-            new \WooRefill_Twig_SimpleFunction('wc_text_input', [$this, 'wcTextInput']),
-            new \WooRefill_Twig_SimpleFunction('wc_checkbox', [$this, 'wcCheckbox']),
-            new \WooRefill_Twig_SimpleFunction('do_action', [$this, 'doAction']),
-            new \WooRefill_Twig_SimpleFunction('call', [$this, 'call']),
-            new \WooRefill_Twig_SimpleFunction('call_get', [$this, 'callGet']),
-            new \WooRefill_Twig_SimpleFunction('admin_url', [$this, 'adminUrl']),
-            new \WooRefill_Twig_SimpleFunction('ajax_admin_url', [$this, 'ajaxAdminUrl']),
-            new \WooRefill_Twig_SimpleFunction('paginate_links', [$this, 'paginateLinks']),
+            new \WooRefillTwig_SimpleFunction('dump', [$this, 'dump']),
+            new \WooRefillTwig_SimpleFunction('wc_text_input', [$this, 'wcTextInput']),
+            new \WooRefillTwig_SimpleFunction('wc_checkbox', [$this, 'wcCheckbox']),
+            new \WooRefillTwig_SimpleFunction('do_action', [$this, 'doAction']),
+            new \WooRefillTwig_SimpleFunction('call', [$this, 'call']),
+            new \WooRefillTwig_SimpleFunction('call_get', [$this, 'callGet']),
+            new \WooRefillTwig_SimpleFunction('admin_url', [$this, 'adminUrl']),
+            new \WooRefillTwig_SimpleFunction('ajax_admin_url', [$this, 'ajaxAdminUrl']),
+            new \WooRefillTwig_SimpleFunction('paginate_links', [$this, 'paginateLinks']),
         ];
     }
 

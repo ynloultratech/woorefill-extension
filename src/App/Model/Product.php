@@ -12,9 +12,9 @@
 
 namespace WooRefill\App\Model;
 
-use WooRefill\JMS\Serializer\Annotation\Exclude;
-use WooRefill\JMS\Serializer\Annotation\SerializedName;
-use WooRefill\JMS\Serializer\Annotation\Type;
+use WooRefillJMS\Serializer\Annotation\Exclude;
+use WooRefillJMS\Serializer\Annotation\SerializedName;
+use WooRefillJMS\Serializer\Annotation\Type;
 
 class Product
 {

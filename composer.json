@@ -76,7 +76,7 @@
           "guzzlehttp/guzzle/docs"
         ],
         "exclude": [
-          "twig/twig/lib/WooRefill/Twig/Node/Expression/Test"
+          "twig/twig/lib/WooRefillTwig/Node/Expression/Test"
         ]
       }
     }

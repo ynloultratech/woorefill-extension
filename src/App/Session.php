@@ -12,8 +12,8 @@
 
 namespace WooRefill\App;
 
-use WooRefill\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use WooRefill\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use WooRefillSymfony\Component\HttpFoundation\Session\SessionBagInterface;
+use WooRefillSymfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Session implements SessionInterface
 {

@@ -18,9 +18,9 @@ use WooRefill\Admin\Import\ProductImporter;
 use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\Controller\Controller;
 use WooRefill\GuzzleHttp\Exception\ClientException;
-use WooRefill\Symfony\Component\Form\FormError;
-use WooRefill\Symfony\Component\HttpFoundation\JsonResponse;
-use WooRefill\Symfony\Component\HttpFoundation\Response;
+use WooRefillSymfony\Component\Form\FormError;
+use WooRefillSymfony\Component\HttpFoundation\JsonResponse;
+use WooRefillSymfony\Component\HttpFoundation\Response;
 
 /**
  * Class ImportProductsController

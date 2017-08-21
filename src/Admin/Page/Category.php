@@ -14,7 +14,7 @@
 namespace WooRefill\Admin\Page;
 
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class Category

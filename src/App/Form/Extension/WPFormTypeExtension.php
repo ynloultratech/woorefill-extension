@@ -13,11 +13,11 @@
 
 namespace WooRefill\App\Form\Extension;
 
-use WooRefill\Symfony\Component\Form\AbstractTypeExtension;
-use WooRefill\Symfony\Component\Form\Extension\Core\Type\FormType;
-use WooRefill\Symfony\Component\Form\FormInterface;
-use WooRefill\Symfony\Component\Form\FormView;
-use WooRefill\Symfony\Component\OptionsResolver\OptionsResolver;
+use WooRefillSymfony\Component\Form\AbstractTypeExtension;
+use WooRefillSymfony\Component\Form\Extension\Core\Type\FormType;
+use WooRefillSymfony\Component\Form\FormInterface;
+use WooRefillSymfony\Component\Form\FormView;
+use WooRefillSymfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class WPFormTypeExtension

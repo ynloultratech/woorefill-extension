@@ -13,8 +13,8 @@
 
 namespace WooRefill\App\TaggedServices;
 
-use WooRefill\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerBuilder;
+use WooRefillSymfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerBuilder;
 
 class TaggedServicesCompilerPass implements CompilerPassInterface
 {

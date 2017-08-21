@@ -16,9 +16,9 @@ namespace WooRefill\App\Form;
 use WooRefill\App\Form\Extension\WPFormTypeExtension;
 use WooRefill\App\Kernel;
 use WooRefill\App\TaggedServices\TaggedServices;
-use WooRefill\Symfony\Component\DependencyInjection\Container;
-use WooRefill\Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
-use WooRefill\Symfony\Component\Form\Forms;
+use WooRefillSymfony\Component\DependencyInjection\Container;
+use WooRefillSymfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use WooRefillSymfony\Component\Form\Forms;
 
 /**
  * Class FormFactory
@@ -29,7 +29,7 @@ class FormFactory
     /**
      * createFormFactory
      *
-     * @return \WooRefill\Symfony\Component\Form\FormFactoryInterface
+     * @return \WooRefillSymfony\Component\Form\FormFactoryInterface
      */
     public static function createFormFactory(Container $container)
     {

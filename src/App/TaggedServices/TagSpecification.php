@@ -13,9 +13,9 @@
 
 namespace WooRefill\App\TaggedServices;
 
-use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
-use WooRefill\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use WooRefill\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use WooRefillSymfony\Component\DependencyInjection\ContainerInterface;
+use WooRefillSymfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use WooRefillSymfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class TagSpecification
 {

@@ -16,11 +16,11 @@ namespace WooRefill\App;
 use WooRefill\Admin\DependencyInjection\AdminExtension;
 use WooRefill\App\DependencyInjection\AppExtension;
 use WooRefill\Shop\DependencyInjection\ShopExtension;
-use WooRefill\Symfony\Component\DependencyInjection\Container;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerBuilder;
-use WooRefill\Symfony\Component\DependencyInjection\Extension\Extension;
-use WooRefill\Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
-use WooRefill\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use WooRefillSymfony\Component\DependencyInjection\Container;
+use WooRefillSymfony\Component\DependencyInjection\ContainerBuilder;
+use WooRefillSymfony\Component\DependencyInjection\Extension\Extension;
+use WooRefillSymfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use WooRefillSymfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use WooRefill\App\TaggedServices\TaggedServicesCompilerPass;
 
 /**

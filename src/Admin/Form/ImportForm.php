@@ -19,13 +19,13 @@ use WooRefill\Admin\Form\Type\CategoryFormType;
 use WooRefill\Admin\Form\Type\ProductTableFormType;
 use WooRefill\Admin\Form\Type\ProductStatusFormType;
 use WooRefill\App\Api\WooRefillApi;
-use WooRefill\Symfony\Component\Form\AbstractType;
-use WooRefill\Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use WooRefill\Symfony\Component\Form\FormBuilderInterface;
-use WooRefill\Symfony\Component\Form\FormInterface;
-use WooRefill\Symfony\Component\Form\FormView;
-use WooRefill\Symfony\Component\HttpFoundation\Request;
-use WooRefill\Symfony\Component\OptionsResolver\OptionsResolver;
+use WooRefillSymfony\Component\Form\AbstractType;
+use WooRefillSymfony\Component\Form\Extension\Core\Type\ChoiceType;
+use WooRefillSymfony\Component\Form\FormBuilderInterface;
+use WooRefillSymfony\Component\Form\FormInterface;
+use WooRefillSymfony\Component\Form\FormView;
+use WooRefillSymfony\Component\HttpFoundation\Request;
+use WooRefillSymfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ImportForm

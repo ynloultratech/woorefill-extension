@@ -18,7 +18,7 @@ use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\OrderManager;
 use WooRefill\App\EntityManager\ProductManager;
 use WooRefill\App\Model\Transaction;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class Refill

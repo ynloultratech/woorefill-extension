@@ -14,9 +14,9 @@
 namespace WooRefill\App\WPEventBridge;
 
 use WooRefill\App\Kernel;
-use WooRefill\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerBuilder;
-use WooRefill\Symfony\Component\DependencyInjection\Reference;
+use WooRefillSymfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerBuilder;
+use WooRefillSymfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass convert some tags like wp_filter and wp_action

@@ -15,7 +15,7 @@ namespace WooRefill\Shop\Widget;
 use WooRefill\App\Asset\AssetRegister;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\Kernel;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class InternationalRefillWidgetBar extends \WP_Widget implements ContainerAwareInterface
 {

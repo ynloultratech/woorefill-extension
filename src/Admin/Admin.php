@@ -17,7 +17,7 @@ use WooRefill\App\Asset\AssetRegister;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\TaggedServices\TaggedServices;
 use WooRefill\App\TaggedServices\TagSpecification;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class Admin

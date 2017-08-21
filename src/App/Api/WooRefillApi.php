@@ -14,9 +14,9 @@
 namespace WooRefill\App\Api;
 
 use WooRefill\App\Logger\Logger;
-use WooRefill\JMS\Serializer\Serializer;
-use WooRefill\JMS\Serializer\SerializerBuilder;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerInterface;
+use WooRefillJMS\Serializer\Serializer;
+use WooRefillJMS\Serializer\SerializerBuilder;
+use WooRefillSymfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class WooRefillApi

@@ -14,7 +14,7 @@
 namespace WooRefill\Admin\Form\Transformer;
 
 use WooRefill\Admin\Import\ImportData;
-use WooRefill\Symfony\Component\Form\DataTransformerInterface;
+use WooRefillSymfony\Component\Form\DataTransformerInterface;
 
 /**
  * Class ImportDataTransformer

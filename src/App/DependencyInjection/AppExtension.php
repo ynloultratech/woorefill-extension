@@ -14,10 +14,10 @@
 namespace WooRefill\App\DependencyInjection;
 
 use WooRefill\App\WPEventBridge\WPEventCompilerPass;
-use WooRefill\Symfony\Component\Config\FileLocator;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerBuilder;
-use WooRefill\Symfony\Component\DependencyInjection\Extension\Extension;
-use WooRefill\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use WooRefillSymfony\Component\Config\FileLocator;
+use WooRefillSymfony\Component\DependencyInjection\ContainerBuilder;
+use WooRefillSymfony\Component\DependencyInjection\Extension\Extension;
+use WooRefillSymfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
  * Class AppExtension

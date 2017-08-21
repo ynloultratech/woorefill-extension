@@ -13,11 +13,11 @@
 
 namespace WooRefill\Admin\Form\Type;
 
-use WooRefill\Symfony\Component\Form\AbstractType;
-use WooRefill\Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use WooRefill\Symfony\Component\Form\FormInterface;
-use WooRefill\Symfony\Component\Form\FormView;
-use WooRefill\Symfony\Component\OptionsResolver\OptionsResolver;
+use WooRefillSymfony\Component\Form\AbstractType;
+use WooRefillSymfony\Component\Form\Extension\Core\Type\ChoiceType;
+use WooRefillSymfony\Component\Form\FormInterface;
+use WooRefillSymfony\Component\Form\FormView;
+use WooRefillSymfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ProductTableFormType

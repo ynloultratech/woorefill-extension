@@ -13,7 +13,7 @@
 
 namespace WooRefill\App\WPEventBridge;
 
-use WooRefill\Symfony\Component\DependencyInjection\Reference;
+use WooRefillSymfony\Component\DependencyInjection\Reference;
 
 /**
  * Class WPEvent

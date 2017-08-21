@@ -12,9 +12,9 @@
 
 namespace WooRefill\App\Model;
 
-use WooRefill\JMS\Serializer\Annotation\MaxDepth;
-use WooRefill\JMS\Serializer\Annotation\SerializedName;
-use WooRefill\JMS\Serializer\Annotation\Type;
+use WooRefillJMS\Serializer\Annotation\MaxDepth;
+use WooRefillJMS\Serializer\Annotation\SerializedName;
+use WooRefillJMS\Serializer\Annotation\Type;
 
 class Transaction
 {

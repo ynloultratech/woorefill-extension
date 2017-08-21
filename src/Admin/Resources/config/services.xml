@@ -43,10 +43,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <tag name="wp_action" tag="product_cat_add_form_fields" method="categoryAddFormFields"/>
-            <tag name="wp_action" tag="product_cat_edit_form_fields" method="categoryEditFormFields"/>
-            <tag name="wp_action" tag="edit_term" method="saveCategory"/>
-            <tag name="wp_action" tag="create_term" method="saveCategory"/>
         </service>
 
         <service id="settings_page" class="WooRefill\Admin\Page\Settings">

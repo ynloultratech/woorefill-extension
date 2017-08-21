@@ -10,3 +10,53 @@ label.form-invalid {
     margin-right: 10px;
     display: inline-block;
 }
+
+
+/** Tables **/
+
+/*table.wp-list-table td.column-thumb img {*/
+    /*margin: 0;*/
+    /*width: auto;*/
+    /*height: auto;*/
+    /*max-width: 40px;*/
+    /*max-height: 40px;*/
+    /*vertical-align: middle;*/
+/*}*/
+
+/*table.wp-list-table .column-thumb {*/
+    /*width: 52px;*/
+    /*text-align: center;*/
+    /*white-space: nowrap;*/
+/*}*/
+
+/*table.wp-list-table span.wc-featured,*/
+/*table.wp-list-table span.wc-image,*/
+/*table.wp-list-table span.wc-type {*/
+    /*display: block;*/
+    /*text-indent: -9999px;*/
+    /*position: relative;*/
+    /*height: 1em;*/
+    /*width: 1em;*/
+    /*margin: 0 auto;*/
+/*}*/
+
+/*table.wp-list-table span.wc-featured:before,*/
+/*table.wp-list-table span.wc-image:before,*/
+/*table.wp-list-table span.wc-type:before {*/
+    /*font-family: Dashicons;*/
+    /*speak: none;*/
+    /*font-weight: 400;*/
+    /*font-variant: normal;*/
+    /*text-transform: none;*/
+    /*line-height: 1;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*margin: 0;*/
+    /*text-indent: 0;*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*text-align: center;*/
+    /*content: "";*/
+/*}*/

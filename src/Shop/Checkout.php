@@ -13,7 +13,7 @@
 
 namespace WooRefill\Shop;
 
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\Asset\AssetRegister;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\ProductManager;
@@ -45,15 +45,13 @@ class Checkout implements ContainerAwareInterface
     {
         if ($this->getCart()->hasWirelessProduct()) {
             try {
-
                 /** @var AssetRegister $register */
                 $register = $this->container->get('asset_register');
                 $register->enqueueScript('jquery_inputmask', '/public/js/jquery.inputmask.bundle.js');
 
                 $product = $this->getCart()->getFirstWirelessProduct();
-                $wirelessId = $this->getProductManager()->getWirelessId($product);
-                $apiProduct = $this->getRefillAPI()->getProduct($wirelessId);
-                $fields = $this->resolveAPIProductFields($wirelessId);
+                $apiProduct = $this->getRefillAPI()->getProducts()->get($product->sku);
+                $fields = $this->resolveAPIProductFields($product->sku);
                 $this->render(
                     '@Shop/checkout/wireless_fields.html.twig',
                     [
@@ -88,17 +86,22 @@ class Checkout implements ContainerAwareInterface
 
     public function resolveAPIProductFields($wirelessId)
     {
-        $apiProduct = $this->getRefillAPI()->getProduct($wirelessId);
+        $product = $this->getRefillAPI()->getProducts()->get($wirelessId);
 
         $fields = [];
-        if ($apiProduct->request_meta) {
-            foreach ($apiProduct->request_meta as $name => $prop) {
+        if ($product->inputs) {
+            foreach ($product->inputs as $name => $prop) {
 
                 $value = null;
                 if ($name === 'phone') {
-                    $phone = apply_filters('woorefill_default_phone_to_refill', null, $apiProduct);
+                    $phone = apply_filters('woorefill_default_phone_to_refill', null, $product);
+                    if (strpos('+'.$product->carrier->internationalCode, $phone) === false) {
+                        $phone = str_replace('+', '+'.$product->carrier->internationalCode, $phone);
+                    }
+
                     $value = $phone;
                 }
+
 
                 $fields[sprintf('_woo_refill_meta_%s', $name)] = [
                     'type' => $prop->input_type ?: 'text',
@@ -106,7 +109,7 @@ class Checkout implements ContainerAwareInterface
                     'required' => $prop->required ?: false,
                     'value' => $value,
                     'custom_attributes' => [
-                        'data-country' => $apiProduct->country_code,
+                        'data-country' => $product->carrier->countryCode,
                     ],
                 ];
 
@@ -123,7 +126,7 @@ class Checkout implements ContainerAwareInterface
     }
 
     /**
-     * @return RefillAPI
+     * @return WooRefillApi
      */
     protected function getRefillAPI()
     {

@@ -120,7 +120,7 @@ class ScriptHandler
      * @param string $prefix
      * @param array  $ignore
      *
-     * @return array
+     * @return array|NamespaceMeta[]
      */
     protected static function resolveNamespaces($vendorDir, $prefix, $ignore = [])
     {
@@ -133,8 +133,33 @@ class ScriptHandler
 
             $namespace = preg_replace("/$prefix\\\\?/", '', $namespace);
             if (preg_match('/\\\\$/', $namespace)) {
-                $namespaces[] = $namespace;
+                $namespaces[] = new NamespaceMeta($namespace, $paths, 4);
             }
+        }
+
+        $psr0NameSpaces = include realpath($vendorDir.'/composer/autoload_namespaces.php');
+        foreach ($psr0NameSpaces as $namespace => $paths) {
+            if (in_array($namespace, $ignore)) {
+                continue;
+            }
+
+            $namespace = preg_replace("/$prefix(_)?\\\\?/", '', $namespace);
+            $namespaces[] = new NamespaceMeta($namespace, $paths, 0);
+
+            list($root) = explode('\\', preg_replace('/_$/','\\', $namespace));
+            $fileSystem = new Filesystem();
+//            foreach ($paths as $path) {
+//                $rootDir = $path.DIRECTORY_SEPARATOR.$root;
+//                if (file_exists($rootDir)) {
+//
+//                    $target = $path.DIRECTORY_SEPARATOR.$prefix.DIRECTORY_SEPARATOR.$root;
+//                    if (file_exists($target)) {
+//                        $fileSystem->remove($target);
+//                    }
+//                    $fileSystem->mirror($rootDir, $target);
+//                    $fileSystem->remove($rootDir);
+//                }
+//            }
         }
 
         return $namespaces;

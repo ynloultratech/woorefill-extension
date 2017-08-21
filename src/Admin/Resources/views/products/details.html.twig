@@ -1,0 +1,97 @@
+{# @var product \WooRefill\App\Model\Product #}
+
+<div id="wireless-carriers-table-wrapper">
+    <table class='widefat'>
+        {% set colspan = 4 %}
+        <thead>
+        {% block columns %}
+            <tr>
+                <th scope="col" style="width: 30px">
+                    {{ 'SKU'|trans }}
+                </th>
+                <th scope="col" width="40px"></th>
+                <th scope="col" width="40px">{{ 'Type'|trans }}</th>
+                <th scope="col">{{ 'Product Name'|trans }}</th>
+                <th scope="col" width="120px" style="text-align: right">
+                    {{ 'Amount'|trans }}
+                </th>
+            </tr>
+        {% endblock %}
+        </thead>
+        <tbody>
+        {% if products %}
+            {% for product in products %}
+                <tr>
+                    <td>
+                        <strong>{{ product.id }}</strong>
+                    </td>
+                    <td scope="col" style="text-align: center">
+                        {% set enabled = product.localProduct and product.localProduct.enabled %}
+                        <a id="enable-product-{{ product.id }}"
+                           href="javascript: switchProduct({{ product.id }});"
+                           class="button button-small button-secondary"
+                           {% if enabled %}style="display: none"{% endif %}>
+                            {{ 'Enable'|trans }}
+                        </a>
+                        <a id="disable-product-{{ product.id }}"
+                           href="javascript: switchProduct({{ product.id }});"
+                           class="button button-small button-primary active"
+                           {% if not enabled %}style="display: none"{% endif %}
+                        >
+                            {{ 'Enabled'|trans }}
+                        </a>
+                        <img id="switching-product-{{ product.id }}" style="display: none" src="/wp-admin/images/spinner.gif">
+                    </td>
+                    <td>
+                        {{ product.type }}
+                    </td>
+                    <td>
+                        {{ product.name }}
+                    </td>
+                    <td style="text-align: right">
+                        <h4 style="padding: 0;margin: 0">
+                            {% if product.variableAmount %}
+                                {{ product.minAmount|price }} -  {{ product.maxAmount|price }}
+                            {% else %}
+                                {{ product.amount|price }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr class="no-items">
+                <td class="colspanchange" colspan="{{ colspan }}">No Products found</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+<hr>
+<script>
+    function switchProduct($sku) {
+        jQuery('#switching-product-' + $sku).show();
+        jQuery('#disable-product-' + $sku).hide();
+        jQuery('#enable-product-' + $sku).hide();
+        jQuery.ajax('{{ ajax_admin_url() }}?action=switch_wireless_product&sku=' + $sku, {
+            success: function (response) {
+                jQuery('#switching-product-' + $sku).hide();
+                if (response.status === 'enabled') {
+                    jQuery('#disable-product-' + $sku).show();
+                    jQuery('#enable-product-' + $sku).hide();
+                } else {
+                    jQuery('#disable-product-' + $sku).hide();
+                    jQuery('#enable-product-' + $sku).show();
+                }
+
+                if (response.carrier_status === 'enabled') {
+                    jQuery('#disable-carrier-{{ carrierId }}').show();
+                    jQuery('#enable-carrier-{{ carrierId }}').hide();
+                } else {
+                    jQuery('#disable-carrier-{{ carrierId }}').hide();
+                    jQuery('#enable-carrier-{{ carrierId }}').show();
+                }
+            }
+        });
+    }
+</script>

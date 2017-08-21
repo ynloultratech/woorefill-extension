@@ -13,8 +13,9 @@
 
 namespace WooRefill\Tests;
 
-use Mockery\MockInterface;
+
 use WooRefill\App\Kernel;
+use WooRefill\Mockery;
 
 abstract class AbstractBasePluginTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ abstract class AbstractBasePluginTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        self::$mockery = \Mockery::mock();
+        self::$mockery = Mockery::mock();
         include_once __DIR__.'/wp-functions.php';
         include_once __DIR__.'/../woorefill.php';
     }

@@ -15,10 +15,11 @@ namespace WooRefill\Admin\Controller;
 
 use WooRefill\Admin\Form\ImportForm;
 use WooRefill\Admin\Import\ProductImporter;
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\Controller\Controller;
 use WooRefill\GuzzleHttp\Exception\ClientException;
 use WooRefill\Symfony\Component\Form\FormError;
+use WooRefill\Symfony\Component\HttpFoundation\JsonResponse;
 use WooRefill\Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,6 +27,9 @@ use WooRefill\Symfony\Component\HttpFoundation\Response;
  */
 class ImportProductsController extends Controller
 {
+
+
+
     /**
      * importAction
      */
@@ -81,7 +85,7 @@ class ImportProductsController extends Controller
                     'form' => $this->buildImportForm()->createView(),
                 ]
             );
-        } catch (ClientException $e) {
+        } catch (\Exception $e) {
             $this->showError($e);
         }
     }
@@ -131,7 +135,7 @@ class ImportProductsController extends Controller
     }
 
     /**
-     * @return RefillAPI
+     * @return WooRefillApi
      */
     protected function getApi()
     {

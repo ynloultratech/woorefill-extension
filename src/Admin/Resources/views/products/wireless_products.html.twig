@@ -1,0 +1,173 @@
+{# @var carrier \WooRefill\App\Model\Carrier #}
+{# @var collection \WooRefill\App\Model\PaginatedCollection #}
+
+{% set carriers = collection.items %}
+{% set pagination = paginate_links(collection.page, collection.pages) %}
+
+<div class="wrap abs">
+    <h1 class="wp-heading-inline">
+        Wireless Products
+    </h1>
+
+    <form id="posts-filter" method="get">
+
+        <p class="search-box">
+            <label class="screen-reader-text" for="post-search-input">Search:</label>
+            <input type="search" id="post-search-input" name="q" value="{{ search }}">
+            <input type="submit" id="search-submit" class="button" value="Search Products">
+            <input type="hidden" name="post_status" class="post_status_page" value="all">
+            <input type="hidden" name="post_type" class="post_type_page" value="product">
+            <input type="hidden" name="page" class="page" value="wireless_products">
+        </p>
+
+        <div class="tablenav top">
+            {% if pagination %}
+                {% block pagination %}
+                    <div class="tablenav" style="width: 99%;">
+                        <div class="tablenav-pages" style="margin: 1em 0">
+                            {{ pagination }}
+                        </div>
+                    </div>
+                {% endblock %}
+            {% endif %}
+        </div>
+
+        <div id="wireless-carriers-table-wrapper">
+            <table class='wp-list-table widefat fixed striped posts'>
+                <thead>
+                {% set colspan = 7 %}
+                {% block columns %}
+                    <tr>
+                        <th scope="col" style="width: 30px">
+                            {{ 'SKU'|trans }}
+                        </th>
+                        <th width="50px"></th>
+                        <th scope="col" id="thumb" class="manage-column column-thumb">
+                            <span class="wc-image tips">Image</span>
+                        </th>
+                        <th scope="col" width="130px">
+                            {{ 'Operator'|trans }}
+                        </th>
+                        <th scope="col">{{ 'Carrier Name'|trans }}</th>
+                        <th scope="col" width="80px" style="text-align: center">
+                            {{ 'Country'|trans }}
+                        </th>
+                        <th width="30px"></th>
+                    </tr>
+                {% endblock %}
+                </thead>
+                <tbody>
+                {% if carriers %}
+                    {% for carrier in carriers %}
+                        <tr id="carrier-row-{{ carrier.id }}">
+                            <td><strong>{{ carrier.id }}</strong></td>
+                            <td scope="col" style="text-align: center">
+                                {% set enabled = carrier.localCarrier %}
+                                <a id="enable-carrier-{{ carrier.id }}"
+                                   href="javascript: switchCarrier({{ carrier.id }});"
+                                   class="button button-small button-secondary"
+                                   {% if enabled %}style="display: none"{% endif %}>
+                                    {{ 'Enable'|trans }}
+                                </a>
+                                <a id="disable-carrier-{{ carrier.id }}"
+                                   href="javascript: switchCarrier({{ carrier.id }});"
+                                   class="button button-small button-primary active"
+                                   {% if not enabled %}style="display: none"{% endif %}
+                                >
+                                    {{ 'Enabled'|trans }}
+                                </a>
+                                <img id="switching-carrier-{{ carrier.id }}" style="display: none" src="/wp-admin/images/spinner.gif">
+                            </td>
+                            <td class="column-thumb">
+                                {% if carrier.operator.logoUrl %}
+                                    <img src="{{ carrier.operator.logoUrl }}">
+                                {% else %}
+                                    <img src="{{ call('wc_placeholder_img_src') }}" alt="Placeholder" class="woocommerce-placeholder wp-post-image">
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ carrier.operator.name }}
+                            </td>
+                            <td class="name column-name has-row-actions column-primary" data-colname="Name">
+                                <strong>
+                                    {{ carrier.name }}
+                                </strong>
+                            </td>
+                            <td align="center">
+                                <div class="iti-flag {{ carrier.countryCode|lower }}"></div> {{ carrier.countryCode }}
+                            </td>
+                            <td scope="col" class="order_actions column-order_actions">
+                                <a href="javascript: toggleDetails({{ carrier.id }});">
+                                    <span class="dashicons dashicons-arrow-down-alt2 show-details-icon show-details-icon-{{ carrier.id }}"></span>
+                                    <span class="dashicons dashicons-arrow-up-alt2 hide-details-icon hide-details-icon-{{ carrier.id }}" style="display: none"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr class="hidden"></tr>
+                        <tr id="show-details-{{ carrier.id }}" class="carrier-details" style="display: none">
+                            <td colspan="{{ colspan }}" class="content-details">
+                                <div style="text-align: center;">
+                                    <img src="/wp-admin/images/spinner-2x.gif">
+                                </div>
+                                <hr>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="no-items">
+                        <td class="colspanchange" colspan="{{ colspan }}">No Products found</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+                <tfoot>
+                {{ block('columns') }}
+                </tfoot>
+            </table>
+        </div>
+
+        {% if pagination %}
+            {{ block('pagination') }}
+        {% endif %}
+    </form>
+</div>
+
+<script>
+    function toggleDetails($sku) {
+        var details = jQuery('#show-details-' + $sku);
+        if (details.css('display') !== 'none') {
+            details.hide();
+            jQuery('.hide-details-icon-' + $sku).hide();
+            jQuery('.show-details-icon-' + $sku).show();
+        } else {
+            jQuery('.carrier-details').hide();
+            jQuery('.hide-details-icon').hide();
+            jQuery('.show-details-icon').show();
+            jQuery('.hide-details-icon-' + $sku).show();
+            jQuery('.show-details-icon-' + $sku).hide();
+            details.show();
+            details.find('.content-details').load('{{ ajax_admin_url() }}?action=get_wireless_products&carrierId=' + $sku);
+        }
+    }
+    function switchCarrier($sku) {
+        jQuery('#switching-carrier-' + $sku).show();
+        jQuery('#disable-carrier-' + $sku).hide();
+        jQuery('#enable-carrier-' + $sku).hide();
+        jQuery.ajax('{{ ajax_admin_url() }}?action=switch_wireless_carrier&sku=' + $sku, {
+            success: function (response) {
+                jQuery('#switching-carrier-' + $sku).hide();
+                if (response.status === 'enabled') {
+                    jQuery('#disable-carrier-' + $sku).show();
+                    jQuery('#enable-carrier-' + $sku).hide();
+                    jQuery('#show-details-' + $sku).find('.button-primary').show();
+                    jQuery('#show-details-' + $sku).find('.button-secondary').hide();
+
+                } else {
+                    jQuery('#disable-carrier-' + $sku).hide();
+                    jQuery('#enable-carrier-' + $sku).show();
+                    jQuery('#show-details-' + $sku).find('.button-primary').hide();
+                    jQuery('#show-details-' + $sku).find('.button-secondary').show();
+                }
+            }
+        });
+    }
+</script>

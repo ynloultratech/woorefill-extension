@@ -18,7 +18,6 @@ use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\TaggedServices\TaggedServices;
 use WooRefill\App\TaggedServices\TagSpecification;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class Admin
@@ -118,7 +117,8 @@ class Admin implements ContainerAwareInterface
         $register->enqueueScript('jquery_validate', '/public/admin/js/jquery.validate.min.js');
         $register->enqueueScript('form_toggle', '/public/admin/js/jquery-form-toggle.js');
         $register->enqueueStyle('datatables_css', '/public/admin/css/jquery.dataTables.min.css');
-        $register->enqueueStyle('woorefill_admin_core', '/public/admin/css/woorefill_admin.core.css');
+        $register->enqueueStyle('woorefill_admin_core', '/public/admin/css/woorefill_admin.core.css', ['woocommerce_admin_styles']);
+        $register->enqueueStyle('intlTelInput', '/public/int-tel-input/css/intlTelInput.css'); //use flags
     }
 
     /**

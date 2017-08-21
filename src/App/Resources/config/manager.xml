@@ -6,6 +6,7 @@
 
     <services>
         <service id="carrier_manager" class="WooRefill\App\EntityManager\CarrierManager"/>
+        <service id="operator_manager" class="WooRefill\App\EntityManager\OperatorManager"/>
 
         <service id="product_category_manager" class="WooRefill\App\EntityManager\ProductCategoryManager"/>
 

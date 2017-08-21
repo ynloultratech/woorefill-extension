@@ -6,7 +6,7 @@
         <input type="hidden" name="{{ field }}" value="{{ value }}">
     {% elseif(field matches "/_phone$/") %}
         {{ call('woocommerce_form_field', field, args, value) }}
-        <input id="_woo_refill_meta_phone_field_international" type="text" name="_woo_refill_meta_phone">
+        <input id="_woo_refill_meta_phone_field_international" type="hidden" name="_woo_refill_meta_phone">
 
     {% else %}
         {{ call('woocommerce_form_field', field, args, value) }}

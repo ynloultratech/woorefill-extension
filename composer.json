@@ -39,7 +39,8 @@
     "symfony/intl": "2.7.*",
     "symfony/property-access": "2.7.*",
     "erusev/parsedown": "^1.6",
-    "symfony/serializer": "2.8.*"
+    "symfony/serializer": "2.8.*",
+    "jms/serializer": "^1.8"
   },
   "require-dev": {
     "phpunit/phpunit": "4.1.*",
@@ -75,7 +76,7 @@
           "guzzlehttp/guzzle/docs"
         ],
         "exclude": [
-          "twig/twig/lib/Twig/Node/Expression/Test"
+          "twig/twig/lib/WooRefill/Twig/Node/Expression/Test"
         ]
       }
     }

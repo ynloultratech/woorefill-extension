@@ -43,22 +43,24 @@
     jQuery('#_wireless_variable_price').on('change', function () {
         if (jQuery(this).prop('checked')) {
             jQuery('.show_if_open_price').show();
-            jQuery('._regular_price_field').hide();
+           // jQuery('._regular_price_field').hide();
         } else {
             jQuery('.show_if_open_price').hide();
-            jQuery('._regular_price_field').show();
+           // jQuery('._regular_price_field').show();
         }
     }).change();
     jQuery('.options_group.pricing').addClass('show_if_wireless');
+    jQuery('.inventory_options').addClass('show_if_wireless');
+
     var forceVirtual = function () {
         if (jQuery('#product-type').val() === 'wireless') {
             jQuery('#_virtual').prop('checked', true);
-            jQuery('._sale_price_field').hide();
-            jQuery('#_sale_price').val('');
-            jQuery('#_sku').val('');
+//            jQuery('._sale_price_field').hide();
+//            jQuery('#_sale_price').val('');
+//            jQuery('#_sku').val('');
             jQuery('#_sold_individually').prop('checked', true)
         } else {
-            jQuery('._sale_price_field').show();
+          //  jQuery('._sale_price_field').show();
         }
     };
     jQuery('#_virtual').on('change', forceVirtual);

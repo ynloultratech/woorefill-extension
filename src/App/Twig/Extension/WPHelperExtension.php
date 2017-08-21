@@ -16,7 +16,7 @@ namespace WooRefill\App\Twig\Extension;
 /**
  * Class WPHelperExtension
  */
-class WPHelperExtension extends \Twig_Extension
+class WPHelperExtension extends \WooRefill_Twig_Extension
 {
     /**
      * {@inheritdoc}
@@ -24,9 +24,9 @@ class WPHelperExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('trans', [$this, 'trans']),
-            new \Twig_SimpleFilter('price', [$this, 'price']),
-            new \Twig_SimpleFilter('dump', [$this, 'dump']),
+            new \WooRefill_Twig_SimpleFilter('trans', [$this, 'trans']),
+            new \WooRefill_Twig_SimpleFilter('price', [$this, 'price']),
+            new \WooRefill_Twig_SimpleFilter('dump', [$this, 'dump']),
         ];
     }
 
@@ -36,13 +36,15 @@ class WPHelperExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('wc_text_input', [$this, 'wcTextInput']),
-            new \Twig_SimpleFunction('wc_checkbox', [$this, 'wcCheckbox']),
-            new \Twig_SimpleFunction('do_action', [$this, 'doAction']),
-            new \Twig_SimpleFunction('call', [$this, 'call']),
-            new \Twig_SimpleFunction('call_get', [$this, 'callGet']),
-            new \Twig_SimpleFunction('admin_url', [$this, 'adminUrl']),
-            new \Twig_SimpleFunction('ajax_admin_url', [$this, 'ajaxAdminUrl']),
+            new \WooRefill_Twig_SimpleFunction('dump', [$this, 'dump']),
+            new \WooRefill_Twig_SimpleFunction('wc_text_input', [$this, 'wcTextInput']),
+            new \WooRefill_Twig_SimpleFunction('wc_checkbox', [$this, 'wcCheckbox']),
+            new \WooRefill_Twig_SimpleFunction('do_action', [$this, 'doAction']),
+            new \WooRefill_Twig_SimpleFunction('call', [$this, 'call']),
+            new \WooRefill_Twig_SimpleFunction('call_get', [$this, 'callGet']),
+            new \WooRefill_Twig_SimpleFunction('admin_url', [$this, 'adminUrl']),
+            new \WooRefill_Twig_SimpleFunction('ajax_admin_url', [$this, 'ajaxAdminUrl']),
+            new \WooRefill_Twig_SimpleFunction('paginate_links', [$this, 'paginateLinks']),
         ];
     }
 
@@ -175,6 +177,19 @@ class WPHelperExtension extends \Twig_Extension
         if (function_exists('dump')) {
             return dump($var);
         }
+    }
+
+    public function paginateLinks($page, $pages)
+    {
+        return paginate_links(
+            [
+                'base' => add_query_arg('pagenum', '%#%'),
+                'prev_text' => __('&laquo;', 'text-domain'),
+                'next_text' => __('&raquo;', 'text-domain'),
+                'total' => $pages,
+                'current' => $page,
+            ]
+        );
     }
 
     /**

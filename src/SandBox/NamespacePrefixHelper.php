@@ -17,26 +17,61 @@ class NamespacePrefixHelper
     /**
      * Prefix the usage of given namespace updating the content of given
      *
-     * @param string $prefix        Prefix to add to given namespace
-     * @param string $namespace     namespace
-     * @param string &$usageContext content of the class when need update the namespace
+     * @param string        $prefix        Prefix to add to given namespace
+     * @param NamespaceMeta $namespaceMeta namespace
+     * @param string        &$usageContext content of the class when need update the namespace
      *
      * @return integer will be return the number of replacements done.
      */
-    public static function prefixUsage($prefix, $namespace, &$usageContext)
+    public static function prefixUsage($prefix, NamespaceMeta $namespaceMeta, &$usageContext)
     {
-        $namespace = preg_replace('/\\\\?$/', '', $namespace);//remove trailing
-
+        //$namespace = preg_replace('/\\\\?$/', '', $namespaceMeta->getName());//remove trailing
+        $namespace = $namespaceMeta->getName();
+        //prepare namespace for regex
         if (count(explode('\\', $namespace)) > 1) {
-            $namespace = str_replace('\\', '\\\\\\\?', $namespace);
+            $namespace = str_replace('\\', '\\\?\\\\?', $namespace);
         }
 
-        $regexs = [
-            "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1\\\\$prefix$2", // starting with \ -> \SomeNamespace
-            "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix\\\\$2$3", // //normal -> SomeNamespace
-            "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$3$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
-            "/(['\"])($namespace)(\\\\)/" => "$1$prefix\\\\$2$3", //as is in string -> 'SomeNamespace\Class'
+        $underscoredNamespace = false;
+        if (count(explode('_', $namespace)) > 1) {
+            $underscoredNamespace = true;
+        }
+
+        $regexs =[
+            "/([^$prefix])($namespace)/" => "$1$prefix$2"
         ];
+
+//        switch ($namespaceMeta->getPsr()) {
+//            case 0:
+//                $replacement = $underscoredNamespace ? '_' : '\\\\';
+//
+//                $regexs = [
+//                    "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1$replacement$prefix$2", // starting with \ -> \SomeNamespace
+//                    "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix$replacement$2$3", // //normal -> SomeNamespace
+//                    "/(['\"])($namespace)(['\"])/" => "$1$prefix$replacement$2$3", // //use as is in string, commonly in autoloader .. 'PhpCollection'
+//                    "/(\(\s*)($namespace)(\s+)/" => "$1$prefix$replacement$2$3", // //using class as function parameter (Twig $twig)
+//                    "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$replacement$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
+//                    "/(['\"])($namespace)(\\\\)/" => "$1$prefix$replacement$2$3", //as is in string -> 'SomeNamespace\Class'
+//                ];
+//
+//                if ($underscoredNamespace && preg_match('/_$/', $namespace)) {
+//                    $namespaceWithout_ = preg_replace('/_$/', null, $namespace);
+//                    $regexs["/([\s\"'\\\\])($namespaceWithout_)(_[\w+\"'])/"] = "$1$prefix$replacement$2$3"; // //wordAsPrefix -> Twig_
+//                    $regexs["/(\(\s*)($namespaceWithout_)(_\w+)/"] = "$1$prefix$replacement$2$3"; // //using class as function parameter (Twig_Interface $twig)
+//                }
+//                break;
+//            case 4:
+//                $regexs = [
+//                    "/([^\\w\\d\\\\])(\\\\$namespace)/" => "$1\\\\$prefix$2", // starting with \ -> \SomeNamespace
+//                    "/([^\\w\\d\\\\'\"])($namespace)([\s;\"'\\\\])/" => "$1$prefix\\\\$2$3", // //normal -> SomeNamespace
+//                    "/([^\\w\\d\\\\])($namespace)(\\\\\\\\)/" => "$1$prefix$3$2$3", //usage with double in strings -> 'SomeNamespace\\Class'
+//                    "/(['\"])($namespace)(\\\\)/" => "$1$prefix\\\\$2$3", //as is in string -> 'SomeNamespace\Class'
+//                ];
+//                break;
+//            default:
+//                $regexs = [];
+//        }
+
 
         $counters = 0;
         foreach ($regexs as $regex => $replacement) {

@@ -12,7 +12,7 @@
 
 namespace WooRefill\Shop;
 
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -31,10 +31,10 @@ class PhoneContext implements ContainerAwareInterface
         if ($phone) {
             $this->getRequest()->getSession()->set('refill_phone', $phone);
             try {
-                $info = $this->getRefillAPI()->accountInfo($phone);
+                $products = $this->getRefillAPI()->getProducts()->getList(null, 1, 30, ['accountNumber' => $phone]);
                 $wirelessIds = [];
-                if ($info && $info->products && !empty($info->products)) {
-                    foreach ($info->products as $product) {
+                if ($products->total && $products->items) {
+                    foreach ($products->items as $product) {
                         $wirelessIds[] = $product->id;
                     }
                 }
@@ -111,7 +111,7 @@ class PhoneContext implements ContainerAwareInterface
     }
 
     /**
-     * @return RefillAPI
+     * @return WooRefillApi
      */
     protected function getRefillAPI()
     {

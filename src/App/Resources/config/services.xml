@@ -60,10 +60,8 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="refill_api" class="WooRefill\App\Api\RefillAPI">
-            <argument>%api_url%</argument>
-            <argument>%api_key%</argument>
-            <argument type="service" id="logger"/>
+        <service id="refill_api" class="WooRefill\App\Api\WooRefillApi">
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="wp_form_type_extension" class="WooRefill\App\Form\Extension\WPFormTypeExtension">

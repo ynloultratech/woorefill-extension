@@ -13,7 +13,7 @@
 
 namespace WooRefill\Admin\Page;
 
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -98,7 +98,7 @@ class Settings extends \WC_Settings_Page implements ContainerAwareInterface
 
         $givenApiKey = $this->getRequest()->get('_woorefill_api_key');
 
-        /** @var RefillAPI $refillApi */
+        /** @var WooRefillApi $refillApi */
         $refillApi = $this->get('refill_api');
         $refillApi->setApiKey($givenApiKey);
         try {

@@ -13,10 +13,11 @@
 
 namespace WooRefill\Shop;
 
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\OrderManager;
 use WooRefill\App\EntityManager\ProductManager;
+use WooRefill\App\Model\Transaction;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -33,41 +34,56 @@ class Refill implements ContainerAwareInterface
      */
     public function refill($id)
     {
-        $order = WC()->order_factory->get_order($id);
-        $product = $this->getOrderManager()->getFirstWirelessProduct($id);
-        $sku = $this->getProductManager()->getWirelessId($product);
+        $localProduct = null;
+        $product = null;
+        $order = null;
 
-        if ($sku) {
+        try {
+            $order = WC()->order_factory->get_order($id);
+            $wcProduct = $this->getOrderManager()->getFirstWirelessProduct($id);
+            $localProduct = $this->getProductManager()->find($wcProduct->get_id());
+            $product = $this->getRefillAPI()->getProducts()->get($localProduct->sku);
+        } catch (\Exception $exception) {
+            $this->getLogger()->addErrorLog($exception->getMessage());
+            if (isset($order)) {
+                $this->refundWirelessProduct($order, 'Error: '.$exception->getMessage());
+            }
+        }
+
+        if ($order && $localProduct && $product) {
             try {
-                $meta = [];
+                $transaction = new Transaction();
                 $metaArray = get_post_meta($id, null, true);
+                $transaction->product = $product;
+                $transaction->correlationId = $order->id;
+
                 foreach ($metaArray as $metaName => $metaValue) {
                     if (strpos($metaName, '_woo_refill_meta_') !== false) {
                         $metaName = str_replace('_woo_refill_meta_', '', $metaName);
                         if ($metaValue) {
-                            $meta[$metaName] = current($metaValue);
+                            $transaction->inputs[$metaName] = current($metaValue);
                         }
                     }
                 }
 
-                $transaction = $this->getRefillAPI()->submit($sku, $id, $meta);
+                $transaction = $this->getRefillAPI()->getTransactions()->post($transaction);
 
                 update_post_meta($id, '_woo_api_response_transaction', $transaction->id);
                 update_post_meta($id, '_woo_api_response_provider_transaction', $transaction->provider_transaction_id);
                 update_post_meta($id, '_woo_api_response_response', $transaction->response_message);
-                foreach ($transaction->response_meta as $name => $value) {
+                foreach ($transaction->response as $name => $value) {
                     update_post_meta($id, '_woo_api_response_'.$name, $value);
                 }
                 $order->update_status('completed', "Refill success \n\n");
 
             } catch (\Exception $e) {
-                $this->getLogger()->addLog('ERROR:'.$e->getMessage());
+                $this->getLogger()->addLog('ERROR: '.$e->getMessage());
                 $this->getLogger()->addLog($e->getTraceAsString());
                 $order->update_status('failed', 'WooRefill: '.$e->getMessage()." \n\n");
                 $this->refundWirelessProduct($order, $e->getMessage());
             }
         } else {
-            $this->getLogger()->addErrorLog('The product "%s" does not have valid wireless product id to submit.', $product->get_formatted_name());
+            $this->getLogger()->addErrorLog('The product "%s" does not have valid wireless product id to submit.', $wcProduct->get_formatted_name());
             $order->update_status('cancelled', "Invalid Product \n\n");
             $this->refundWirelessProduct($order, "Invalid Product");
         }
@@ -113,7 +129,7 @@ class Refill implements ContainerAwareInterface
     }
 
     /**
-     * @return RefillAPI
+     * @return WooRefillApi
      */
     public function getRefillAPI()
     {

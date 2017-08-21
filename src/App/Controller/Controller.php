@@ -20,6 +20,7 @@ use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use WooRefill\Symfony\Component\Form\Extension\Core\Type\FormType;
 use WooRefill\Symfony\Component\Form\FormFactory;
+use WooRefill\Symfony\Component\HttpFoundation\JsonResponse;
 use WooRefill\Symfony\Component\HttpFoundation\Request;
 use WooRefill\App\Twig\Template;
 use WooRefill\Symfony\Component\Form\FormBuilderInterface;
@@ -65,6 +66,17 @@ abstract class Controller implements ContainerAwareInterface
     protected function renderAjax($view, $args = [])
     {
         $this->render($view, $args);
+        exit;
+    }
+
+    /**
+     * @param array $data
+     */
+    protected function renderJson($data)
+    {
+        //clean wp
+        ob_clean();
+        JsonResponse::create($data)->send();
         exit;
     }
 }

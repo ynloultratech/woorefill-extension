@@ -85,7 +85,7 @@ class ProductSettings implements ContainerAwareInterface
             update_post_meta($post_id, '_wireless_product_id', $_POST['_wireless_product_id']);
         }
 
-        if (isset($_POST['_wireless_variable_price'])) {
+        if (isset($_POST['_wireless_variable_price']) && $_POST['_wireless_variable_price'] == 'yes') {
             update_post_meta($post_id, '_regular_price', 0);
             update_post_meta($post_id, '_wireless_variable_price', $_POST['_wireless_variable_price']);
         }

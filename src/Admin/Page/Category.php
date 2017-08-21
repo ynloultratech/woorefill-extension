@@ -23,21 +23,4 @@ class Category implements ContainerAwareInterface
 {
     use CommonServiceTrait;
 
-    public function categoryAddFormFields()
-    {
-        $this->render('@Admin/category/category_add_form_fields.html.twig');
-    }
-
-    public function categoryEditFormFields($term)
-    {
-        $value = (boolean)get_term_meta($term->term_id, 'wireless_carrier', true);
-        $this->render('@Admin/category/category_edit_form_fields.html.twig', ['checked' => $value]);
-    }
-
-    public function saveCategory($term_id, $tt_id = '', $taxonomy = '')
-    {
-        if (isset($_POST['wireless_carrier']) && 'product_cat' === $taxonomy) {
-            update_term_meta($term_id, 'wireless_carrier', (boolean)$_POST['wireless_carrier']);
-        }
-    }
 }

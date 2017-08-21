@@ -13,7 +13,7 @@
 
 namespace WooRefill\Admin\Import;
 
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\EntityManager\CarrierManager;
 use WooRefill\App\EntityManager\ProductCategoryManager;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -156,7 +156,7 @@ class ProductImporter implements ContainerAwareInterface
     }
 
     /**
-     * @return RefillAPI
+     * @return WooRefillApi
      */
     protected function getApi()
     {

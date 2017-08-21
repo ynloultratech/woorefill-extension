@@ -18,7 +18,7 @@ use WooRefill\Admin\Form\Type\CarrierFormType;
 use WooRefill\Admin\Form\Type\CategoryFormType;
 use WooRefill\Admin\Form\Type\ProductTableFormType;
 use WooRefill\Admin\Form\Type\ProductStatusFormType;
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\Symfony\Component\Form\AbstractType;
 use WooRefill\Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use WooRefill\Symfony\Component\Form\FormBuilderInterface;
@@ -33,7 +33,7 @@ use WooRefill\Symfony\Component\OptionsResolver\OptionsResolver;
 class ImportForm extends AbstractType
 {
     /**
-     * @var RefillAPI
+     * @var WooRefillApi
      */
     protected $api;
 
@@ -45,9 +45,9 @@ class ImportForm extends AbstractType
     /**
      * ImportForm constructor.
      *
-     * @param RefillAPI $api
+     * @param WooRefillApi $api
      */
-    public function __construct(RefillAPI $api, Request $request)
+    public function __construct(WooRefillApi $api, Request $request)
     {
         $this->api = $api;
         $this->request = $request;

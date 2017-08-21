@@ -12,7 +12,7 @@
 
 namespace WooRefill\Shop;
 
-use WooRefill\App\Api\RefillAPI;
+use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -36,17 +36,18 @@ class Shop implements ContainerAwareInterface
                 $this->getRequest()->getSession()->set('refill_dial_code', $dialCode);
                 $this->getRequest()->getSession()->set('refill_country_code', $countryCode);
 
-                /** @var RefillAPI $api */
+                /** @var WooRefillApi $api */
                 $api = $this->get('refill_api');
                 try {
                     $productIDs = [];
-                    $accountInfo = $api->accountInfo($phone);
-                    if ($accountInfo && $accountInfo->products) {
-                        foreach ($accountInfo->products as $product) {
+                    $products = $api->getProducts()->getList(null, 1, 30, ['accountNumber' => $phone]);
+
+                    if ($products->total && $products->items) {
+                        foreach ($products->items as $product) {
                             $productIDs[] = $product->id;
                         }
                     }
-                    $productIDs =array_unique(array_filter($productIDs));
+                    $productIDs = array_unique(array_filter($productIDs));
                     if ($productIDs) {
 
                         global $wpdb;

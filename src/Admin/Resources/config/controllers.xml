@@ -4,10 +4,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="import_products_controller" parent="controller" class="WooRefill\Admin\Controller\ImportProductsController">
-            <tag name="admin_menu" title="Import Wireless Products" method="importAction" parent="edit.php?post_type=product"/>
-            <tag name="controller_action" method="downloadCSVAction" slug="download_wireless_products_csv" parent="edit.php?post_type=product"/>
-            <tag name="wp_action" tag="wp_ajax_get_wireless_carriers" method="carriersAction" />
+        <service id="import_products_controller" parent="controller" class="WooRefill\Admin\Controller\WirelessProducts">
+            <tag name="admin_menu" title="Wireless Products" method="wirelessProductsAction" parent="edit.php?post_type=product"/>
+            <!--<tag name="controller_action" method="downloadCSVAction" slug="download_wireless_products_csv" parent="edit.php?post_type=product"/>-->
+            <tag name="wp_action" tag="wp_ajax_switch_wireless_carrier" method="switchCarrierAction" />
+            <tag name="wp_action" tag="wp_ajax_switch_wireless_product" method="switchProductAction" />
             <tag name="wp_action" tag="wp_ajax_get_wireless_products" method="productsAction" />
         </service>
     </services>

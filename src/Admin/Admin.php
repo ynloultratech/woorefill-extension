@@ -130,6 +130,25 @@ class Admin implements ContainerAwareInterface
         $register->enqueueStyle('datatables_css', '/public/admin/css/jquery.dataTables.min.css');
         $register->enqueueStyle('woorefill_admin_core', '/public/admin/css/woorefill_admin.core.css', ['woocommerce_admin_styles']);
         $register->enqueueStyle('intlTelInput', '/public/int-tel-input/css/intlTelInput.css'); //use flags
+
+        //register TinyMce plugin
+        add_filter(
+            "mce_external_plugins",
+            function ($plugin_array) {
+                $plugin = $this->container->getParameter('plugin_file');
+                $plugin_array['woorefill'] = plugin_dir_url($plugin).'public/admin/js/woorefill-tinymce-plugin.js';
+
+                return $plugin_array;
+            }
+        );
+        add_filter(
+            'mce_buttons',
+            function ($buttons) {
+                array_push($buttons, 'quick_refill');
+
+                return $buttons;
+            }
+        );
     }
 
     /**

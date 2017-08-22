@@ -125,7 +125,6 @@ class Admin implements ContainerAwareInterface
         $register->enqueueScript('datatables', '/public/admin/js/jquery.dataTables.min.js');
         $register->enqueueScript('woorefill_admin_core', '/public/admin/js/woorefill_admin.core.js');
         $register->enqueueScript('jquery_validate', '/public/admin/js/jquery.validate.min.js');
-        $register->enqueueScript('jquery_validate', '/public/admin/js/jquery.validate.min.js');
         $register->enqueueScript('form_toggle', '/public/admin/js/jquery-form-toggle.js');
         $register->enqueueStyle('datatables_css', '/public/admin/css/jquery.dataTables.min.css');
         $register->enqueueStyle('woorefill_admin_core', '/public/admin/css/woorefill_admin.core.css', ['woocommerce_admin_styles']);

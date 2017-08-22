@@ -47,7 +47,10 @@ class Checkout implements ContainerAwareInterface
             try {
                 /** @var AssetRegister $register */
                 $register = $this->container->get('asset_register');
-                $register->enqueueScript('jquery_inputmask', '/public/js/jquery.inputmask.bundle.js');
+                $register->enqueueStyle('intlTelInput', '/public/int-tel-input/css/intlTelInput.css');
+                $register->enqueueScript('intlTelInputUtils', '/public/int-tel-input/js/utils.js');
+                $register->enqueueScript('intlTelInput', '/public/int-tel-input/js/intlTelInput.js');
+                $register->enqueueScript('inputmask', '/public/js/jquery.inputmask.bundle.js');
 
                 $product = $this->getCart()->getFirstWirelessProduct();
                 $apiProduct = $this->getRefillAPI()->getProducts()->get($product->sku);

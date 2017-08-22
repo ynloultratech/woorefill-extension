@@ -41,8 +41,12 @@ class Refill implements ContainerAwareInterface
         try {
             $order = WC()->order_factory->get_order($id);
             $wcProduct = $this->getOrderManager()->getFirstWirelessProduct($id);
-            $localProduct = $this->getProductManager()->find($wcProduct->get_id());
-            $product = $this->getRefillAPI()->getProducts()->get($localProduct->sku);
+            if ($wcProduct) {
+                $localProduct = $this->getProductManager()->find($wcProduct->get_id());
+                $product = $this->getRefillAPI()->getProducts()->get($localProduct->sku);
+            } else {
+                throw new \Exception('Invalid Order Product');
+            }
         } catch (\Exception $exception) {
             $this->getLogger()->addErrorLog($exception->getMessage());
             if (isset($order)) {
@@ -55,7 +59,7 @@ class Refill implements ContainerAwareInterface
                 $transaction = new Transaction();
                 $metaArray = get_post_meta($id, null, true);
                 $transaction->product = $product;
-                $transaction->correlationId = $order->id;
+                $transaction->correlationId = $order->get_id();
 
                 foreach ($metaArray as $metaName => $metaValue) {
                     if (strpos($metaName, '_woo_refill_meta_') !== false) {
@@ -83,7 +87,9 @@ class Refill implements ContainerAwareInterface
                 $this->refundWirelessProduct($order, $e->getMessage());
             }
         } else {
-            $this->getLogger()->addErrorLog('The product "%s" does not have valid wireless product id to submit.', $wcProduct->get_formatted_name());
+            if (isset($wcProduct)) {
+                $this->getLogger()->addErrorLog('The product "%s" does not have valid wireless product id to submit.', $wcProduct->get_formatted_name());
+            }
             $order->update_status('cancelled', "Invalid Product \n\n");
             $this->refundWirelessProduct($order, "Invalid Product");
         }
@@ -104,11 +110,11 @@ class Refill implements ContainerAwareInterface
 
         if ($gateway instanceof \WC_Payment_Gateway) {
             if ($gateway->supports('refunds')) {
-                $refunded = $gateway->process_refund($order->id, $amount, $reason);
+                $refunded = $gateway->process_refund($order->get_id(), $amount, $reason);
                 if ($refunded) {
                     wc_create_refund(
                         [
-                            'order_id' => $order->id,
+                            'order_id' => $order->get_id(),
                             'amount' => $amount,
                             'reason' => $reason,
                         ]
@@ -116,9 +122,9 @@ class Refill implements ContainerAwareInterface
                     $order->update_status('refunded');
 
                     return true;
-                } else {
-                    $order->add_order_note('The refund has been failed, check your payment gateway logs.');
                 }
+
+                $order->add_order_note('The refund has been failed, check your payment gateway logs.');
             } else {
                 $gatewayName = $gateway->title;
                 $order->add_order_note(sprintf('The gateway %s does not support refund. Make the refund manually', $gatewayName));

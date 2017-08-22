@@ -15,7 +15,7 @@
 Plugin Name: WooRefill
 Plugin URI: https://github.com/ynloultratech/woorefill-extension
 Description: WooRefill is a extension for WooCommerce to add wireless plans to your shop and do refills.
-Version: 1.0.22-alpha1
+Version: 1.0.22-alpha2
 Author: YnloUltratech
 */
 
@@ -24,6 +24,37 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('WooCommerce')) {
+    add_action(
+        'admin_notices',
+        function () {
+            $notice = <<<HTML
+    <div class="notice notice-error is-dismissible">
+        <p>WooRefill extension is <strong>Enabled</strong> but require 
+        <a href="https://wordpress.org/plugins/woocommerce/" target="_blank">WooCommerce</a> to works. Please install <a href="https://wordpress.org/plugins/woocommerce/" target="_blank">WooCommerce</a> plugin to add products and accept payments.
+    </div>
+HTML;
+            echo $notice;
+
+        }
+    );
+    return;
+}
+
+if (!version_compare(WooCommerce::instance()->version, '3.0', '>=')) {
+    add_action(
+        'admin_notices',
+        function () {
+            $version = WooCommerce::instance()->version;
+            $notice = <<<HTML
+    <div class="notice notice-error is-dismissible">
+        <p>WooRefill require <a href="https://wordpress.org/plugins/woocommerce/" target="_blank">WooCommerce</a> version 3.0 or greater. 
+        Your current version ($version) is not compatible.</p>
+    </div>
+HTML;
+            echo $notice;
+
+        }
+    );
     return;
 }
 

@@ -26,7 +26,7 @@ class CartTestAbstractBase extends AbstractBasePluginTest
         $productMock = $this->getMockBuilder('\WC_Product_Wireless')->disableOriginalConstructor()->getMock();
         $productMock->expects(self::once())->method('is_purchasable')->willReturn(true);
         $productMock->expects(self::once())->method('is_in_stock')->willReturn(true);
-        $productMock->expects(self::once())->method('getId')->willReturn(1);
+        $productMock->expects(self::once())->method('get_id')->willReturn(1);
         $productMock->expects(self::once())->method('add_to_cart_text')->willReturn('Refill');
 
         self::getMockery()->shouldReceive('do_action')->with('woocommerce_before_add_to_cart_form')->once();

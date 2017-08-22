@@ -95,7 +95,7 @@ class Checkout implements ContainerAwareInterface
                 $value = null;
                 if ($name === 'phone') {
                     $phone = apply_filters('woorefill_default_phone_to_refill', null, $product);
-                    if (strpos('+'.$product->carrier->internationalCode, $phone) === false) {
+                    if (strpos($phone, '+'.$product->carrier->internationalCode) === false) {
                         $phone = str_replace('+', '+'.$product->carrier->internationalCode, $phone);
                     }
 

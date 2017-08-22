@@ -332,15 +332,15 @@ class WirelessProducts extends Controller
         update_post_meta($post_id, '_wireless_phone_length', $carrier->phoneLength);
         update_post_meta($post_id, '_regular_price', $product->amount);
         update_post_meta($post_id, '_price', $product->amount);
-        update_post_meta($post_id, '_sale_price', $product->amount);
+        update_post_meta($post_id, '_sale_price', null);
         update_post_meta($post_id, '_visibility', 'visible');
         update_post_meta($post_id, '_stock_status', 'instock');
         update_post_meta($post_id, 'total_sales', '0');
         update_post_meta($post_id, '_downloadable', 'no');
         update_post_meta($post_id, '_virtual', 'yes');
-        update_post_meta($post_id, '_sale_price', $product->amount);
         update_post_meta($post_id, '_purchase_note', '');
         update_post_meta($post_id, '_featured', 'no');
+        update_post_meta($post_id, '_product_version', \WooCommerce::instance()->version);
         update_post_meta($post_id, '_weight', '');
         update_post_meta($post_id, '_length', '');
         update_post_meta($post_id, '_width', '');

@@ -30,7 +30,7 @@ class CustomerOrderDetails implements ContainerAwareInterface
      */
     public function addWirelessDetails($order)
     {
-        $pin = get_post_meta($order->id, '_woo_api_response_PIN', true);
+        $pin = get_post_meta($order->get_id(), '_woo_api_response_PIN', true);
         if ($pin) {
             $this->render('@Shop/order_details/pin.html.twig', ['pin' => $pin]);
         }

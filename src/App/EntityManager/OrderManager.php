@@ -32,22 +32,15 @@ class OrderManager
         }
 
         $items = $order->get_items();
-        $product = null;
         foreach ($items as $item) {
-            if (isset($item['item_meta']['_product_id'])) {
-                if (is_array($item['item_meta']['_product_id'])) {
-                    $productId = current($item['item_meta']['_product_id']);
-                } else {
-                    $productId = $item['item_meta']['_product_id'];
-                }
-
-                $product = wc_get_product($productId);
+            if ($item instanceof \WC_Order_Item_Product) {
+                $product = wc_get_product($item->get_product_id());
                 if ($product instanceof \WC_Product_Wireless) {
-                    break;
+                    return $product;
                 }
             }
         }
 
-        return $product;
+        return null;
     }
 }

@@ -29,7 +29,7 @@ abstract class AbstractBasePluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         self::$mockery = \WooRefillMockery::mock();
-        include_once __DIR__.'/wp-functions.php';
+        include_once __DIR__.'/Fixtures/wp-functions.php';
         include_once __DIR__.'/../woorefill.php';
     }
 

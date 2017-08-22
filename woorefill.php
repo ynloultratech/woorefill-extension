@@ -15,7 +15,7 @@
 Plugin Name: WooRefill
 Plugin URI: https://github.com/ynloultratech/woorefill-extension
 Description: WooRefill is a extension for WooCommerce to add wireless plans to your shop and do refills.
-Version: 1.0.22-alpha4
+Version: 1.0.22
 Author: YnloUltratech
 */
 

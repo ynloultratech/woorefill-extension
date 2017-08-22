@@ -57,6 +57,9 @@ class Admin implements ContainerAwareInterface
         $parent = isset($specification->getAttributes()['parent']) ? $specification->getAttributes()['parent'] : null;
         $title = isset($specification->getAttributes()['title']) ? $specification->getAttributes()['title'] : null;
         $slug = isset($specification->getAttributes()['slug']) ? $specification->getAttributes()['slug'] : null;
+        $iconUrl = isset($specification->getAttributes()['icon']) ? $specification->getAttributes()['icon'] : null;
+        $position = isset($specification->getAttributes()['position']) ? $specification->getAttributes()['position'] : null;
+
         if (!$slug) {
             $slug = strtolower(str_replace(' ', '_', $title));
         }
@@ -67,6 +70,14 @@ class Admin implements ContainerAwareInterface
                 $title,
                 $slug,
                 [$specification->getService(), $specification->getAttributes()['method']]
+            );
+        } else {
+            $this->addMenu(
+                $title,
+                $slug,
+                [$specification->getService(), $specification->getAttributes()['method']],
+                $iconUrl,
+                $position
             );
         }
     }
@@ -122,8 +133,6 @@ class Admin implements ContainerAwareInterface
     }
 
     /**
-     * addSubMenu
-     *
      * @param $parent
      * @param $title
      * @param $slug
@@ -132,5 +141,10 @@ class Admin implements ContainerAwareInterface
     protected function addSubMenu($parent, $title, $slug, $action)
     {
         add_submenu_page($parent, $title, $title, 'manage_woocommerce', $slug, $action);
+    }
+
+    protected function addMenu($title, $slug, $action, $iconUrl, $position)
+    {
+        add_menu_page($title, $title, 'manage_woocommerce', $slug, $action, $iconUrl, $position);
     }
 }

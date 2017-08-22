@@ -23,7 +23,6 @@
             var telInput = $("#_woo_refill_meta_phone");
 
             telInput.attr('class', ''); //remove any theme class to avoid conflicts
-            telInput.css('width', '100% !important');
 
             telInput.intlTelInput({
                 dropdownContainer: "body",
@@ -41,6 +40,9 @@
 
             //block input with 100% width
             telInput.closest('.intl-tel-input').css('display', 'block');
+            telInput.attr('style', function (i, s) {
+                return (s !== undefined ? s : '') + 'width: 100% !important;'
+            });
         });
     });
 </script>

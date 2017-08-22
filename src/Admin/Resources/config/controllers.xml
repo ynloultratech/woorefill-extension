@@ -6,7 +6,6 @@
     <services>
         <service id="import_products_controller" parent="controller" class="WooRefill\Admin\Controller\WirelessProducts">
             <tag name="admin_menu" title="WooRefill" method="wirelessProductsAction" icon="dashicons-phone" position="56"/>
-            <!--<tag name="controller_action" method="downloadCSVAction" slug="download_wireless_products_csv" parent="edit.php?post_type=product"/>-->
             <tag name="wp_action" tag="wp_ajax_switch_wireless_carrier" method="switchCarrierAction" />
             <tag name="wp_action" tag="wp_ajax_switch_wireless_product" method="switchProductAction" />
             <tag name="wp_action" tag="wp_ajax_get_wireless_products" method="productsAction" />

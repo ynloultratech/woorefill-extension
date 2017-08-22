@@ -21,7 +21,7 @@ class InternationalRefillWidgetBar extends \WP_Widget implements ContainerAwareI
 {
     use CommonServiceTrait;
 
-    function __construct()
+    public function __construct()
     {
         //wp instance this widget by itself
         $this->container = Kernel::getContainer();
@@ -39,9 +39,45 @@ class InternationalRefillWidgetBar extends \WP_Widget implements ContainerAwareI
     public function registerWidget()
     {
         register_widget('WooRefill\Shop\Widget\InternationalRefillWidgetBar');
+        add_shortcode('woorefill_quickrefill', [$this, 'renderShortCode']);
     }
 
+    /**
+     * This function is called when the widget is used with short_code
+     *
+     * @return string
+     */
+    public function renderShortCode()
+    {
+        return $this->renderWidget();
+    }
+
+    /**
+     * Widget function called when a widget is used using the default widgets
+     *
+     * @param array $args
+     * @param array $instance
+     */
     public function widget($args, $instance)
+    {
+        $title = apply_filters('widget_title', $instance['title']);
+
+        $this->renderWidget(
+            [
+                'title' => $title,
+                'before_widget' => $args['before_widget'],
+                'before_title' => $args['before_title'],
+                'after_title' => $args['after_title'],
+                'after_widget' => $args['after_widget'],
+                'ok_btn' => $instance['ok_btn'] ?: 'Go',
+            ]
+        );
+    }
+
+    /**
+     * @param array $options
+     */
+    public function renderWidget($options = [])
     {
         global $wpdb;
 
@@ -83,29 +119,35 @@ AND {$wpdb->posts}.post_status = 'publish'";
         $country = $this->getRequest()->get('country', $defaultCountry);
         $id = md5(mt_rand());
 
-        $title = apply_filters('widget_title', $instance['title']);
-
-        $this->render(
-            '@Shop/widget/int_refill_bar.html.twig',
+        $options = array_merge(
             [
                 'id' => $id,
                 'country' => $country,
-                'title' => $title,
-                'before_widget' => $args['before_widget'],
-                'before_title' => $args['before_title'],
-                'after_title' => $args['after_title'],
-                'after_widget' => $args['after_widget'],
-                'ok_btn' => $instance['ok_btn'] ?: 'Go',
+                'title' => @$options['title'],
+                'before_widget' => $options['before_widget'],
+                'before_title' => $options['before_title'],
+                'after_title' => $options['after_title'],
+                'after_widget' => $options['after_widget'],
+                'ok_btn' => @$options['ok_btn'] ?: 'Go',
                 'defaultCountry' => $defaultCountry,
                 'phone' => $this->getRequest()->get('phone'),
                 'dial_code' => $this->getRequest()->get('dial_code'),
                 'countries' => $countries,
                 'allowDropdown' => count($countries) > 1,
-            ]
+            ],
+            $options
         );
+
+        $this->render('@Shop/widget/int_refill_bar.html.twig', $options);
     }
 
-    // Widget Backend
+    /**
+     * Widget Settings
+     *
+     * @param array $instance
+     *
+     * @return void
+     */
     public function form($instance)
     {
         if (isset($instance['title'])) {

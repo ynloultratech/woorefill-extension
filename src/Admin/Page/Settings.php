@@ -102,7 +102,7 @@ class Settings extends \WC_Settings_Page implements ContainerAwareInterface
         $refillApi = $this->get('refill_api');
         $refillApi->setApiKey($givenApiKey);
         try {
-            $carriers = $refillApi->getCarriers();
+            $carriers = $refillApi->getCarriers()->getList(null, 1, 1);
             \WC_Admin_Settings::add_message('Your API key has been verified and is VALID.');
 
         } catch (\Exception $e) {

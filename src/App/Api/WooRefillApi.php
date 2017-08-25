@@ -109,89 +109,13 @@ class WooRefillApi
         return $this->transactions;
     }
 
-    //
-    //    /**
-    //     * @return \stdClass
-    //     */
-    //    public function getCarrier($carrierId)
-    //    {
-    //        $carriers = $this->send(self::GET, '/carriers/'.$carrierId);
-    //    }
-    //
-    //    /**
-    //     * @return array
-    //     */
-    //    public function getCarriers()
-    //    {
-    //        $carriers = $this->send(self::GET, '/carriers');
-    //        $carriers = $this->serializer->fromArray($carriers['items'], 'array<WooRefill\App\Model\Carrier>');
-    //        dump($carriers);
-    //        exit;
-    //    }
-    //
-    //    /**
-    //     * @return array
-    //     */
-    //    public function getProducts($carrierId = null)
-    //    {
-    //        $products = $this->send(self::GET, '/products'.($carrierId ? "?carrier_id=$carrierId" : ''));
-    //
-    //        //   dump($products);exit;
-    //        return $products;
-    //    }
-    //
-    //    /**
-    //     * @return array
-    //     */
-    //    public function getProduct($productId)
-    //    {
-    //        $products = $this->send(self::GET, '/products/'.$productId);
-    //        //print_r($products);
-    //        //exit;
-    //        return $products;
-    //    }
-    //
-    //    /**
-    //     * @param integer $wirelessId
-    //     * @param null    $orderId
-    //     * @param array   $meta
-    //     *
-    //     * @return array|false
-    //     * @throws \Exception
-    //     */
-    //    public function submit($wirelessId, $orderId = null, $meta = [])
-    //    {
-    //        $this->logger->addLog('Submitting order #%s', $orderId);
-    //        $data = array_merge(
-    //            [
-    //                'correlation_id' => $orderId,
-    //            ],
-    //            $meta
-    //        );
-    //
-    //        $transaction = $this->send(self::POST, sprintf('/product/%s/submit', $wirelessId), $data);
-    //
-    //        if ($transaction && $transaction->status === 'COMPLETED') {
-    //            $this->logger->addLog('The order #%s has been completed successfully.', $orderId);
-    //
-    //            return $transaction;
-    //        }
-    //
-    //        $message = sprintf('Invalid API response processing order #%s', $orderId);
-    //        $this->logger->addErrorLog($message);
-    //        throw new \Exception($message);
-    //    }
-    //
-    //    /**
-    //     * @param string $mobile
-    //     *
-    //     * @return array|false
-    //     * @throws \Exception
-    //     */
-    //    public function accountInfo($mobile)
-    //    {
-    //        return $this->send(self::GET, sprintf('/account/%s', $mobile));
-    //    }
+    /**
+     * @param string $apiKey
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
 
     /**
      * send
@@ -260,17 +184,5 @@ class WooRefillApi
     public function getLogger()
     {
         return $this->logger;
-    }
-
-    /**
-     * makeCacheKey
-     *
-     * @param array $data
-     *
-     * @return string
-     */
-    private static function makeCacheKey($data)
-    {
-        return 'woo_refill_api_'.md5(serialize($data));
     }
 }

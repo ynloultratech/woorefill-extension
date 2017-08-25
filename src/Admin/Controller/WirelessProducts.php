@@ -28,38 +28,56 @@ class WirelessProducts extends Controller
 {
     public function wirelessProductsAction()
     {
-        $page = $this->getRequest()->get('pagenum', 1);
-        $search = $this->getRequest()->get('q');
-        $collection = $this->getApi()->getCarriers()->getList($search, $page);
+        try {
+            $page = $this->getRequest()->get('pagenum', 1);
+            $search = $this->getRequest()->get('q');
+            $collection = $this->getApi()->getCarriers()->getList($search, $page);
 
-        $this->render(
-            '@Admin/products/wireless_products.html.twig',
-            [
-                'collection' => $collection,
-                'search' => $search,
-            ]
-        );
+            $this->render(
+                '@Admin/products/wireless_products.html.twig',
+                [
+                    'collection' => $collection,
+                    'search' => $search,
+                ]
+            );
+        } catch (\Exception $exception) {
+            $this->render(
+                '@Admin/error_message.html.twig',
+                [
+                    'error_message' => $exception->getMessage(),
+                ]
+            );
+        }
     }
 
     public function productsAction()
     {
-        $carrierId = $this->getRequest()->get('carrierId', 0);
-        $collection = $this->getApi()->getProducts()->getList(
-            null,
-            1,
-            100,
-            [
-                'carrierId' => $carrierId,
-            ]
-        );
+        try {
+            $carrierId = $this->getRequest()->get('carrierId', 0);
+            $collection = $this->getApi()->getProducts()->getList(
+                null,
+                1,
+                100,
+                [
+                    'carrierId' => $carrierId,
+                ]
+            );
 
-        $this->renderAjax(
-            '@Admin/products/details.html.twig',
-            [
-                'products' => $collection->items,
-                'carrierId' => $carrierId,
-            ]
-        );
+            $this->renderAjax(
+                '@Admin/products/details.html.twig',
+                [
+                    'products' => $collection->items,
+                    'carrierId' => $carrierId,
+                ]
+            );
+        } catch (\Exception $exception) {
+            $this->render(
+                '@Admin/error_message.html.twig',
+                [
+                    'error_message' => $exception->getMessage(),
+                ]
+            );
+        }
     }
 
     public function switchCarrierAction()

@@ -1,0 +1,28 @@
+<div class="wrap">
+    <h1>WooRefill - Settings</h1>
+
+    {% if saved %}
+        <div class="notice notice-success is-dismissible">
+            <p>Settings saved successfully!</p>
+        </div>
+    {% else %}
+        {{ form_errors(form) }}
+    {% endif %}
+
+    <form method="post">
+        <table class="form-table">
+            {% for input in form.children %}
+                <tr valign="top">
+                    <th scope="row">{{ form_label(input) }}</th>
+                    <td>
+                        {{ form_widget(input) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <p class="submit">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+        </p>
+    </form>
+</div>

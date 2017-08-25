@@ -28,26 +28,25 @@ class WirelessProducts extends Controller
 {
     public function wirelessProductsAction()
     {
+        $error = null;
+        $collection = null;
+        $search = null;
         try {
             $page = $this->getRequest()->get('pagenum', 1);
             $search = $this->getRequest()->get('q');
             $collection = $this->getApi()->getCarriers()->getList($search, $page);
-
-            $this->render(
-                '@Admin/products/wireless_products.html.twig',
-                [
-                    'collection' => $collection,
-                    'search' => $search,
-                ]
-            );
         } catch (\Exception $exception) {
-            $this->render(
-                '@Admin/error_message.html.twig',
-                [
-                    'error_message' => $exception->getMessage(),
-                ]
-            );
+            $error = $exception->getMessage();
         }
+
+        $this->render(
+            '@Admin/products/wireless_products.html.twig',
+            [
+                'collection' => $collection,
+                'search' => $search,
+                'error' => $error,
+            ]
+        );
     }
 
     public function productsAction()

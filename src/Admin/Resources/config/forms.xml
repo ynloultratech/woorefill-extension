@@ -14,6 +14,10 @@
             <tag name="form.type"/>
         </service>
 
+        <service id="wp_checkbox" class="WooRefill\Admin\Form\Type\WPCheckboxType">
+            <tag name="form.type"/>
+        </service>
+
         <service id="carrier_choice" class="WooRefill\Admin\Form\Type\CarrierFormType">
             <argument type="service" id="product_category_manager"/>
             <tag name="form.type"/>

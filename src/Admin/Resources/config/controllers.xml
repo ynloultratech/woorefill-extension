@@ -4,11 +4,18 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="woo_refill_admin_menu" parent="controller" class="WooRefill\Admin\Controller\WirelessProducts">
+            <tag name="admin_menu" title="WooRefill" icon="dashicons-phone" position="56" slug="woorefill"/>
+        </service>
         <service id="import_products_controller" parent="controller" class="WooRefill\Admin\Controller\WirelessProducts">
-            <tag name="admin_menu" title="WooRefill" method="wirelessProductsAction" icon="dashicons-phone" position="56"/>
-            <tag name="wp_action" tag="wp_ajax_switch_wireless_carrier" method="switchCarrierAction" />
-            <tag name="wp_action" tag="wp_ajax_switch_wireless_product" method="switchProductAction" />
-            <tag name="wp_action" tag="wp_ajax_get_wireless_products" method="productsAction" />
+            <tag name="admin_menu" title="Carriers / Products" parent="woorefill" method="wirelessProductsAction" slug="woorefill"/>
+            <tag name="wp_action" tag="wp_ajax_switch_wireless_carrier" method="switchCarrierAction"/>
+            <tag name="wp_action" tag="wp_ajax_switch_wireless_product" method="switchProductAction"/>
+            <tag name="wp_action" tag="wp_ajax_get_wireless_products" method="productsAction"/>
+        </service>
+
+        <service id="settings_controller" parent="controller" class="WooRefill\Admin\Controller\SettingsController">
+            <tag name="admin_menu" title="Settings" method="settingsAction" parent="woorefill" slug="woorefill-settings"/>
         </service>
     </services>
 </container>

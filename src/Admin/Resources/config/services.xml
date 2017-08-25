@@ -20,7 +20,6 @@
             </call>
         </service>
 
-
         <service id="product_settings_page" class="WooRefill\Admin\Page\ProductSettings">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
@@ -43,15 +42,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-        </service>
-
-        <service id="settings_page" class="WooRefill\Admin\Page\Settings">
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-            <tag name="wp_filter" tag="woocommerce_settings_tabs_array" method="add_settings_page" priority="40"/>
-            <tag name="wp_action" tag="woocommerce_settings_wireless" method="output"/>
-            <tag name="wp_action" tag="woocommerce_settings_save_wireless" method="save"/>
         </service>
     </services>
 </container>

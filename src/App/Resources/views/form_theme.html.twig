@@ -23,8 +23,15 @@
     {{ block('help_block') }}
 {% endblock %}
 
+{% block checkbox_widget %}
+    <label>
+    {{ parent() }}
+    {{ help|raw }}
+    </label>
+{% endblock %}
+
 {% block help_block %}
-    {% if help %}<p>{{ help }}</p>{% endif %}
+    {% if help %}<p class="description">{{ help }}</p>{% endif %}
 {% endblock %}
 
 {%- block form_errors -%}

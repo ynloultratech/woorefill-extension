@@ -75,7 +75,7 @@ class Admin implements ContainerAwareInterface
             $this->addMenu(
                 $title,
                 $slug,
-                [$specification->getService(), $specification->getAttributes()['method']],
+                $specification->getAttributes()['method'] ? [$specification->getService(), $specification->getAttributes()['method']] : null,
                 $iconUrl,
                 $position
             );
@@ -88,8 +88,8 @@ class Admin implements ContainerAwareInterface
     public function checkAPIKey()
     {
         $apiKey = $this->container->getParameter('api_key');
-        if (empty($apiKey) && !(isset($_GET['page'], $_GET['tab']) && 'wc-settings' === $_GET['page'] && 'wireless' === $_GET['tab'])) {
-            $message = sprintf('WooRefill is almost ready. To get started, <a href="%s">set your WooRefill API Key</a>.', admin_url().'/admin.php?page=wc-settings&tab=wireless');
+        if (empty($apiKey) && (!isset($_GET['page']) || $_GET['page']!== 'woorefill-settings')) {
+            $message = sprintf('WooRefill is almost ready. To get started, <a href="%s">set your WooRefill API Key</a>.', admin_url().'admin.php?page=woorefill-settings');
             $this->render(
                 '@Admin/notice.html.twig',
                 [
@@ -103,8 +103,8 @@ class Admin implements ContainerAwareInterface
     public function checkLogsOn()
     {
         $logsEnabled = $this->container->getParameter('enable_logs');
-        if ($logsEnabled && !(isset($_GET['page'], $_GET['tab']) && 'wc-settings' === $_GET['page'] && 'wireless' === $_GET['tab'])) {
-            $message = sprintf('You have WooRefill Debug Logs ENABLED, this may reduce the system performance, <a href="%s">DISABLE LOGS</a>. (<small> Leave ENABLED if you has problems with this plugin, in that case please contact <a href="mailto:support@ynolultratech.com">YnloUltratech</a></small>)', admin_url().'/admin.php?page=wc-settings&tab=wireless');
+        if ($logsEnabled && (!isset($_GET['page']) || $_GET['page']!== 'woorefill-settings')) {
+            $message = sprintf('You have WooRefill Debug Logs ENABLED, this may reduce the system performance, <a href="%s">DISABLE LOGS</a>. (<small> Leave ENABLED if you has problems with this plugin, in that case please contact <a href="mailto:support@ynolultratech.com">YnloUltratech</a></small>)', admin_url().'admin.php?page=woorefill-settings');
             $this->render(
                 '@Admin/notice.html.twig',
                 [

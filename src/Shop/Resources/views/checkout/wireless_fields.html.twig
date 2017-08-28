@@ -5,36 +5,34 @@
         {% set value = product.price %}
         <input type="hidden" name="{{ field }}" value="{{ value }}">
     {% elseif(field matches "/_phone$/") %}
-        {{ call('woocommerce_form_field', field, args, value) }}
-        <input id="_woo_refill_meta_phone_field_international" type="hidden" name="_woo_refill_meta_phone">
-
+        {{ call('woocommerce_form_field', 'woorefill_phone', args, value) }}
+        <input id="_woo_refill_meta_phone" type="hidden" name="_woo_refill_meta_phone">
     {% else %}
         {{ call('woocommerce_form_field', field, args, value) }}
     {% endif %}
 {% endfor %}
 <script>
     jQuery(document).ready(function () {
-        var label = jQuery('#_woo_refill_meta_phone_field label');
+        var label = jQuery('#woorefill_phone_field label');
         var content = '<h3>' + label.html() + '</h3>';
         label.replaceWith(content);
-        // jQuery('#_woo_refill_meta_phone').inputmask();
 
         jQuery(document).ready(function ($) {
-            var telInput = $("#_woo_refill_meta_phone");
+            var telInput = $("#woorefill_phone");
 
             telInput.attr('class', ''); //remove any theme class to avoid conflicts
 
             telInput.intlTelInput({
                 dropdownContainer: "body",
                 onlyCountries: [telInput.data('country')],
-                nationalMode: false,
+                nationalMode: true,
                 separateDialCode: true,
                 allowDropdown: false
             });
 
             telInput.on('change', function () {
                 var intPhone = telInput.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
-                $('#_woo_refill_meta_phone_field_international').val(intPhone)
+                $('#_woo_refill_meta_phone').val(intPhone)
             }).trigger('change');
 
 

@@ -87,6 +87,42 @@ class Checkout implements ContainerAwareInterface
         }
     }
 
+
+    /**
+     * Validates the posted checkout data based on field properties.
+     *
+     * @param  array     $data An array of posted data.
+     * @param  \WP_Error $errors
+     */
+    public function validatePostedData($data, $errors)
+    {
+        $product = $this->getCart()->getFirstWirelessProduct();
+        $sku = $this->getProductManager()->find($product->get_id())->sku;
+        $product = $this->getRefillAPI()->getProducts()->get($sku);
+
+        foreach ($product->inputs as $name => $props) {
+            $required = (boolean) @$props['required'];
+            $dataKey = sprintf('_woo_refill_meta_%s', $name);
+            $value = @$data[$dataKey];
+
+            if ($required && !$value) {
+                $errors->add('validation', sprintf('<strong>%s</strong> is a required field', $props['label']));
+            }
+
+            if ($regexRules = @$props['validationRegex']) {
+                foreach ($regexRules as $rule => $label) {
+                    try {
+                        if (!preg_match($rule, $value)) {
+                            $errors->add('validation', $label);
+                        }
+                    } catch (\Exception $exception) {
+                        $this->getLogger()->error($exception->getMessage());
+                    }
+                }
+            }
+        }
+    }
+
     public function resolveAPIProductFields($wirelessId)
     {
         $product = $this->getRefillAPI()->getProducts()->get($wirelessId);
@@ -105,11 +141,10 @@ class Checkout implements ContainerAwareInterface
                     $value = $phone;
                 }
 
-
                 $fields[sprintf('_woo_refill_meta_%s', $name)] = [
-                    'type' => $prop->input_type ?: 'text',
-                    'label' => $prop->label ?: ucfirst($name),
-                    'required' => $prop->required ?: false,
+                    'type' => @$prop['inputType'] ?: 'text',
+                    'label' => @$prop['label'] ?: ucfirst($name),
+                    'required' => @$prop['required'] ?: false,
                     'value' => $value,
                     'custom_attributes' => [
                         'data-country' => $product->carrier->countryCode,

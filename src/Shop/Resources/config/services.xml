@@ -22,6 +22,7 @@
             <tag name="wp_filter" tag="woocommerce_checkout_fields" method="checkoutFields"/>
             <tag name="wp_action" tag="woocommerce_checkout_billing" method="checkoutBilling"/>
             <tag name="wp_action" tag="woocommerce_checkout_update_order_meta" method="updateOrderMeta"/>
+            <tag name="wp_action" tag="woocommerce_after_checkout_validation" method="validatePostedData"/>
         </service>
 
         <service id="shop_category" class="WooRefill\Shop\PhoneContext">

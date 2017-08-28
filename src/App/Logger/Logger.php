@@ -34,6 +34,8 @@ class Logger
      * addErrorLog
      *
      * @param $message
+     *
+     * @deprecated
      */
     public function addErrorLog($message)
     {
@@ -41,9 +43,58 @@ class Logger
     }
 
     /**
+     * @param string $message
+     * @param array  $params
+     */
+    public function warning($message, $params = [])
+    {
+        $this->log(\WC_Log_Levels::WARNING, $message, $params);
+    }
+
+    /**
+     * @param string $message
+     * @param array  $params
+     */
+    public function info($message, $params = [])
+    {
+        $this->log(\WC_Log_Levels::INFO, $message, $params);
+    }
+
+    /**
+     * @param string $message
+     * @param array  $params
+     */
+    public function error($message, $params = [])
+    {
+        $this->log(\WC_Log_Levels::ERROR, $message, $params);
+    }
+
+    /**
+     * @param string $level
+     * @param string $message
+     * @param array  $params
+     */
+    public function log($level, $message, $params = [])
+    {
+        if ($this->logsEnabled) {
+            if (is_array($message) || is_object($message)) {
+                $message = print_r($message, true);
+            }
+
+            if ($params) {
+                $message = vsprintf($message, $params);
+            }
+
+            wc_get_logger()->log($level, 'WooRefill: '.$message);
+        }
+    }
+
+    /**
      * addLog
      *
      * @param       $message
+     *
+     * @deprecated
      */
     public function addLog($message)
     {

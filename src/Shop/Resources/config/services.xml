@@ -44,7 +44,7 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <tag name="wp_action" tag="woocommerce_payment_complete" method="refill"/>
+            <tag name="wp_action" tag="woocommerce_order_status_completed" method="refill"/>
         </service>
 
         <service id="shop_customer_order_details" class="WooRefill\Shop\CustomerOrderDetails">

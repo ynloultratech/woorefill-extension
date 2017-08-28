@@ -55,7 +55,7 @@ class SettingsController extends Controller
                 'data' => get_option('_woorefill_log') === 'yes',
                 'label' => 'Debug Log',
                 'required' => false,
-                'help' => sprintf(__('Log WooRefill events, such as API request and responses, inside <code>%s</code>'), wc_get_log_file_path('woorefill')),
+                'help' => sprintf(__('Log WooRefill events, such as API request and responses inside WooCommerce logs')),
             ]
         );
 

@@ -34,8 +34,19 @@ class WirelessProducts extends Controller
         try {
             $page = $this->getRequest()->get('pagenum', 1);
             $search = $this->getRequest()->get('q');
+            $this->getLogger()->info('Getting list of products, page: %s, search: %s', [$page, $search]);
             $collection = $this->getApi()->getCarriers()->getList($search, $page);
+            $this->getLogger()->info(
+                '%s Products found, showing %s in page %s of %s pages',
+                [
+                    $collection->total,
+                    $collection->limit,
+                    $collection->page,
+                    $collection->pages,
+                ]
+            );
         } catch (\Exception $exception) {
+            $this->getLogger()->error($exception->getMessage());
             $error = $exception->getMessage();
         }
 

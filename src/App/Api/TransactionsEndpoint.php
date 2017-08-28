@@ -31,17 +31,7 @@ class TransactionsEndpoint extends AbstractEndpoint
 
         if ($transaction) {
             /** @var Transaction $transaction */
-            $transaction = $this->deserialize($transaction, $this->getModeClass());
-
-            if ($transaction && $transaction->status !== 'ERROR') {
-                $this->api->getLogger()->addLog('The order #%s has been processed successfully.', $transaction->correlationId);
-
-                return $transaction;
-            }
-
-            $message = sprintf('Error (%s) - %s', $transaction->errorCode, $transaction->responseMessage);
-            $this->api->getLogger()->addErrorLog($message);
-            throw new \Exception($message);
+            return $this->deserialize($transaction, $this->getModeClass());
         }
 
         throw new \RuntimeException('Invalid API response');

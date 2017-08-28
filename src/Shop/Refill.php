@@ -38,12 +38,12 @@ class Refill implements ContainerAwareInterface
         $product = null;
         $order = null;
         $this->getLogger()->info('Processing Order: '.$id);
+
         try {
             $order = WC()->order_factory->get_order($id);
-
-            $inProcess = get_post_meta($id, '_woorefill_processing', true);
-            if ($inProcess) {
-                $this->getLogger()->warning('The order: %s is already in process.', [$id]);
+            $processed = get_post_meta($id, '_woorefill_process_started', true);
+            if ($processed) {
+                $this->getLogger()->info('Ignoring order %s, is already submitted to WooRefill.', [$id]);
 
                 return;
             }
@@ -91,22 +91,26 @@ class Refill implements ContainerAwareInterface
 
                 $this->getLogger()->info('Submitting transaction for order: %s', [$id]);
 
-                update_post_meta($id, '_woorefill_processing', true);
+                update_post_meta($id, '_woorefill_process_started', true);
                 $transaction = $this->getRefillAPI()->getTransactions()->post($transaction);
 
-                $this->getLogger()->info('Transaction %s completed for order %s, updating order status', [$transaction->id, $id]);
-
-                update_post_meta($id, '_woorefill_processing', false);
                 update_post_meta($id, '_woo_api_response_transaction', $transaction->id);
                 update_post_meta($id, '_woo_api_response_provider_transaction', $transaction->provider_transaction_id);
                 update_post_meta($id, '_woo_api_response_response', $transaction->response_message);
-                foreach ($transaction->response as $name => $value) {
-                    update_post_meta($id, '_woo_api_response_'.$name, $value);
-                }
-                $order->update_status('completed', "Refill success \n\n");
 
+                if ($transaction->status !== 'ERROR') {
+                    $this->getLogger()->info('Transaction %s completed for order %s, updating order status', [$transaction->id, $id]);
+                    foreach ($transaction->response as $name => $value) {
+                        update_post_meta($id, '_woo_api_response_'.$name, $value);
+                    }
+                    if ($order->get_status() !== 'completed') {
+                        $order->update_status('completed', "Refill success \n\n");
+                    }
+                } else {
+                    $message = sprintf('Error (%s) - %s', $transaction->errorCode, $transaction->responseMessage);
+                    throw new \Exception($message);
+                }
             } catch (\Exception $e) {
-                update_post_meta($id, '_woorefill_processing', false);
                 $this->getLogger()->error($e->getMessage());
                 $order->update_status('failed', 'WooRefill: '.$e->getMessage()." \n\n");
                 $this->refundWirelessProduct($order, $e->getMessage());

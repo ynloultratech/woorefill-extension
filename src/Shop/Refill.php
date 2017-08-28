@@ -41,22 +41,28 @@ class Refill implements ContainerAwareInterface
         try {
             $order = WC()->order_factory->get_order($id);
 
-            $processed = get_post_meta($id, '_woo_api_response_transaction', true);
-            if ($processed) {
-                $this->getLogger()->warning('The order: '.$id.' is already processed by WooRefill, transaction: '.$processed);
+            $inProcess = get_post_meta($id, '_woorefill_processing', true);
+            if ($inProcess) {
+                $this->getLogger()->warning('The order: %s is already in process.', [$id]);
 
                 return;
             }
 
-            $this->getLogger()->info('Get first wireless product in order '.$id);
+            $processed = get_post_meta($id, '_woo_api_response_transaction', true);
+            if ($processed) {
+                $this->getLogger()->info('Ignoring order %s is already processed by WooRefill, transaction: %s', [$id, $processed]);
+
+                return;
+            }
+
+            $this->getLogger()->info('Get first wireless product in order %s', [$id]);
             $wcProduct = $this->getOrderManager()->getFirstWirelessProduct($id);
-            $this->getLogger()->info('Processing Order: '.$id);
             if ($wcProduct) {
-                $this->getLogger()->info('Getting local product ID: '.$wcProduct->get_id());
+                $this->getLogger()->info('Getting local product ID: %s', [$wcProduct->get_id()]);
                 $localProduct = $this->getProductManager()->find($wcProduct->get_id());
-                $this->getLogger()->info('Local product match, getting remote product for SKU: '.$localProduct->sku);
+                $this->getLogger()->info('Local product match, getting remote product for SKU: %s', [$localProduct->sku]);
                 $product = $this->getRefillAPI()->getProducts()->get($localProduct->sku);
-                $this->getLogger()->info('Remote product match: '.$product->name);
+                $this->getLogger()->info('Remote product match: %s', [$product->name]);
             } else {
                 throw new \Exception('Invalid Order Product');
             }
@@ -83,10 +89,14 @@ class Refill implements ContainerAwareInterface
                     }
                 }
 
-                $this->getLogger()->info('Submitting transaction for order: '.$id);
-                $transaction = $this->getRefillAPI()->getTransactions()->post($transaction);
-                $this->getLogger()->info('Transaction '.$transaction->id.' completed for order '.$id.', updating order status');
+                $this->getLogger()->info('Submitting transaction for order: %s', [$id]);
 
+                update_post_meta($id, '_woorefill_processing', true);
+                $transaction = $this->getRefillAPI()->getTransactions()->post($transaction);
+
+                $this->getLogger()->info('Transaction %s completed for order %s, updating order status', [$transaction->id, $id]);
+
+                update_post_meta($id, '_woorefill_processing', false);
                 update_post_meta($id, '_woo_api_response_transaction', $transaction->id);
                 update_post_meta($id, '_woo_api_response_provider_transaction', $transaction->provider_transaction_id);
                 update_post_meta($id, '_woo_api_response_response', $transaction->response_message);
@@ -95,10 +105,9 @@ class Refill implements ContainerAwareInterface
                 }
                 $order->update_status('completed', "Refill success \n\n");
 
-
             } catch (\Exception $e) {
-                $this->getLogger()->info('ERROR: '.$e->getMessage());
-                $this->getLogger()->info($e->getTraceAsString());
+                update_post_meta($id, '_woorefill_processing', false);
+                $this->getLogger()->error($e->getMessage());
                 $order->update_status('failed', 'WooRefill: '.$e->getMessage()." \n\n");
                 $this->refundWirelessProduct($order, $e->getMessage());
             }

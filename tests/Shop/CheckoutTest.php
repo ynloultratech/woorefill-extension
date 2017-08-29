@@ -19,6 +19,70 @@ use WooRefill\Tests\AbstractBasePluginTest;
 
 class CheckoutTest extends AbstractBasePluginTest
 {
+    public function testCheckoutFields()
+    {
+        $product = self::getMockBuilder('\WC_Product')->disableOriginalConstructor()->getMock();
+        $product->expects(self::once())->method('get_id')->willReturn(1);
+
+        $cart = self::getMockBuilder('WooRefill\Shop\Cart')->disableOriginalConstructor()->getMock();
+        $cart->expects(self::once())->method('hasWirelessProduct')->willReturn(true);
+        $cart->expects(self::once())->method('getFirstWirelessProduct')->willReturn($product);
+
+        $productManager = self::getMockBuilder('WooRefill\App\EntityManager\ProductManager')->disableOriginalConstructor()->getMock();
+        $localProduct = new LocalProduct();
+        $localProduct->id = 1;
+        $localProduct->sku = 123;
+        $productManager->expects(self::once())->method('find')->willReturn($localProduct);
+
+        /** @var Checkout|\PHPUnit_Framework_MockObject_MockObject $checkout */
+        $checkout = self::getMockBuilder('WooRefill\Shop\Checkout')->disableOriginalConstructor()->setMethods(
+            [
+                'getCart',
+                'getProductManager',
+                'resolveAPIProductFields',
+            ]
+        )->getMock();
+        $checkout->expects(self::any())->method('getCart')->willReturn($cart);
+        $checkout->expects(self::once())->method('getProductManager')->willReturn($productManager);
+
+        $resolvedFields = [
+            '_woo_refill_meta_phone' => [
+                'type' => 'tel',
+                'label' => 'Phone number to refill',
+                'required' => true,
+                'value' => '+5352937658',
+                'custom_attributes' =>
+                    [
+                        'data-country' => 'CU',
+                    ],
+            ],
+            '_woo_refill_meta_amount' =>
+                [
+                    'type' => 'hidden',
+                    'label' => null,
+                    'required' => false,
+                    'value' => null,
+                    'custom_attributes' =>
+                        [
+                            'data-country' => 'CU',
+                        ],
+                ],
+        ];
+
+        $checkout->expects(self::once())->method('resolveAPIProductFields')->willReturn($resolvedFields);
+
+        $fields = [
+            'billing' => [
+                'billing_first_name' => [
+                    'label' => 'First name',
+                    'required' => true,
+                ],
+            ],
+        ];
+        $checkoutFields = $checkout->checkoutFields($fields);
+
+        self::assertEquals(array_merge($fields, ['refill' => $resolvedFields]), $checkoutFields);
+    }
 
     public function testUpdateOrderMeta()
     {

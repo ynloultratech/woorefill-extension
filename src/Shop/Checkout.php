@@ -26,15 +26,23 @@ class Checkout implements ContainerAwareInterface
 {
     use CommonServiceTrait;
 
+    /**
+     * Add wireless fields to the array of WooCommerce fields to checkout form
+     *
+     * @param array $fields original fields array from WooCommerce
+     *
+     * @return array
+     */
     public function checkoutFields($fields)
     {
         if ($this->getCart()->hasWirelessProduct()) {
             try {
                 $product = $this->getCart()->getFirstWirelessProduct();
-                $wirelessId = $this->getProductManager()->getWirelessId($product);
-                $fields['refill'] = array_merge($fields, $this->resolveAPIProductFields($wirelessId));
+                $localProduct = $this->getProductManager()->find($product->get_id());
+                $fields = array_merge($fields, ['refill' => $this->resolveAPIProductFields($localProduct->sku)]);
+
             } catch (\Exception $e) {
-                //do nothing
+                $this->getLogger()->error($e->getMessage());
             }
         }
 

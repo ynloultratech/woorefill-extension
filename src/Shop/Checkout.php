@@ -71,6 +71,12 @@ class Checkout implements ContainerAwareInterface
         }
     }
 
+    /**
+     * This method is called when checkout is submitted to save
+     * order wireless metadata like phone number, amount to refill etc
+     *
+     * @param $order_id
+     */
     public function updateOrderMeta($order_id)
     {
         if ($this->getCart()->hasWirelessProduct()) {
@@ -86,7 +92,6 @@ class Checkout implements ContainerAwareInterface
             }
         }
     }
-
 
     /**
      * Validates the posted checkout data based on field properties.

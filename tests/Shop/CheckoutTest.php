@@ -19,6 +19,31 @@ use WooRefill\Tests\AbstractBasePluginTest;
 
 class CheckoutTest extends AbstractBasePluginTest
 {
+
+    public function testUpdateOrderMeta()
+    {
+        $cart = self::getMockBuilder('WooRefill\Shop\Cart')->disableOriginalConstructor()->getMock();
+        $cart->expects(self::once())->method('hasWirelessProduct')->willReturn(true);
+
+        $_POST = [
+            '_woo_refill_meta_phone' => '+1 (305) 123-1234',
+            '_woo_refill_meta_amount' => 20,
+        ];
+
+        /** @var Checkout|\PHPUnit_Framework_MockObject_MockObject $checkout */
+        $checkout = self::getMockBuilder('WooRefill\Shop\Checkout')->disableOriginalConstructor()->setMethods(
+            [
+                'getCart',
+            ]
+        )->getMock();
+        $checkout->expects(self::once())->method('getCart')->willReturn($cart);
+
+        self::getMockery()->shouldReceive('update_post_meta')->withArgs([1, '_woo_refill_meta_phone', '+13051231234'])->once();
+        self::getMockery()->shouldReceive('update_post_meta')->withArgs([1, '_woo_refill_meta_amount', 20])->once();
+
+        $checkout->updateOrderMeta(1);
+    }
+
     public function testValidatePostedData()
     {
         $product = self::getMockBuilder('\WC_Product')->disableOriginalConstructor()->getMock();
@@ -79,7 +104,7 @@ class CheckoutTest extends AbstractBasePluginTest
                 'getCart',
                 'getProductManager',
                 'getRefillAPI',
-                'getLogger'
+                'getLogger',
             ]
         )->getMock();
 

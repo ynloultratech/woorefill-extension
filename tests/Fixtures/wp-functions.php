@@ -54,6 +54,11 @@ function do_filter($tag)
     return AbstractBasePluginTest::getMockery()->do_filter($tag);
 }
 
+function update_post_meta()
+{
+    return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
+}
+
 function plugin_basename()
 {
     return call_user_func_array([AbstractBasePluginTest::getMockery(), __FUNCTION__], func_get_args());
@@ -108,7 +113,8 @@ class WP_Filesystem_Base
     }
 }
 
-class WC_Cart{
+class WC_Cart
+{
 
 }
 

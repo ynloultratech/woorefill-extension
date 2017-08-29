@@ -17,6 +17,8 @@ use WooRefill\App\Twig\Extension\WPHelperExtension;
 use WooRefillSymfony\Bridge\Twig\Extension\FormExtension;
 use WooRefillSymfony\Bridge\Twig\Form\TwigRenderer;
 use WooRefillSymfony\Bridge\Twig\Form\TwigRendererEngine;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
+use WooRefillSymfony\Component\DependencyInjection\ContainerAwareTrait;
 use WooRefillSymfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -62,7 +64,7 @@ class Template
         // add the FormExtension to Twig
         $this->twig->addExtension(new FormExtension(new TwigRenderer($formEngine)));
 
-        $this->twig->addExtension(new WPHelperExtension());
+        $this->twig->addExtension(new WPHelperExtension($container));
         $this->twig->addGlobal('request', $container->get('request'));
     }
 

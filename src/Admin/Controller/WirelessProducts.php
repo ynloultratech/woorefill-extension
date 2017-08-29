@@ -32,8 +32,8 @@ class WirelessProducts extends Controller
         $collection = null;
         $search = null;
         try {
-            $page = $this->getRequest()->get('pagenum', 1);
-            $search = $this->getRequest()->get('q');
+            $page = $this->getRequest()->get('paged', 1);
+            $search = $this->getRequest()->get('s');
             $this->getLogger()->info('Getting list of products, page: %s, search: %s', [$page, $search]);
             $collection = $this->getApi()->getCarriers()->getList($search, $page);
             $this->getLogger()->info(
@@ -45,6 +45,24 @@ class WirelessProducts extends Controller
                     $collection->pages,
                 ]
             );
+
+            if ($action = $this->getRequest()->get('action')) {
+                $carriers = $this->getRequest()->get('carrier');
+
+                $this->batchToggleCarriers($carriers, $action === 'enable');
+
+                $url = $this->getRequest()->getBaseUrl();
+                $url .= '?'.build_query(
+                        [
+                            'page' => $this->getRequest()->get('page'),
+                            'paged' => $this->getRequest()->get('paged'),
+                            's' => $this->getRequest()->get('s'),
+                        ]
+                    );
+                wp_redirect($url);
+                exit;
+            }
+
         } catch (\Exception $exception) {
             $this->getLogger()->error($exception->getMessage());
             $error = $exception->getMessage();
@@ -87,6 +105,22 @@ class WirelessProducts extends Controller
                     'error_message' => $exception->getMessage(),
                 ]
             );
+        }
+    }
+
+    public function batchToggleCarriers($skus, $enabled)
+    {
+        foreach ($skus as $sku) {
+            try {
+                $carrier = $this->getApi()->getCarriers()->get($sku);
+
+                if ($carrier) {
+                    $this->switchCarrier($carrier, $enabled);
+                    $this->switchProductsForCarrier($carrier, $enabled);
+                }
+            } catch (\Exception $exception) {
+                $this->getLogger()->error($exception->getMessage());
+            }
         }
     }
 
@@ -162,6 +196,7 @@ class WirelessProducts extends Controller
         }
 
         if ($status) {
+            //enable
             wp_publish_post($localProduct->id);
             update_post_meta($localProduct->id, '_wireless_product_enabled', 1);
 
@@ -177,6 +212,7 @@ class WirelessProducts extends Controller
 
             wp_set_object_terms($localProduct->id, [$localOperator->id, $localCarrier->id], 'product_cat');
         } else {
+            //disable
             global $wpdb;
             $wpdb->update($wpdb->posts, ['post_status' => 'trash'], ['ID' => $localProduct->id]);
             update_post_meta($localProduct->id, '_wireless_product_enabled', 0);
@@ -200,6 +236,7 @@ class WirelessProducts extends Controller
         }
 
         if (!$status) {
+            //disable
             wp_delete_term($localCarrier->id, 'product_cat');
 
             $carriers = $this->getCarrierManager()->findByOperatorId($localCarrier->operatorId);
@@ -220,6 +257,7 @@ class WirelessProducts extends Controller
                 wp_delete_term($localCarrier->operatorId, 'product_cat');
             }
         } else {
+            //enable
             $this->fetchOrCreateLocalCarrier($carrier);
         }
 

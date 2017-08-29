@@ -13,11 +13,30 @@
 
 namespace WooRefill\App\Twig\Extension;
 
+use WooRefillSymfony\Component\DependencyInjection\ContainerInterface;
+use WooRefillSymfony\Component\HttpFoundation\Request;
+
 /**
  * Class WPHelperExtension
  */
 class WPHelperExtension extends \WooRefillTwig_Extension
 {
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * WPHelperExtension constructor.
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,6 +64,7 @@ class WPHelperExtension extends \WooRefillTwig_Extension
             new \WooRefillTwig_SimpleFunction('admin_url', [$this, 'adminUrl']),
             new \WooRefillTwig_SimpleFunction('ajax_admin_url', [$this, 'ajaxAdminUrl']),
             new \WooRefillTwig_SimpleFunction('paginate_links', [$this, 'paginateLinks']),
+            new \WooRefillTwig_SimpleFunction('pagination_link', [$this, 'paginationLink']),
         ];
     }
 
@@ -190,6 +210,25 @@ class WPHelperExtension extends \WooRefillTwig_Extension
                 'current' => $page,
             ]
         );
+    }
+
+    public function paginationLink($page)
+    {
+        /** @var Request $request */
+        $request = $this->container->get('request');
+        $uri = $request->getUri();
+
+        if (preg_match('/paged=\d+/', $uri)) {
+            $uri = preg_replace('/(paged=)(\d+)/', "\${1}$page", $uri);
+        } else {
+            $prefix = '?';
+            if (strpos($uri, '?') !== false) {
+                $prefix = '&';
+            }
+            $uri .= $prefix."paged=$page";
+        }
+
+        return $uri;
     }
 
     /**

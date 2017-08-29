@@ -1,8 +1,14 @@
 {# @var carrier \WooRefill\App\Model\Carrier #}
 {# @var collection \WooRefill\App\Model\PaginatedCollection #}
 
+{% from '@App/pagination_macro.html.twig' import pagination %}
+
 <div class="wrap">
-    <h1>WooRefill - Carriers & Products</h1>
+    <h1 class="wp-heading-inline">Carriers & Products</h1>
+
+    {% if request.get('s') %}
+        <span class="subtitle">Search results for “{{ request.get('s') }}”</span>
+    {% endif %}
 
     {% if error %}
         <div class="notice notice-error notice-large">
@@ -11,34 +17,47 @@
     {% else %}
 
         {% set carriers = collection.items %}
-        {% set pagination = paginate_links(collection.page, collection.pages) %}
         <form id="posts-filter" method="get">
-
             <p class="search-box">
-                <label class="screen-reader-text" for="post-search-input">Search:</label>
-                <input type="search" id="post-search-input" name="q" value="{{ search }}">
-                <input type="submit" id="search-submit" class="button" value="Search Products">
-                <input type="hidden" name="page" class="page" value="woorefill">
+                <label class="screen-reader-text" for="post-search-input">Search products:</label>
+                <input type="search" id="post-search-input" name="s" value="{{ search }}">
+                <input type="submit" id="search-submit" class="button" value="Search products">
             </p>
+            <input type="hidden" name="page" class="post_type_page" value="woorefill">
 
             <div class="tablenav top">
-                {% if pagination %}
-                    {% block pagination %}
-                        <div class="tablenav" style="width: 99%;">
-                            <div class="tablenav-pages" style="margin: 1em 0">
-                                {{ pagination }}
-                            </div>
-                        </div>
-                    {% endblock %}
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label><select name="action" id="bulk-action-selector-top">
+                        <option value="">Bulk Actions</option>
+                        <option value="enable">Enable</option>
+                        <option value="disable">Disabled</option>
+                    </select>
+                    <input type="submit" id="doaction" class="button action" value="Apply">
+                </div>
+
+                {#<div class="alignleft actions">#}
+                {#<select name="country" class="dropdown_product_cat">#}
+                {#<option value="" selected="selected">Filter by country</option>#}
+                {#</select>#}
+                {#</div>#}
+
+                {% if collection.pages > 1 %}
+                    <div class="tablenav-pages">
+                        {{ pagination(collection, true) }}
+                    </div>
                 {% endif %}
             </div>
 
             <div id="wireless-carriers-table-wrapper">
-                <table class='wp-list-table widefat fixed striped posts'>
+                <table class="wp-list-table widefat fixed striped posts">
                     <thead>
-                    {% set colspan = 7 %}
+                    {% set colspan = 8 %}
                     {% block columns %}
                         <tr>
+                            <td id="cb" class="manage-column column-cb check-column">
+                                <label class="screen-reader-text" for="cb-select-all-1">Select All</label>
+                                <input id="cb-select-all-1" type="checkbox">
+                            </td>
                             <th scope="col" style="width: 30px">
                                 {{ 'SKU'|trans }}
                             </th>
@@ -61,6 +80,14 @@
                     {% if carriers %}
                         {% for carrier in carriers %}
                             <tr id="carrier-row-{{ carrier.id }}">
+                                <th scope="row" class="check-column">
+                                    <label class="screen-reader-text" for="cb-select-{{ carrier.id }}">Select {{ carrier.name }}</label>
+                                    <input id="cb-select-{{ carrier.id }}" type="checkbox" name="carrier[]" value="{{ carrier.id }}">
+                                    <div class="locked-indicator">
+                                        <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                        <span class="screen-reader-text">“{{ carrier.name }}” is locked</span>
+                                    </div>
+                                </th>
                                 <td><strong>{{ carrier.id }}</strong></td>
                                 <td scope="col" style="text-align: center">
                                     {% set enabled = carrier.localCarrier %}
@@ -126,12 +153,21 @@
                 </table>
             </div>
 
-            {% if pagination %}
-                {{ block('pagination') }}
-            {% endif %}
+            <div class="tablenav bottom">
+                {% if collection.pages > 1 %}
+                    <div class="tablenav-pages">
+                        {{ pagination(collection, false) }}
+                    </div>
+                {% endif %}
+            </div>
         </form>
 
         <script>
+
+            jQuery('#posts-filter').submit(function () {
+                jQuery('#current-page-selector').val(1);
+            });
+
             function toggleDetails($sku) {
                 var details = jQuery('#show-details-' + $sku);
                 if (details.css('display') !== 'none') {

@@ -1,0 +1,57 @@
+{% macro pagination(collection, pageInput) %}
+    <span class="displaying-num">{{ collection.total }} items</span>
+    <span class="pagination-links">
+
+        {# First Page #}
+        {% if collection.page  > 2 %}
+            <a class="first-page" href="{{ pagination_link(1) }}">
+                <span class="screen-reader-text">First page</span><span aria-hidden="true">«</span>
+            </a>
+        {% else %}
+            <span class="tablenav-pages-navspan" aria-hidden="true">«</span>
+        {% endif %}
+
+        {# Previous Page #}
+        {% if collection.page - 1 > 0 %}
+            <a class="prev-page" href="{{ pagination_link(collection.page - 1) }}">
+                <span class="screen-reader-text">Previous page</span><span aria-hidden="true">‹</span>
+            </a>
+        {% else %}
+            <span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+        {% endif %}
+
+        <span class="paging-input">
+            <label for="current-page-selector" class="screen-reader-text">Current Page</label>
+            {% if pageInput %}
+                <input class="current-page" id="current-page-selector"
+                       type="text" name="paged"
+                       value="{{ collection.page }}"
+                       max="{{ collection.pages }}"
+                       min="1"
+                       size="1"
+                       aria-describedby="table-paging">
+            {% endif %}
+            <span class="tablenav-paging-text">{% if not pageInput %}{{ collection.page }}{% endif %} of <span class="total-pages">{{ collection.pages }}</span></span>
+        </span>
+
+
+        {# Next Page #}
+        {% if collection.page + 1 <= collection.pages %}
+            <a class="next-page" href="{{ pagination_link(collection.page + 1) }}">
+                <span class="screen-reader-text">Next page</span>
+                <span aria-hidden="true">›</span>
+            </a>
+        {% else %}
+            <span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+        {% endif %}
+
+        {# Last Page #}
+        {% if collection.page <= collection.pages - 2 %}
+            <a class="last-page" href="{{ pagination_link(collection.pages) }}">
+                <span class="screen-reader-text">Last page</span><span aria-hidden="true">»</span>
+            </a>
+        {% else %}
+            <span class="tablenav-pages-navspan" aria-hidden="true">»</span>
+        {% endif %}
+    </span>
+{% endmacro %}

@@ -116,7 +116,7 @@ class Checkout implements ContainerAwareInterface
                             $errors->add('validation', $label);
                         }
                     } catch (\Exception $exception) {
-                        $this->getLogger()->error($exception->getMessage());
+                        $this->getLogger()->error('Validation expression error: '.$exception->getMessage());
                     }
                 }
             }

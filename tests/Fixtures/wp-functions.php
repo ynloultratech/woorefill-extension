@@ -94,6 +94,11 @@ class WooCommerce
     }
 }
 
+function WC()
+{
+    return WooCommerce::instance();
+}
+
 class WP_Filesystem_Base
 {
 
@@ -101,6 +106,10 @@ class WP_Filesystem_Base
     {
 
     }
+}
+
+class WC_Cart{
+
 }
 
 class WC_Product
@@ -338,11 +347,13 @@ class WC_Product
     {
     }
 
-    public function is_purchasable(){
+    public function is_purchasable()
+    {
 
     }
 
-    public function is_in_stock() {
+    public function is_in_stock()
+    {
     }
 
     protected function get_hook_prefix()
@@ -366,6 +377,11 @@ class WC_Product
 }
 
 class WC_Payment_Gateway
+{
+
+}
+
+class WP_Error
 {
 
 }

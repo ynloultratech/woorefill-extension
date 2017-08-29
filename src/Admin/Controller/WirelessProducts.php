@@ -55,8 +55,8 @@ class WirelessProducts extends Controller
                 $url .= '?'.build_query(
                         [
                             'page' => $this->getRequest()->get('page'),
-                            'paged' => $this->getRequest()->get('paged'),
-                            's' => $this->getRequest()->get('s'),
+                            'paged' => $page,
+                            's' => $search,
                         ]
                     );
                 wp_redirect($url);
@@ -235,6 +235,8 @@ class WirelessProducts extends Controller
             $status = !(boolean) $localCarrier;
         }
 
+        $this->getLogger()->info('%s carrier with sku "%s"', [$status ? 'Enabling' : 'Disabling', $carrier->id]);
+
         if (!$status) {
             //disable
             wp_delete_term($localCarrier->id, 'product_cat');
@@ -261,6 +263,7 @@ class WirelessProducts extends Controller
             $this->fetchOrCreateLocalCarrier($carrier);
         }
 
+        $this->getLogger()->info('%s carrier with sku "%s" successfully', [$status ? 'Enabled' : 'Disabled', $carrier->id]);
         return $status;
     }
 

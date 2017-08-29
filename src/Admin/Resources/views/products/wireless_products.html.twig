@@ -22,12 +22,14 @@
                 <label class="screen-reader-text" for="post-search-input">Search products:</label>
                 <input type="search" id="post-search-input" name="s" value="{{ search }}">
                 <input type="submit" id="search-submit" class="button" value="Search products">
+                <input type="hidden" id="paged" name="paged" value="{{ collection.page }}">
             </p>
             <input type="hidden" name="page" class="post_type_page" value="woorefill">
 
             <div class="tablenav top">
                 <div class="alignleft actions bulkactions">
-                    <label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label><select name="action" id="bulk-action-selector-top">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>
+                    <select name="action">
                         <option value="">Bulk Actions</option>
                         <option value="enable">Enable</option>
                         <option value="disable">Disabled</option>
@@ -41,11 +43,9 @@
                 {#</select>#}
                 {#</div>#}
 
-                {% if collection.pages > 1 %}
-                    <div class="tablenav-pages">
-                        {{ pagination(collection, true) }}
-                    </div>
-                {% endif %}
+                <div class="tablenav-pages">
+                    {{ pagination(collection, true) }}
+                </div>
             </div>
 
             <div id="wireless-carriers-table-wrapper">
@@ -154,18 +154,20 @@
             </div>
 
             <div class="tablenav bottom">
-                {% if collection.pages > 1 %}
-                    <div class="tablenav-pages">
-                        {{ pagination(collection, false) }}
-                    </div>
-                {% endif %}
+                <div class="tablenav-pages">
+                    {{ pagination(collection, false) }}
+                </div>
             </div>
         </form>
 
         <script>
 
+            jQuery('#post-search-input').change(function () {
+                jQuery('#paged').val(1);
+            });
+
             jQuery('#posts-filter').submit(function () {
-                jQuery('#current-page-selector').val(1);
+                jQuery('#current-page-selector').val(jQuery('#paged').val());
             });
 
             function toggleDetails($sku) {

@@ -6,12 +6,13 @@
             <p>Settings saved successfully!</p>
         </div>
     {% else %}
-        {{ form_errors(form) }}
+        {{ form_errors(settingsForm) }}
+        {{ form_errors(advancedSettingsForm) }}
     {% endif %}
 
     <form method="post">
         <table class="form-table">
-            {% for input in form.children %}
+            {% for input in settingsForm.children %}
                 <tr valign="top">
                     <th scope="row">{{ form_label(input) }}</th>
                     <td>
@@ -20,9 +21,47 @@
                 </tr>
             {% endfor %}
         </table>
-
+        {% set advancesSettings = advancedSettingsForm['_woorefill_advanced_settings'].vars['value'] %}
+        <div style="margin-top: 50px">
+            <div id="ToggleWooRefillAdvancedSettings" class="button button-small {% if advancesSettings %}active button-primary{% endif %}">
+                Advanced Settings
+            </div>
+            <input type="hidden" name="_woorefill_advanced_settings">
+            <hr>
+            <table class="advanced-settings form-table" {% if not advancesSettings %}style="display: none"{% endif %}>
+                {% for input in advancedSettingsForm.children %}
+                    {% set type = input.vars['block_prefixes'][1] %}
+                    {% if type == 'hidden' %}
+                        {{ form_widget(input) }}
+                    {% else %}
+                        <tr valign="top">
+                            <th scope="row">{{ form_label(input) }}</th>
+                            <td>
+                                {{ form_widget(input) }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
         <p class="submit">
             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
         </p>
     </form>
+    <script>
+        jQuery('#ToggleWooRefillAdvancedSettings').click(function () {
+            var toggle = jQuery(this);
+            if (toggle.hasClass('active')) {
+                jQuery('#form__woorefill_advanced_settings').val(0);
+                jQuery('.advanced-settings').hide();
+                toggle.removeClass('active');
+                toggle.removeClass('button-primary');
+            } else {
+                jQuery('.advanced-settings').show();
+                toggle.addClass('active');
+                toggle.addClass('button-primary');
+                jQuery('#form__woorefill_advanced_settings').val(1);
+            }
+        })
+    </script>
 </div>

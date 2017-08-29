@@ -21,6 +21,55 @@ class SettingsController extends Controller
 {
     public function settingsAction()
     {
+
+        $settingsForm = $this->createSettingsForm();
+        $advancedSettingsForm = $this->createAdvancedSettingsForm();
+
+        $saved = false;
+        if ($settingsForm->isSubmitted() && $advancedSettingsForm->isSubmitted()) {
+
+            $data = array_merge($settingsForm->getData(), $advancedSettingsForm->getData());
+
+            $givenApiKey = $data['_woorefill_api_key'];
+
+            //validate api key
+            if ($givenApiKey) {
+                /** @var WooRefillApi $refillApi */
+                $refillApi = $this->get('refill_api');
+                $refillApi->setApiKey($givenApiKey);
+                try {
+                    $carriers = $refillApi->getCarriers()->getList(null, 1, 1);
+                } catch (\Exception $e) {
+                    $errorCode = $e->getCode();
+                    if ($errorCode > 400 && $errorCode < 500) {
+                        $settingsForm->addError(new FormError('Your API key is not valid, please verify or get a new API key.'));
+                    }
+                }
+            }
+
+            if ($settingsForm->isValid() && $advancedSettingsForm->isValid()) {
+                foreach ($data as $key => $value) {
+                    update_option($key, $value);
+                }
+                $saved = true;
+            }
+        }
+
+        $this->render(
+            '@Admin/settings.html.twig',
+            [
+                'settingsForm' => $settingsForm->createView(),
+                'advancedSettingsForm' => $advancedSettingsForm->createView(),
+                'saved' => $saved,
+            ]
+        );
+    }
+
+    /**
+     * @return FormInterface
+     */
+    protected function createSettingsForm()
+    {
         /** @var FormInterface $form */
         $form = $this->get('form_factory')->create();
         $form->add(
@@ -36,6 +85,22 @@ class SettingsController extends Controller
                 ],
             ]
         );
+
+
+        $form->handleRequest($this->getRequest());
+
+        return $form;
+    }
+
+    /**
+     * @return FormInterface
+     */
+    protected function createAdvancedSettingsForm()
+    {
+        /** @var FormInterface $form */
+        $form = $this->get('form_factory')->create();
+
+        $form->add('_woorefill_advanced_settings', 'hidden', ['data' => (boolean) get_option('_woorefill_advanced_settings', 0)]);
 
         $form->add(
             '_woorefill_prerelease',
@@ -60,40 +125,7 @@ class SettingsController extends Controller
         );
 
         $form->handleRequest($this->getRequest());
-        $saved = false;
-        if ($form->isSubmitted()) {
-            $givenApiKey = $form->get('_woorefill_api_key')->getData();
 
-            //validate api key
-            if ($givenApiKey) {
-                /** @var WooRefillApi $refillApi */
-                $refillApi = $this->get('refill_api');
-                $refillApi->setApiKey($givenApiKey);
-                try {
-                    $carriers = $refillApi->getCarriers()->getList(null, 1, 1);
-                } catch (\Exception $e) {
-                    $errorCode = $e->getCode();
-                    if ($errorCode > 400 && $errorCode < 500) {
-                        $form->addError(new FormError('Your API key is not valid, please verify or get a new API key.'));
-                    }
-                }
-            }
-
-            if ($form->isValid()) {
-                $data = $form->getData();
-                foreach ($data as $key => $value) {
-                    update_option($key, $value);
-                }
-                $saved = true;
-            }
-        }
-
-        $this->render(
-            '@Admin/settings.html.twig',
-            [
-                'form' => $form->createView(),
-                'saved' => $saved,
-            ]
-        );
+        return $form;
     }
 }

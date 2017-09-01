@@ -174,7 +174,8 @@ class WooRefillApi
             }
 
             $this->getLogger()->error('Invalid JSON response');
-            $this->getLogger()->info('Response: '.@$response['body']);
+            $this->getLogger()->info('Response Code: '.@$response['response']['code']);
+            $this->getLogger()->info('Response Body: '.@$response['body']);
 
             throw new \Exception('Invalid API response');
 

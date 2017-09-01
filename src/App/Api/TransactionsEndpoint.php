@@ -34,7 +34,7 @@ class TransactionsEndpoint extends AbstractEndpoint
             return $this->deserialize($transaction, $this->getModeClass());
         }
 
-        throw new \RuntimeException('Invalid API response');
+        throw new \RuntimeException('Invalid API response, expected transaction response and null given.');
     }
 
     protected function getModeClass()

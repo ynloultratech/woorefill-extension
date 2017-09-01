@@ -147,6 +147,8 @@ class WooRefillApi
                 ],
             ];
 
+            $this->getLogger()->info('Requesting API URL: [%s] %s', [strtoupper($method), $url]);
+
             if (self::GET === $method) {
                 $response = wp_remote_get($url, $options);
             } else {
@@ -154,6 +156,7 @@ class WooRefillApi
             }
 
             if ($response instanceof \WP_Error) {
+                $this->getLogger()->error($response->get_error_message());
                 throw new \Exception($response->get_error_message());
             }
 
@@ -162,7 +165,7 @@ class WooRefillApi
                 if ($result && @$response['response']['code'] >= 400 && @$result['code']) {
                     $error = $result['code'];
                     $message = $result['message'];
-
+                    $this->getLogger()->error($message);
                     throw new \Exception((string) $message, (int) $error);
                 }
 
@@ -170,9 +173,13 @@ class WooRefillApi
 
             }
 
+            $this->getLogger()->error('Invalid JSON response');
+            $this->getLogger()->info('Response: '.@$response['body']);
+
             throw new \Exception('Invalid API response');
 
         } catch (\Exception $e) {
+            $this->getLogger()->error($e->getMessage());
             //log error
             throw  $e;
         }

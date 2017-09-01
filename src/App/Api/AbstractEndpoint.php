@@ -67,8 +67,11 @@ abstract class AbstractEndpoint
 
             return $collection;
         }
+        if ($records) {
+            throw new \RuntimeException('Invalid API response, expected collection of items. Given: '.json_encode($records));
+        }
 
-        throw new \RuntimeException('Invalid API response');
+        throw new \RuntimeException('Invalid API response, expected collection of items and null given');
     }
 
     /**
@@ -84,7 +87,7 @@ abstract class AbstractEndpoint
             return $this->deserialize($record, $this->getModeClass());
         }
 
-        throw new \RuntimeException('Invalid API response');
+        throw new \RuntimeException('Invalid API response, expected resource and null given.');
     }
 
     /**

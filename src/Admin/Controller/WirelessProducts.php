@@ -34,10 +34,10 @@ class WirelessProducts extends Controller
         try {
             $page = $this->getRequest()->get('paged', 1);
             $search = $this->getRequest()->get('s');
-            $this->getLogger()->info('Getting list of products, page: %s, search: %s', [$page, $search]);
+            $this->getLogger()->info('Getting list of carriers, page: %s, search: %s', [$page, $search]);
             $collection = $this->getApi()->getCarriers()->getList($search, $page);
             $this->getLogger()->info(
-                '%s Products found, showing %s in page %s of %s pages',
+                '%s Carriers found, showing %s in page %s of %s pages',
                 [
                     $collection->total,
                     $collection->limit,
@@ -82,6 +82,7 @@ class WirelessProducts extends Controller
     {
         try {
             $carrierId = $this->getRequest()->get('carrierId', 0);
+            $this->getLogger()->info('Getting list of products for carrier sku: %s', [$carrierId]);
             $collection = $this->getApi()->getProducts()->getList(
                 null,
                 1,
@@ -91,6 +92,8 @@ class WirelessProducts extends Controller
                 ]
             );
 
+            $this->getLogger()->info('%s Products found', [$collection->total]);
+
             $this->renderAjax(
                 '@Admin/products/details.html.twig',
                 [
@@ -99,6 +102,7 @@ class WirelessProducts extends Controller
                 ]
             );
         } catch (\Exception $exception) {
+            $this->getLogger()->error($exception->getMessage());
             $this->render(
                 '@Admin/error_message.html.twig',
                 [
@@ -195,6 +199,8 @@ class WirelessProducts extends Controller
             $status = !$localProduct->enabled;
         }
 
+        $this->getLogger()->info('%s product with sku "%s"', [$status ? 'Enabling' : 'Disabling', $product->id]);
+
         if ($status) {
             //enable
             wp_publish_post($localProduct->id);
@@ -217,6 +223,8 @@ class WirelessProducts extends Controller
             $wpdb->update($wpdb->posts, ['post_status' => 'trash'], ['ID' => $localProduct->id]);
             update_post_meta($localProduct->id, '_wireless_product_enabled', 0);
         }
+
+        $this->getLogger()->info('%s product with sku "%s" successfully', [$status ? 'Enabled' : 'Disabled', $product->id]);
 
         return $status;
     }
@@ -264,6 +272,7 @@ class WirelessProducts extends Controller
         }
 
         $this->getLogger()->info('%s carrier with sku "%s" successfully', [$status ? 'Enabled' : 'Disabled', $carrier->id]);
+
         return $status;
     }
 
@@ -273,6 +282,7 @@ class WirelessProducts extends Controller
      */
     protected function switchProductsForCarrier(Carrier $carrier, $enabled)
     {
+        $this->getLogger()->info('%s all products in carrier with sku "%s"', [$enabled ? 'Enabling' : 'Disabling', $carrier->id]);
         $products = $this->getApi()->getProducts()->getList(null, 1, 100, ['carrierId' => $carrier->id]);
         foreach ($products->items as $product) {
             $this->switchProduct($product, $enabled);

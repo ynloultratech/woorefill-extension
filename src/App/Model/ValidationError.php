@@ -46,6 +46,22 @@ class ValidationError
     protected $invalidValue;
 
     /**
+     * ValidationError constructor.
+     *
+     * @param string $message
+     * @param string $property
+     * @param string $invalidValue
+     * @param string $code
+     */
+    public function __construct($message = null, $property = null, $invalidValue = null, $code = null)
+    {
+        $this->message = $message;
+        $this->code = $code;
+        $this->property = $property;
+        $this->invalidValue = $invalidValue;
+    }
+
+    /**
      * @return string
      */
     public function getMessage()

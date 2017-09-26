@@ -12,8 +12,10 @@
 
 namespace WooRefill\Tests\Shop;
 
+use WooRefill\App\Exception\ValidationException;
 use WooRefill\App\Model\LocalProduct;
 use WooRefill\App\Model\Product;
+use WooRefill\App\Model\ValidationError;
 use WooRefill\Shop\Checkout;
 use WooRefill\Tests\AbstractBasePluginTest;
 
@@ -159,8 +161,17 @@ class CheckoutTest extends AbstractBasePluginTest
         ];
         $productsApi->expects(self::once())->method('get')->with(123)->willReturn($remoteProduct);
 
+        $errors = [
+            new ValidationError('Invalid phone number', 'inputs.phone', '+13051231234'),
+            new ValidationError('<strong>Email</strong> is a required field', 'inputs.email'),
+        ];
+        $exception = new ValidationException('Validation Failed with 1 error', $errors);
+        $transactionsApi = self::getMockBuilder('WooRefill\App\Api\TransactionsEndpoint')->disableOriginalConstructor()->getMock();
+        $transactionsApi->expects(self::once())->method('validate')->willThrowException($exception);
+
         $api = self::getMockBuilder('WooRefill\App\Api\WooRefillApi')->disableOriginalConstructor()->getMock();
         $api->expects(self::once())->method('getProducts')->willReturn($productsApi);
+        $api->expects(self::once())->method('getTransactions')->willReturn($transactionsApi);
 
         /** @var Checkout|\PHPUnit_Framework_MockObject_MockObject $checkout */
         $checkout = self::getMockBuilder('WooRefill\Shop\Checkout')->disableOriginalConstructor()->setMethods(
@@ -172,13 +183,9 @@ class CheckoutTest extends AbstractBasePluginTest
             ]
         )->getMock();
 
-        $logger = self::getMockBuilder('WooRefill\App\Logger\Logger')->disableOriginalConstructor()->getMock();
-        $logger->expects(self::once())->method('error')->with('Validation expression error: preg_match(): No ending delimiter \'/\' found');
-
         $checkout->expects(self::once())->method('getCart')->willReturn($cart);
         $checkout->expects(self::once())->method('getProductManager')->willReturn($productManager);
-        $checkout->expects(self::once())->method('getRefillAPI')->willReturn($api);
-        $checkout->expects(self::once())->method('getLogger')->willReturn($logger);
+        $checkout->expects(self::any())->method('getRefillAPI')->willReturn($api);
 
         $data = [
             '_woo_refill_meta_phone' => '+13051231234',

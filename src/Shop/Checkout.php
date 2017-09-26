@@ -17,6 +17,8 @@ use WooRefill\App\Api\WooRefillApi;
 use WooRefill\App\Asset\AssetRegister;
 use WooRefill\App\DependencyInjection\CommonServiceTrait;
 use WooRefill\App\EntityManager\ProductManager;
+use WooRefill\App\Exception\ValidationException;
+use WooRefill\App\Model\Transaction;
 use WooRefillSymfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -113,25 +115,21 @@ class Checkout implements ContainerAwareInterface
         $sku = $this->getProductManager()->find($product->get_id())->sku;
         $product = $this->getRefillAPI()->getProducts()->get($sku);
 
-        foreach ($product->inputs as $name => $props) {
-            $required = (boolean) @$props['required'];
-            $dataKey = sprintf('_woo_refill_meta_%s', $name);
-            $value = @$data[$dataKey];
+        $transaction = new Transaction();
+        $transaction->product = $product;
 
-            if ($required && !$value) {
-                $errors->add('validation', sprintf('<strong>%s</strong> is a required field', $props['label']));
+        $metaArray = $data;
+        foreach ($metaArray as $metaName => $metaValue) {
+            if (strpos($metaName, '_woo_refill_meta_') !== false) {
+                $metaName = str_replace('_woo_refill_meta_', '', $metaName);
+                $transaction->inputs[$metaName] = $metaValue;
             }
-
-            if ($regexRules = @$props['validationRegex']) {
-                foreach ($regexRules as $rule => $label) {
-                    try {
-                        if (!preg_match($rule, $value)) {
-                            $errors->add('validation', $label);
-                        }
-                    } catch (\Exception $exception) {
-                        $this->getLogger()->error('Validation expression error: '.$exception->getMessage());
-                    }
-                }
+        }
+        try {
+            $this->getRefillAPI()->getTransactions()->validate($transaction);
+        } catch (ValidationException $exception) {
+            foreach ($exception->getErrors() as $error) {
+                $errors->add('validation', $error->getMessage());
             }
         }
     }

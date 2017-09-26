@@ -37,6 +37,19 @@ class TransactionsEndpoint extends AbstractEndpoint
         throw new \RuntimeException('Invalid API response, expected transaction response and null given.');
     }
 
+    public function validate(Transaction $transaction)
+    {
+        $body = $this->api->getSerializer()->serialize($transaction, 'json');
+        $transaction = $this->requestPost('/validate', $body);
+
+        if ($transaction) {
+            /** @var Transaction $transaction */
+            return $this->deserialize($transaction, $this->getModeClass());
+        }
+
+        throw new \RuntimeException('Invalid API response, expected transaction response and null given.');
+    }
+
     protected function getModeClass()
     {
         return 'WooRefill\App\Model\Transaction';

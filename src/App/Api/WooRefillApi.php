@@ -13,6 +13,7 @@
 
 namespace WooRefill\App\Api;
 
+use WooRefill\App\Exception\ValidationException;
 use WooRefill\App\Logger\Logger;
 use WooRefillJMS\Serializer\Serializer;
 use WooRefillJMS\Serializer\SerializerBuilder;
@@ -162,9 +163,18 @@ class WooRefillApi
 
             $result = @json_decode($response['body'], true);
             if ($result !== null) {
+
+
                 if ($result && @$response['response']['code'] >= 400 && @$result['code']) {
                     $error = $result['code'];
                     $message = $result['message'];
+
+                    if ($result && $error === 422 && isset($result['errors'])) {
+                        $errors = $this->getSerializer()->fromArray($result['errors'], 'array<WooRefill\App\Model\ValidationError>');
+                        $this->getLogger()->info($message);
+                        throw new ValidationException((string) $message, $errors, (int) $error);
+                    }
+
                     $this->getLogger()->error($message);
                     throw new \Exception((string) $message, (int) $error);
                 }
@@ -184,13 +194,14 @@ class WooRefillApi
             //log error
             throw  $e;
         }
-    }
+}
 
-    /**
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
+/**
+ * @return Logger
+ */
+public
+function getLogger()
+{
+    return $this->logger;
+}
 }

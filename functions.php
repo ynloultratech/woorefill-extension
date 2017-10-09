@@ -4,7 +4,7 @@
  * Insert an attachment from an URL address.
  *
  * @param  String $url
- * @param  array    $meta_data
+ * @param  array  $meta_data
  * @param  Int    $post_id
  *
  * @return Int    Attachment ID
@@ -57,4 +57,37 @@ function wp_insert_attachment_from_url($url, $meta_data = [], $post_id = null)
 
     return $attach_id;
 
+}
+
+/**
+ * Update a attachment from an URL address and update media
+ *
+ * @param  integer $media_id
+ * @param  String  $url
+ *
+ * @return Int    Attachment ID
+ */
+function wp_update_attachment_from_url($media_id, $url)
+{
+    if (!class_exists('WP_Http')) {
+        include_once(ABSPATH.WPINC.'/class-http.php');
+    }
+
+    $http = new WP_Http();
+    $response = $http->request($url);
+    if ($response['response']['code'] != 200) {
+        return false;
+    }
+
+    $upload = wp_upload_bits(basename($url), null, $response['body']);
+    if (!empty($upload['error'])) {
+        return false;
+    }
+
+    $file_path = $upload['file'];
+    $meta = wp_generate_attachment_metadata($media_id, $file_path);
+    if (isset($meta['file'])) {
+        wp_update_attachment_metadata($media_id, $meta);
+        update_post_meta($media_id, '_wp_attached_file', $meta['file']);
+    }
 }

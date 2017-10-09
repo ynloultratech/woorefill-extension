@@ -37,6 +37,7 @@ HTML;
 
         }
     );
+
     return;
 }
 
@@ -55,6 +56,7 @@ HTML;
 
         }
     );
+
     return;
 }
 
@@ -71,5 +73,15 @@ if (file_exists(__DIR__.'/dev/dev.php')) {
 if (!defined('WOOREFILL_DEBUG')) {
     define('WOOREFILL_DEBUG', false);
 }
+
+add_action(
+    'init',
+    function () {
+        if (get_transient('_woorefill_products_synchronized') === false) {
+            $process = new \WooRefill\App\Sync\ProductSyncRequest();
+            $process->dispatch();
+        }
+    }
+);
 
 Kernel::init();

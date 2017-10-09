@@ -2,9 +2,6 @@
 
 namespace WooRefill\Tests;
 
-/**
- * Class PluginInitializationTest
- */
 class PluginInitializationTest extends AbstractBasePluginTest
 {
     public function testPluginInitialization()

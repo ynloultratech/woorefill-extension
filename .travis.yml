@@ -4,6 +4,10 @@ notifications:
   email:
     - rsantos@ynloultratech.com
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 matrix:
     fast_finish: true
     include:

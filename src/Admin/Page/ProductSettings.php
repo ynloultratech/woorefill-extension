@@ -46,7 +46,15 @@ class ProductSettings implements ContainerAwareInterface
      */
     public function productTypeOptions($options)
     {
+        if (!isset($options['virtual']['wrapper_class'])) {
+            $options['virtual']['wrapper_class'] = '';
+        }
         $options['virtual']['wrapper_class'] .= ' show_if_wireless';
+
+        if (!isset($options['virtual']['downloadable'])) {
+            $options['virtual']['downloadable'] = '';
+        }
+
         $options['virtual']['downloadable'] .= ' hide_if_wireless';
 
         return $options;

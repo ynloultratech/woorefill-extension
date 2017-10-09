@@ -38,7 +38,7 @@ class Cart implements ContainerAwareInterface
     {
         //set product price data to use later in the cart, @see cartLoadedFromSession
         $product = $cart_item_data['data'];
-        if ($product instanceof \WC_Product_Wireless) {
+        if ($product instanceof \WC_Product_Wireless && isset($_POST['_wireless_price'])) {
             $cart_item_data['price'] = $_POST['_wireless_price'];
         }
 

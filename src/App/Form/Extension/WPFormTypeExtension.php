@@ -32,7 +32,7 @@ class WPFormTypeExtension extends AbstractTypeExtension
         $view->vars['help'] = $options['help'];
         $view->vars['wrapper_class'] = $options['wrapper_class'];
 
-        if ($options['expanded']) {
+        if (isset($options['expanded']) && $options['expanded']) {
             $view->vars['label_attr'] = [
                 'style' => 'display: inline-block; margin-right: 10px;',
             ];

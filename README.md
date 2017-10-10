@@ -1,4 +1,11 @@
 # WooRefill (WooCommerce Extension)
+
+[![Build Status](https://travis-ci.org/ynloultratech/woorefill-extension.svg?branch=master)](https://travis-ci.org/ynloultratech/woorefill-extension)
+[![Github Releases](https://img.shields.io/github/downloads/ynloultratech/woorefill-extension/total.svg)](https://github.com/ynloultratech/woorefill-extension/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/ynloultratech/woorefill-extension.svg)](https://github.com/ynloultratech/woorefill-extension)
+[![license](https://img.shields.io/badge/Wordpress-4.6+-blue.svg)](http://wordpress.com)
+[![license](https://img.shields.io/github/license/ynloultratech/woorefill-extension.svg)](https://github.com/ynloultratech/woorefill-extension/blob/master/LICENSE)
+
 WooRefill is a extension for WooCommerce to add wireless plans to your shop and make refills.
 
 ## Requirements
